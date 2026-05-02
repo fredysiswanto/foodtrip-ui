@@ -120,24 +120,24 @@ All components MUST export TypeScript interfaces for props.
 
 ### 1.5 Core Authentication Feature
 
-- [ ] **Create `features/auth/` structure**:
-  - [ ] `hooks/useLogin.ts` — login mutation (React Query)
-  - [ ] `hooks/useAuth.ts` — global auth state hook
-  - [ ] `hooks/useLogout.ts` — logout mutation
+- [done] **Create `features/auth/` structure**:
+  - [done] `hooks/useLogin.ts` — login mutation (React Query)
+  - [done] `hooks/useAuth.ts` — global auth state hook
+  - [done] `hooks/useLogout.ts` — logout mutation
   - [ ] `hooks/useRefreshToken.ts` — token refresh (called on 401)
-  - [ ] `components/LoginForm.tsx` — login UI with email/password
-  - [ ] `types/index.ts` — auth-specific types
-- [ ] **Create Auth Provider** in `providers/`:
-  - [ ] Wrap with `AuthProvider` (manages auth state, token persistence using strategy from 1.9)
-  - [ ] Create `useAuth()` hook for auth state access (user, isAuthenticated, loading)
+  - [done] `components/LoginForm.tsx` — login UI with email/password
+  - [done] `types/index.ts` — auth-specific types
+- [done] **Create Auth Provider** in `providers/`:
+  - [done] Wrap with `AuthProvider` (manages auth state, token persistence using strategy from 1.9)
+  - [done] Create `useAuth()` hook for auth state access (user, isAuthenticated, loading)
   - [ ] Auto-refresh token on app load (if token expired)
   - [ ] Intercept 401 responses and trigger logout
-  - [ ] Store token using method from 1.9 (localStorage/cookie)
-- [ ] **Create ProtectedRoute component** — redirect to /login if not authenticated
-- [ ] **Create LoginPage** in `pages/LoginPage.tsx`
-  - [ ] Redirect to /dashboard if already authenticated
-  - [ ] Route protection setup in `routes.tsx`
-  - [ ] Show loading state during login
+  - [done] Store token using method from 1.9 (localStorage)
+- [done] **Create ProtectedRoute component** — redirect to /login if not authenticated
+- [done] **Create LoginPage** in `pages/LoginPage.tsx`
+  - [done] Redirect to /dashboard if already authenticated
+  - [done] Route protection setup in `routes.tsx`
+  - [done] Show loading state during login
 
 ### 1.6 Layout Components
 

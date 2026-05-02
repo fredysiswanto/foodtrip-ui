@@ -1,14 +1,12 @@
-import { ReactNode, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
+import { useAuth, useLogout } from '../features/auth';
 import { navigationItems, NavItem } from './navigation';
 
-interface AdminLayoutProps {
-  children: ReactNode;
-}
-
-export function AdminLayout({ children }: AdminLayoutProps) {
+export function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const location = useLocation();
+  const { user } = useAuth();
 
   const isActive = (path: string) => {
     return location.pathname.startsWith(path);
@@ -72,12 +70,14 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           </button>
 
           {/* Right Side - User Menu */}
-          <UserMenu />
+          <UserMenu user={user} />
         </header>
 
         {/* Page Content */}
         <main className="flex-1 overflow-auto">
-          <div className="h-full">{children}</div>
+          <div className="h-full">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>
@@ -105,8 +105,27 @@ function NavLink({ item, isActive }: NavLinkProps) {
   );
 }
 
-function UserMenu() {
+interface UserMenuProps {
+  user: any;
+}
+
+function UserMenu({ user }: UserMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+  const { mutate: logout } = useLogout();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login', { replace: true });
+  };
+
+  const displayName = user
+    ? `${user.first_name} ${user.last_name}`
+    : 'Admin';
+
+  const initials = user
+    ? `${user.first_name?.[0]}${user.last_name?.[0]}`
+    : 'A';
 
   return (
     <div className="relative">
@@ -117,9 +136,9 @@ function UserMenu() {
       >
         {/* User Avatar */}
         <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
-          A
+          {initials}
         </div>
-        <span className="text-sm font-medium text-slate-900">Admin</span>
+        <span className="text-sm font-medium text-slate-900">{displayName}</span>
         <svg
           className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           fill="none"
@@ -145,7 +164,10 @@ function UserMenu() {
             ⚙️ Settings
           </button>
           <hr className="my-1" />
-          <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
+          <button
+            onClick={handleLogout}
+            className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+          >
             🚪 Logout
           </button>
         </div>
@@ -153,3 +175,4 @@ function UserMenu() {
     </div>
   );
 }
+

@@ -1,37 +1,40 @@
-import { Suspense } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AdminLayout } from '../layouts';
+import { AuthProvider } from '../features/auth';
 import { adminRoutes } from './routes';
+
+// Create a client for React Query
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      gcTime: 1000 * 60 * 10, // 10 minutes (formerly cacheTime)
+    },
+  },
+});
 
 function App() {
   return (
-    <BrowserRouter>
-      <AdminLayout>
-        <Suspense fallback={<LoadingFallback />}>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <AuthProvider>
           <Routes>
             {adminRoutes.map((route, idx) => (
-              <Route
-                key={idx}
-                path={route.path}
-                element={route.element}
-                index={route.index}
-              />
+              <Route key={idx} path={route.path} element={route.element}>
+                {route.children?.map((childRoute, childIdx) => (
+                  <Route
+                    key={childIdx}
+                    path={childRoute.path}
+                    index={childRoute.index}
+                    element={childRoute.element}
+                  />
+                ))}
+              </Route>
             ))}
           </Routes>
-        </Suspense>
-      </AdminLayout>
-    </BrowserRouter>
-  );
-}
-
-function LoadingFallback() {
-  return (
-    <div className="flex items-center justify-center h-full">
-      <div className="text-center">
-        <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-slate-600">Loading...</p>
-      </div>
-    </div>
+        </AuthProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }
 

@@ -1,2 +1,3 @@
 // Shared types and Zod schemas
-// Re-export all types here
+// Auth types
+export * from './auth';

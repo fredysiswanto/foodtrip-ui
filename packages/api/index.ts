@@ -1,2 +1,2 @@
 // API client and endpoints
-// Re-export all API functions here
+export { authApi, apiFetch, ApiError } from './client';
