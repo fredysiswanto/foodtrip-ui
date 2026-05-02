@@ -12,12 +12,12 @@ Must-complete items needed for MVP. These are foundational and block other featu
 
 ### 1.1 Styling Setup
 
-- [ ] **Install & configure Tailwind CSS** in admin app
+- [done] **Install & configure Tailwind CSS** in admin app
   - Add `tailwindcss`, `postcss`, `autoprefixer` dependencies
   - Create `tailwind.config.js` and `postcss.config.js`
   - Set up global stylesheet with Tailwind directives
   - Configure TypeScript for Tailwind class intellisense
-- [ ] **Create typography & spacing system** in styles/
+- [done] **Create typography & spacing system** in styles/
 
 ### 1.2 Shared Types Package (`packages/types/`)
 
@@ -141,17 +141,17 @@ All components MUST export TypeScript interfaces for props.
 
 ### 1.6 Layout Components
 
-- [ ] **Create AdminLayout** component:
-  - [ ] Sidebar navigation (menu items)
-  - [ ] Top header bar (logo, user menu, logout)
-  - [ ] Main content area with padding
-  - [ ] Responsive on mobile (collapsible sidebar)
-- [ ] **Create navigation structure**:
-  - [ ] Dashboard link
-  - [ ] Food management link
-  - [ ] Trip management link
-  - [ ] Restaurant management link
-  - [ ] User management link (if needed)
+- [done] **Create AdminLayout** component:
+  - [done] Sidebar navigation (menu items)
+  - [done] Top header bar (logo, user menu, logout)
+  - [done] Main content area with padding
+  - [done] Responsive on mobile (collapsible sidebar)
+- [done] **Create navigation structure**:
+  - [done] Dashboard link
+  - [done] Food management link
+  - [done] Trip management link
+  - [done] Restaurant management link
+  - [done] User management link (if needed)
 - [ ] **Create user menu dropdown** in header
 
 ### 1.7 Error Handling & Loading States (Global)

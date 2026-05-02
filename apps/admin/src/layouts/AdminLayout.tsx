@@ -1,0 +1,155 @@
+import { ReactNode, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { navigationItems, NavItem } from './navigation';
+
+interface AdminLayoutProps {
+  children: ReactNode;
+}
+
+export function AdminLayout({ children }: AdminLayoutProps) {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const location = useLocation();
+
+  const isActive = (path: string) => {
+    return location.pathname.startsWith(path);
+  };
+
+  return (
+    <div className="flex h-screen bg-slate-100">
+      {/* Sidebar */}
+      <aside
+        className={`${
+          sidebarOpen ? 'w-64' : 'w-0'
+        } bg-slate-900 text-slate-100 transition-all duration-300 overflow-hidden flex flex-col`}
+      >
+        {/* Logo */}
+        <div className="h-16 flex items-center justify-center border-b border-slate-800 px-4">
+          <Link to="/dashboard" className="font-bold text-xl">
+            FoodTrip
+          </Link>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 overflow-y-auto px-2 py-4 space-y-1">
+          {navigationItems.map((item) => (
+            <NavLink
+              key={item.path}
+              item={item}
+              isActive={isActive(item.path)}
+            />
+          ))}
+        </nav>
+
+        {/* Footer */}
+        <div className="h-16 border-t border-slate-800 px-4 flex items-center text-xs text-slate-400">
+          Admin Panel v1.0
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        {/* Header */}
+        <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shadow-sm">
+          {/* Toggle Sidebar Button */}
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+            aria-label="Toggle sidebar"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
+
+          {/* Right Side - User Menu */}
+          <UserMenu />
+        </header>
+
+        {/* Page Content */}
+        <main className="flex-1 overflow-auto">
+          <div className="h-full">{children}</div>
+        </main>
+      </div>
+    </div>
+  );
+}
+
+interface NavLinkProps {
+  item: NavItem;
+  isActive: boolean;
+}
+
+function NavLink({ item, isActive }: NavLinkProps) {
+  return (
+    <Link
+      to={item.path}
+      className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors ${
+        isActive
+          ? 'bg-blue-600 text-white'
+          : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+      }`}
+    >
+      <span className="text-lg">{item.icon}</span>
+      <span className="text-sm font-medium">{item.label}</span>
+    </Link>
+  );
+}
+
+function UserMenu() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="relative">
+      {/* User Menu Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-3 p-2 hover:bg-slate-100 rounded-lg transition-colors"
+      >
+        {/* User Avatar */}
+        <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+          A
+        </div>
+        <span className="text-sm font-medium text-slate-900">Admin</span>
+        <svg
+          className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 14l-7 7m0 0l-7-7m7 7V3"
+          />
+        </svg>
+      </button>
+
+      {/* Dropdown Menu */}
+      {isOpen && (
+        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-slate-200 py-1 z-50">
+          <button className="w-full text-left px-4 py-2 text-sm text-slate-900 hover:bg-slate-50 transition-colors">
+            👤 Profile
+          </button>
+          <button className="w-full text-left px-4 py-2 text-sm text-slate-900 hover:bg-slate-50 transition-colors">
+            ⚙️ Settings
+          </button>
+          <hr className="my-1" />
+          <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
+            🚪 Logout
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
