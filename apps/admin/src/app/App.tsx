@@ -1,14 +1,12 @@
-import { BrowserRouter, Routes, Route, Suspense } from 'react-router-dom';
-import { adminRoutes } from './routes';
+import { Suspense } from 'react';
+import { BrowserRouter, Routes } from 'react-router-dom';
 
 function App() {
   return (
     <BrowserRouter>
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
-          {adminRoutes.map((route) => (
-            <Route key={route.path} {...route} />
-          ))}
+          {/* Routes will be added here */}
         </Routes>
       </Suspense>
     </BrowserRouter>

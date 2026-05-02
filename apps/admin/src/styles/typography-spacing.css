@@ -1,0 +1,214 @@
+/**
+ * Typography & Spacing System for FoodTrip Admin
+ * 
+ * This file documents the typography and spacing conventions used throughout the admin app.
+ * Follow these guidelines for consistent design and spacing.
+ */
+
+/* ============================================
+   TYPOGRAPHY SCALE
+   ============================================ */
+
+// Font Sizes (based on 16px base)
+// xs: 12px  - Small labels, captions
+// sm: 14px  - Form labels, secondary text
+// base: 16px - Body text, default size
+// lg: 18px  - Subheadings
+// xl: 20px  - Section titles
+// 2xl: 24px - Page titles
+// 3xl: 30px - Large headings
+// 4xl: 36px - Hero headings
+
+// Font Weights
+// font-normal: 400     - Regular text
+// font-medium: 500     - Form labels, secondary headings
+// font-semibold: 600   - Section titles
+// font-bold: 700       - Headings
+// font-black: 900      - Hero text (use sparingly)
+
+/* ============================================
+   SPACING SCALE (8px baseline)
+   ============================================ */
+
+// Base unit: 4px (0.25rem)
+// Scale: xs, sm, md, lg, xl, 2xl, 3xl
+
+// xs: 8px   (0.5rem)  - Tight spacing between elements
+// sm: 12px  (0.75rem) - Small spacing
+// md: 16px  (1rem)    - Standard spacing (most common)
+// lg: 24px  (1.5rem)  - Generous spacing
+// xl: 32px  (2rem)    - Large spacing
+// 2xl: 40px (2.5rem)  - Extra large spacing
+// 3xl: 48px (3rem)    - Huge spacing between sections
+
+/* ============================================
+   COMMON SPACING PATTERNS
+   ============================================ */
+
+// Padding
+// .px-{size}  - Horizontal padding (left + right)
+// .py-{size}  - Vertical padding (top + bottom)
+// .p-{size}   - All sides padding
+// Examples:
+//   p-4       - All sides 16px
+//   px-6 py-4 - Horizontal 24px, vertical 16px
+
+// Margin
+// .mx-{size}  - Horizontal margin (left + right)
+// .my-{size}  - Vertical margin (top + bottom)
+// .m-{size}   - All sides margin
+// .mb-{size}  - Bottom margin only
+// .mt-{size}  - Top margin only
+// Examples:
+//   mb-4      - Bottom margin 16px
+//   mx-auto   - Center horizontally
+
+// Gap (in flex/grid)
+// .gap-{size} - Space between items
+// Examples:
+//   gap-4     - 16px between items
+//   gap-3     - 12px between items
+
+/* ============================================
+   COMPONENT SPACING GUIDELINES
+   ============================================ */
+
+// Form Groups
+// - gap-2 (8px) between label and input
+// - mb-4 (16px) between each form group
+// - gap-3 (12px) between form fields in a row
+
+// Cards
+// - p-6 (24px) for card body padding
+// - gap-4 (16px) for gap between card sections
+
+// Buttons & Controls
+// - px-4 py-2 (16px horizontal, 8px vertical) for medium buttons
+// - px-3 py-1.5 (12px horizontal, 6px vertical) for small buttons
+// - px-6 py-3 (24px horizontal, 12px vertical) for large buttons
+
+// Lists
+// - gap-3 (12px) between list items
+// - gap-4 (16px) for larger list items
+
+// Tables
+// - px-4 py-2 (16px horizontal, 8px vertical) for cell padding
+// - mb-4 (16px) for table margin below
+
+// Page Sections
+// - mb-8 (32px) between major sections
+// - mb-6 (24px) between sub-sections
+// - mt-6 (24px) section top spacing
+
+/* ============================================
+   TEXT STYLES REFERENCE
+   ============================================ */
+
+// Headings
+// <h1>Page Title</h1>                          - 36px, bold, tracking-tight
+// <h2>Section Title</h2>                       - 30px, bold, tracking-tight
+// <h3>Subsection Title</h3>                    - 24px, bold, tracking-tight
+// <h4>Card Title</h4>                          - 20px, bold, tracking-tight
+// <p class="text-lg font-semibold">Label</p>  - 18px, semibold (secondary heading)
+
+// Body Text
+// <p>Body paragraph with normal text</p>       - 16px, normal, leading-relaxed
+// <p class="text-sm text-neutral-600">Secondary text</p>
+
+// Labels & Form Text
+// <label class="form-label">Email Address</label>  - 14px, medium
+// <span class="form-hint">Enter your email</span>  - 12px, neutral-500
+
+/* ============================================
+   COLOR USAGE
+   ============================================ */
+
+// Primary Actions
+// .bg-primary-600  - Primary buttons, active states
+// .text-primary-600 - Links, active navigation
+
+// Text Colors
+// .text-neutral-900 - Primary text (headings, body)
+// .text-neutral-600 - Secondary text
+// .text-neutral-400 - Placeholder text, disabled state
+
+// Background Colors
+// .bg-white           - Card backgrounds, modals
+// .bg-neutral-50      - Page background, subtle sections
+// .bg-neutral-100     - Hover states, secondary backgrounds
+
+// Status Colors
+// Success: .bg-success-50, .text-success-600
+// Warning: .bg-warning-50, .text-warning-600
+// Danger: .bg-danger-50, .text-danger-600
+
+/* ============================================
+   RESPONSIVE SPACING
+   ============================================ */
+
+// Mobile First Approach
+// <div class="p-4 md:p-6 lg:p-8">
+//   16px padding on mobile, 24px on tablet, 32px on desktop
+
+// Common Breakpoints
+// sm: 640px   - Small devices (landscape mobile)
+// md: 768px   - Tablets
+// lg: 1024px  - Desktops
+// xl: 1280px  - Large desktops
+// 2xl: 1536px - Extra large screens
+
+// Examples
+// <div class="px-4 md:px-6 lg:px-8"> - Responsive horizontal padding
+// <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"> - Responsive grid
+
+/* ============================================
+   COMPONENT CLASS REFERENCE
+   ============================================ */
+
+// Buttons
+// .btn .btn-primary .btn-secondary .btn-danger .btn-ghost
+// .btn-sm .btn-md .btn-lg
+
+// Cards
+// .card .card-body .card-header .card-footer
+
+// Badges
+// .badge .badge-primary .badge-success .badge-warning .badge-danger .badge-neutral
+
+// Alerts
+// .alert .alert-success .alert-warning .alert-danger .alert-info
+
+// Form
+// .form-group .form-label .form-error .form-hint
+
+// Layout
+// .container .container-lg .container-md .container-sm
+// .stack .stack-row .stack-xs .stack-sm .stack-md .stack-lg .stack-xl
+
+// Page
+// .page-header .page-body
+
+// Skeleton
+// .skeleton .skeleton-text .skeleton-circle .skeleton-button
+
+// Utilities
+// .truncate-line (single line ellipsis)
+// .truncate-lines (2 line clamp)
+// .line-clamp-3 (3 line clamp)
+// .sr-only (screen reader only)
+
+/* ============================================
+   QUICK SPACING REFERENCE
+   ============================================ */
+
+// Tight layouts: gap-2 (8px)
+// Normal layouts: gap-3 or gap-4 (12-16px)
+// Generous layouts: gap-6 (24px)
+
+// Card padding: p-6 (24px)
+// Button padding: px-4 py-2 (standard), px-3 py-1.5 (small), px-6 py-3 (large)
+// Form spacing: gap-2 between label+input, mb-4 between form groups
+
+// Section breaks: mb-8 (32px)
+// Small breaks: mb-4 (16px)
+// Micro breaks: mb-2 (8px)
