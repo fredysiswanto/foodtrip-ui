@@ -8,17 +8,22 @@ export interface LoginFormProps {
 export function LoginForm({ onSuccess }: LoginFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const loginMutation = useLogin();
   const isLoading = loginMutation.isPending;
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(null);
+    setValidationError(null);
 
     if (!email || !password) {
-      setError('Please fill in all fields');
+      setValidationError('Please fill in all fields');
+      return;
+    }
+
+    if (!email.includes('@')) {
+      setValidationError('Please enter a valid email address');
       return;
     }
 
@@ -27,10 +32,11 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         email_address: email,
         password,
       });
+      // Toast notification is handled in useLogin hook
       onSuccess?.();
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Login failed';
-      setError(message);
+      // Error handling is done in useLogin hook
+      console.error('Login error:', err);
     }
   };
 
@@ -40,9 +46,9 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         <h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">FoodTrip Admin</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
+          {validationError && (
             <div className="p-4 bg-red-50 border border-red-200 rounded text-red-700 text-sm">
-              {error}
+              {validationError}
             </div>
           )}
 
@@ -79,11 +85,18 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium rounded-lg transition-colors disabled:cursor-not-allowed"
+            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium rounded-lg transition-colors disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
+            {isLoading && (
+              <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            )}
             {isLoading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
+
+        <p className="text-center text-sm text-gray-600 mt-6">
+          Demo Account: <code className="bg-gray-100 px-2 py-1 rounded">paultulod@pm.me</code>
+        </p>
       </div>
     </div>
   );

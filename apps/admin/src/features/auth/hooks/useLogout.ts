@@ -1,13 +1,16 @@
 import { useMutation } from '@tanstack/react-query';
 import { useAuth } from './useAuth';
+import { useToast } from '../../../providers/toast';
 
 export function useLogout() {
   const { setAuth } = useAuth();
+  const toast = useToast();
 
   return useMutation({
     mutationFn: async () => {
       // Clear token from localStorage
       localStorage.removeItem('auth_token');
+      localStorage.removeItem('auth_user');
     },
     onSuccess: () => {
       // Reset auth state
@@ -17,6 +20,12 @@ export function useLogout() {
         isAuthenticated: false,
         isLoading: false,
       });
+
+      // Show logout message
+      toast.info('Logged Out', 'You have been successfully logged out');
+    },
+    onError: () => {
+      toast.error('Logout Error', 'Failed to logout. Please try again.');
     },
   });
 }

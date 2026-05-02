@@ -1,8 +1,39 @@
 # FoodTrip Admin App - Complete Todolist
 
-**Project Status**: Scaffolding complete, zero features implemented  
+**Project Status**: Phase 1 partially complete - Auth system live, core foundation in place  
 **Target Scope**: Admin App only (CRUD operations, dashboard, monitoring)  
 **Organization**: By Priority (Critical → High → Medium → Low)
+
+**Completed in Phase 1**:
+
+- ✅ 1.1 Styling Setup (Tailwind CSS configured)
+- ✅ 1.5 Core Authentication (login/logout working, tested & verified)
+- ✅ 1.6 Layout Components (AdminLayout with navigation, user menu)
+- ✅ Part of 1.2 (Auth types with Zod schemas)
+- ✅ Part of 1.3 (apiFetch client + auth endpoints)
+- ✅ Part of 1.8 (env config with .env.local)
+- ✅ Part of 1.9 (localStorage token persistence)
+- ✅ Part of 2.1 (Dashboard page with summary cards & quick actions)
+
+**What's Working**:
+
+- 🎯 Login page with email/password authentication
+- 🎯 API integration with live backend (foodtrip-api.panduanqa.blog)
+- 🎯 Protected routes - unauthenticated users redirected to /login
+- 🎯 User info displayed in header (name, initials)
+- 🎯 Logout functionality with state cleanup
+- 🎯 Token persistence across page reloads
+- 🎯 Sidebar navigation with all features
+- 🎯 Error handling in LoginForm
+
+**Next Steps (Recommended)**:
+
+1. **1.7 Error Handling & Loading States** - Toast notifications, error boundaries
+2. **1.10 Shared Utilities** - Format functions, validators, helpers
+3. **1.4 Shared UI Components** - Reusable form/table components
+4. **2.2-2.4 CRUD Features** - Food, Trip, Restaurant management
+
+---
 
 ---
 
@@ -23,8 +54,14 @@ Must-complete items needed for MVP. These are foundational and block other featu
 
 Define Zod schemas as the single source of truth for data validation.
 
+- [done] **Auth Request/Response types** (`packages/types/auth.ts`):
+  - [done] User schema (matches API response structure)
+  - [done] LoginRequest schema (email_address, password)
+  - [done] LoginResponse schema (error, data, token, message)
+  - [done] RefreshTokenRequest schema
+  - [done] AuthState schema (user, token, isAuthenticated, isLoading)
+  - [done] TokenPayload schema (JWT decoded)
 - [ ] **Core entity types**:
-  - [ ] User schema (id, email, name, role, avatar, createdAt)
   - [ ] Food schema (id, name, description, image, category, price, restaurantId)
   - [ ] Restaurant schema (id, name, address, image, cuisine, rating)
   - [ ] Trip schema (id, name, description, userId, foods[], createdAt)
@@ -32,45 +69,42 @@ Define Zod schemas as the single source of truth for data validation.
 - [ ] **API Response types**:
   - [ ] Paginated response wrapper schema
   - [ ] Error response schema
-  - [ ] Auth response schema (token, user, expiresIn, refreshToken)
   - [ ] Success response wrapper schema
-- [ ] **Auth Request types**:
-  - [ ] LoginRequest schema (email, password)
-  - [ ] SignupRequest schema (email, password, name)
-  - [ ] RefreshTokenRequest schema (refreshToken)
 - [ ] **Request/Query types**:
   - [ ] Pagination params (page, limit, sortBy, order)
   - [ ] Filter params (search, category, status, dateFrom, dateTo)
   - [ ] File upload metadata (name, size, type)
-- [ ] **Export all types** from `packages/types/index.ts`
+- [done] **Export all types** from `packages/types/index.ts`
+  - [done] Barrel export with `export * from './auth'`
 
 ### 1.3 Shared API Package (`packages/api/`)
 
 Build the HTTP client layer (single source for all backend communication).
 
-- [ ] **Create API client**:
-  - [ ] Create `apiFetch` wrapper with:
-    - Base URL configuration (from env)
-    - Authorization header injection (Bearer token from localStorage/cookie)
-    - Error handling & response validation (with Zod)
-    - Timeout handling (30s default)
-    - Request/response logging (dev only)
-  - [ ] Create error class for API errors (code, message, status, details)
-  - [ ] Create response interceptor for validation (Zod)
+- [done] **Create API client** (`packages/api/client.ts`):
+  - [done] Create `apiFetch` wrapper with:
+    - [done] Base URL configuration (from env: VITE_API_URL)
+    - [done] Authorization header injection (Bearer token from localStorage)
+    - [done] Error handling & response validation (with Zod)
+    - [ ] Timeout handling (30s default)
+    - [ ] Request/response logging (dev only)
+  - [done] Create error class for API errors (ApiError with code, message, status, details)
+  - [done] Create response validation (validateWith Zod)
   - [ ] Create error interceptor with:
-    - 401 handling (token refresh or logout)
-    - 403 handling (permission denied)
-    - 4xx/5xx handling (user-friendly error messages)
-    - Network error handling (no internet, timeout)
+    - [ ] 401 handling (token refresh or logout)
+    - [ ] 403 handling (permission denied)
+    - [ ] 4xx/5xx handling (user-friendly error messages)
+    - [ ] Network error handling (no internet, timeout)
   - [ ] Create request retry logic (max 3 retries for GET requests)
-- [ ] **Define endpoint modules**:
-  - [ ] `auth.ts` — login, logout, getCurrentUser, refreshToken, validateToken
+- [done] **Define endpoint modules**:
+  - [done] `authApi.ts` — login, logout, getCurrentUser
   - [ ] `food.ts` — list, detail, create, update, delete (with search/filter)
   - [ ] `trip.ts` — list, detail, create, update, delete, addFood, removeFood
   - [ ] `restaurant.ts` — list, detail, search
   - [ ] `category.ts` — list
   - [ ] `upload.ts` — uploadImage (returns image URL), uploadFile
-- [ ] **Export everything** from `packages/api/index.ts`
+- [done] **Export everything** from `packages/api/index.ts`
+  - [done] Exports: authApi, apiFetch, ApiError
 
 ### 1.4 Shared UI Components (`packages/ui/`)
 
@@ -121,38 +155,51 @@ All components MUST export TypeScript interfaces for props.
 ### 1.5 Core Authentication Feature
 
 - [done] **Create `features/auth/` structure**:
-  - [done] `hooks/useLogin.ts` — login mutation (React Query)
-  - [done] `hooks/useAuth.ts` — global auth state hook
-  - [done] `hooks/useLogout.ts` — logout mutation
-  - [ ] `hooks/useRefreshToken.ts` — token refresh (called on 401)
-  - [done] `components/LoginForm.tsx` — login UI with email/password
-  - [done] `types/index.ts` — auth-specific types
-- [done] **Create Auth Provider** in `providers/`:
-  - [done] Wrap with `AuthProvider` (manages auth state, token persistence using strategy from 1.9)
-  - [done] Create `useAuth()` hook for auth state access (user, isAuthenticated, loading)
+  - [done] `hooks/useLogin.ts` — login mutation (React Query) with error handling
+  - [done] `hooks/useAuth.ts` — auth context consumer hook
+  - [done] `hooks/useLogout.ts` — logout mutation with state reset
+  - [ ] `hooks/useRefreshToken.ts` — token refresh (for 401 handling)
+  - [done] `components/LoginForm.tsx` — login UI with email/password inputs, validation
+  - [done] `components/ProtectedRoute.tsx` — route guard component
+  - [done] `types/index.ts` — auth-specific types (barrel export from packages/types)
+- [done] **Create Auth Provider** (`features/auth/context/AuthContext.tsx`):
+  - [done] `AuthProvider` wrapper (manages auth state globally)
+  - [done] `useAuth()` hook for auth state access (user, isAuthenticated, isLoading)
+  - [done] localStorage persistence strategy (token + user data)
   - [ ] Auto-refresh token on app load (if token expired)
   - [ ] Intercept 401 responses and trigger logout
-  - [done] Store token using method from 1.9 (localStorage)
+  - [done] Store token using localStorage (from 1.9)
 - [done] **Create ProtectedRoute component** — redirect to /login if not authenticated
-- [done] **Create LoginPage** in `pages/LoginPage.tsx`
+- [done] **Create LoginPage** in `pages/LoginPage.tsx`:
+  - [done] Renders LoginForm component
   - [done] Redirect to /dashboard if already authenticated
-  - [done] Route protection setup in `routes.tsx`
   - [done] Show loading state during login
+  - [done] Handle login errors gracefully
+- [done] **Route protection setup** in `routes.tsx`:
+  - [done] /login route (public)
+  - [done] Nested routes under / with AdminLayout
+  - [done] All admin routes wrapped with ProtectedRoute
+  - [done] Lazy loading with Suspense boundaries
+  - [done] LoadingFallback component for transitions
 
 ### 1.6 Layout Components
 
 - [done] **Create AdminLayout** component:
-  - [done] Sidebar navigation (menu items)
-  - [done] Top header bar (logo, user menu, logout)
-  - [done] Main content area with padding
-  - [done] Responsive on mobile (collapsible sidebar)
+  - [done] Sidebar navigation (menu items with emoji icons)
+  - [done] Top header bar (logo, user menu, hamburger toggle)
+  - [done] Main content area with Outlet for nested routes
+  - [done] Responsive on mobile (collapsible sidebar with smooth transition)
 - [done] **Create navigation structure**:
-  - [done] Dashboard link
-  - [done] Food management link
-  - [done] Trip management link
-  - [done] Restaurant management link
-  - [done] User management link (if needed)
-- [ ] **Create user menu dropdown** in header
+  - [done] Dashboard link (📊)
+  - [done] Food management link (🍔)
+  - [done] Trip management link (✈️)
+  - [done] Restaurant management link (🏪)
+  - [done] User management link (👥)
+- [done] **Create user menu dropdown** in header:
+  - [done] Shows user initials & full name
+  - [done] Profile & Settings buttons
+  - [done] Logout button with redirect to login
+  - [done] Integrates with useAuth() & useLogout() hooks
 
 ### 1.7 Error Handling & Loading States (Global)
 
@@ -167,7 +214,8 @@ All components MUST export TypeScript interfaces for props.
 
 ### 1.8 Environment Configuration
 
-- [ ] **Create `.env.example`** with required variables:
+- [partial] **Create `.env.example`** with required variables:
+  - [ ] Create file with template variables
   - [ ] `VITE_API_URL` — backend API URL
   - [ ] `VITE_API_TIMEOUT` — request timeout in ms
   - [ ] `VITE_ENV` — development/staging/production
@@ -175,16 +223,23 @@ All components MUST export TypeScript interfaces for props.
   - [ ] Read and validate env variables
   - [ ] Export typed config object
   - [ ] Throw error on missing required vars
-- [ ] **Create `.env.local`** for local development
+- [done] **Create `.env.local`** for local development
+  - [done] Set VITE_API_URL to https://foodtrip-api.panduanqa.blog/api/v1
 
 ### 1.9 Auth Token Persistence Strategy
 
-- [ ] **Define token storage method**:
-  - [ ] ❌ Decide: localStorage vs sessionStorage vs HTTPOnly cookie
+- [done] **Define token storage method**:
+  - [done] ✅ **Decision**: localStorage (practical for web admin, can upgrade to httpOnly later)
   - [ ] Create `tokenManager` utility with get/set/remove/isExpired methods
   - [ ] Handle token refresh flow: 401 response → try refresh → retry request
-  - [ ] Clear token on logout
-- [ ] **Implement in AuthProvider** (Phase 1.5)
+  - [done] Clear token on logout
+- [done] **Implement in AuthProvider** (`features/auth/context/AuthContext.tsx`):
+  - [done] Token persisted to localStorage (key: `auth_token`)
+  - [done] User data persisted to localStorage (key: `auth_user`)
+  - [done] Token cleared on logout
+  - [done] Auto-initialize auth state from localStorage on mount
+  - [ ] Auto-refresh token on app load (if expired)
+  - [ ] Handle 401 responses to trigger logout
 
 ### 1.10 Shared Utilities (`packages/utils/`)
 
@@ -218,13 +273,14 @@ Core CRUD features that make the admin panel functional.
 
 ### 2.1 Dashboard Page
 
-- [ ] **Create DashboardPage** in `pages/`
-  - [ ] Summary cards: Total foods, Total trips, Total restaurants, Total users
-  - [ ] Recent activities/operations list
-  - [ ] Quick action buttons
+- [partial] **Create DashboardPage** in `pages/`
+  - [done] Summary cards: Total foods, Total trips, Total restaurants, Total users (hardcoded values)
+  - [done] Quick action buttons (link to create pages)
+  - [ ] Recent activities/operations list (placeholder only)
   - [ ] Basic stats/charts (optional for MVP)
 - [ ] **Create dashboard hooks** (React Query hooks for summary data)
-- [ ] Route: `/dashboard` (default after login)
+  - [ ] Hook to fetch summary statistics
+- [done] **Route**: `/dashboard` (default after login)
 
 ### 2.2 Food Management Feature
 

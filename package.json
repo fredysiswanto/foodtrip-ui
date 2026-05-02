@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "pnpm -r --parallel run dev",
     "dev:admin": "pnpm --filter admin run dev",
+    "dev:client": "pnpm --filter client run dev",
     "build": "pnpm -r --parallel run build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "pnpm -r run preview"
