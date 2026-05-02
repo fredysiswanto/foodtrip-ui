@@ -1,9 +1,9 @@
-import { createContext, useState, useCallback, useEffect } from 'react';
+import { createContext, useState, useCallback, useEffect, type ReactNode } from 'react';
 import { Toast, ToastContextType } from './types';
 
 export const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
-export function ToastProvider({ children }: { children: React.ReactNode }) {
+export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [timeouts, setTimeouts] = useState<Map<string, ReturnType<typeof setTimeout>>>(new Map());
 

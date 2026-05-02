@@ -1,4 +1,3 @@
-import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 
 // Lazy load pages

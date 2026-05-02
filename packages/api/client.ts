@@ -3,6 +3,14 @@ import { LoginResponse, LoginResponseSchema } from '@foodtrip/types';
 const API_URL =
   import.meta.env.VITE_API_URL || 'https://foodtrip-api.panduanqa.blog/api/v1';
 
+interface FetchOptions extends Record<string, unknown> {
+  method?: string;
+  headers?: Record<string, string>;
+  body?: string | FormData;
+  credentials?: 'omit' | 'same-origin' | 'include';
+  signal?: AbortSignal;
+}
+
 class ApiError extends Error {
   constructor(
     public status: number,
@@ -17,9 +25,9 @@ class ApiError extends Error {
 
 async function apiFetch<T>(
   endpoint: string,
-  options: RequestInit & { validateWith?: (data: unknown) => T } = {}
+  options?: FetchOptions & { validateWith?: (data: unknown) => T }
 ): Promise<T> {
-  const { validateWith, ...fetchOptions } = options;
+  const { validateWith, ...fetchOptions } = options || {};
 
   const url = `${API_URL}${endpoint}`;
   const headers = new Headers(fetchOptions.headers || {});
@@ -51,7 +59,7 @@ async function apiFetch<T>(
 
     // Validate response if validator provided
     if (validateWith) {
-      return validateWith(data);
+      return validateWith(data) as T;
     }
 
     return data as T;

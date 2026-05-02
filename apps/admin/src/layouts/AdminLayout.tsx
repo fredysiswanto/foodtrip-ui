@@ -106,7 +106,10 @@ function NavLink({ item, isActive }: NavLinkProps) {
 }
 
 interface UserMenuProps {
-  user: any;
+  user: {
+    first_name: string;
+    last_name: string;
+  } | null;
 }
 
 function UserMenu({ user }: UserMenuProps) {
