@@ -15,6 +15,8 @@ export default [
       '**/build/**',
       '**/.vite/**',
       '**/.next/**',
+      // 'tsconfig.*.json',
+      // '**/tsconfig.json',
     ],
   },
   {
