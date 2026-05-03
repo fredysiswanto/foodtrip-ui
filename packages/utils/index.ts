@@ -1,2 +1,2 @@
 // Shared utilities and constants
-// Re-export all utilities here
+export * from './error';

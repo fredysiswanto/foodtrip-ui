@@ -37,7 +37,6 @@ Specialized agent for building client features in the FoodTrip frontend monorepo
 3. **Presentational Components** — Components are pure UI only (receive data via props/hooks)
 4. **No Direct API Calls** — ALL API calls go through `packages/api`
 5. **React Query for Server State** — Never use `useEffect` for data fetching
-6. Don't remove "ignoreDeprecations": "6.0", from `tsconfig.json` without discussing with the team first
 
 ### File Structure
 
