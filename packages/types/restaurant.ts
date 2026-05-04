@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+import { RestaurantCategorySchema } from './restauran-category';
+import { RestaurantAdminSchema } from './user';
+
 /**
  * Restaurant entity schema
  * Represents a restaurant in the system
@@ -16,45 +19,8 @@ export const RestaurantSchema = z.object({
   resto_website: z.string().optional(),
   restocatg_id: z.string().uuid(),
   status: z.string(),
-  created_by: z.string().uuid().nullable(),
-  updated_by: z.null(),
-  deleted_by: z.null(),
-  date_created: z.string().datetime(),
-  date_updated: z.string().datetime(),
-  date_deleted: z.null(),
-  restaurant_category: z
-    .object({
-      restocatg_id: z.string().uuid(),
-      restocatg_name: z.string(),
-      created_by: z.string().uuid().nullable(),
-      updated_by: z.null(),
-      deleted_by: z.null(),
-      date_created: z.string().datetime(),
-      date_updated: z.string().datetime(),
-      date_deleted: z.null(),
-    })
-    .nullable(),
-  restoadmin: z
-    .object({
-      user_id: z.string().uuid(),
-      resto_id: z.string().uuid(),
-      user_no: z.string(),
-      password: z.string(),
-      first_name: z.string(),
-      middle_name: z.string().nullable(),
-      last_name: z.string(),
-      email_address: z.string().email(),
-      phone_number: z.string().nullable(),
-      gender: z.string().nullable(),
-      user_type: z.string(),
-      created_by: z.string().uuid().nullable(),
-      updated_by: z.null(),
-      deleted_by: z.null(),
-      date_created: z.string().datetime(),
-      date_updated: z.string().datetime(),
-      date_deleted: z.null(),
-    })
-    .nullable(),
+  restaurant_category: RestaurantCategorySchema.nullable(),
+  restoadmin: RestaurantAdminSchema.nullable(),
 });
 
 export type Restaurant = z.infer<typeof RestaurantSchema>;
