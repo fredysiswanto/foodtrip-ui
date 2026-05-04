@@ -23,7 +23,7 @@ export const RestaurantSchema = z.object({
   restoadmin: RestaurantAdminSchema.nullable(),
 });
 
-export type Restaurant = z.infer<typeof RestaurantSchema>;
+export type RestaurantType = z.infer<typeof RestaurantSchema>;
 
 /**
  * Create restaurant request schema

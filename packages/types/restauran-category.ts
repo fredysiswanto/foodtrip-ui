@@ -6,4 +6,4 @@ export const RestaurantCategorySchema = z
     restocatg_name: z.string(),
   })
   .merge(AuditFieldsSchema);
-export type RestaurantCategory = z.infer<typeof RestaurantCategorySchema>;
+export type RestaurantCategoryType = z.infer<typeof RestaurantCategorySchema>;

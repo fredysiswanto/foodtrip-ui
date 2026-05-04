@@ -7,4 +7,4 @@ export const AuditFieldsSchema = z.object({
   date_updated: z.string().datetime(),
   date_deleted: z.string().datetime().nullable(),
 });
-export type AuditFields = z.infer<typeof AuditFieldsSchema>;
+export type AuditFieldsType = z.infer<typeof AuditFieldsSchema>;

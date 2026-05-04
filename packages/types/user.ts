@@ -15,4 +15,4 @@ export const RestaurantAdminSchema = z
     user_type: z.string(),
   })
   .merge(AuditFieldsSchema);
-export type RestaurantAdmin = z.infer<typeof RestaurantAdminSchema>;
+export type RestaurantAdminType = z.infer<typeof RestaurantAdminSchema>;
