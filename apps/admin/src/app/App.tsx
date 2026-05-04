@@ -10,12 +10,10 @@ const queryClient = new QueryClient({
       staleTime: 1000 * 60 * 5, // 5 minutes
       gcTime: 1000 * 60 * 10, // 10 minutes (formerly cacheTime)
       retry: 1,
-      // Don't throw errors - let individual hooks handle errors via onError callback
       throwOnError: false,
     },
     mutations: {
       retry: 0,
-      // Don't throw errors - let individual hooks handle errors via onError callback
       throwOnError: false,
     },
   },
