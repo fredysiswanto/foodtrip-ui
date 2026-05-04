@@ -3,6 +3,7 @@ import { HTMLAttributes, ReactNode } from 'react';
 export interface TableColumn<T> {
   key: keyof T | string;
   label: string;
+  //  eslint-disable-next-line @typescript-eslint/no-explicit-any
   render?: (value: any, row: T) => ReactNode;
   sortable?: boolean;
 }
@@ -18,7 +19,7 @@ export interface TableProps<T> extends HTMLAttributes<HTMLTableElement> {
   hoverable?: boolean;
   compact?: boolean;
 }
-
+//  eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function Table<T extends Record<string, any>>({
   columns,
   data,
@@ -38,12 +39,14 @@ export function Table<T extends Record<string, any>>({
 
   const handleSort = (key: string, isSortable: boolean) => {
     if (!isSortable || !onSort) return;
-    
-    const direction = sortKey === key && sortDirection === 'asc' ? 'desc' : 'asc';
+
+    const direction =
+      sortKey === key && sortDirection === 'asc' ? 'desc' : 'asc';
     onSort(key, direction);
   };
 
-  const finalClassName = `w-full border-collapse border border-gray-200 rounded-lg overflow-hidden shadow-sm ${className}`.trim();
+  const finalClassName =
+    `w-full border-collapse border border-gray-200 rounded-lg overflow-hidden shadow-sm ${className}`.trim();
 
   return (
     <table className={finalClassName} {...props}>
@@ -53,15 +56,21 @@ export function Table<T extends Record<string, any>>({
             <th
               key={String(column.key)}
               className={`text-left text-sm font-semibold text-gray-900 ${rowPadding} ${
-                column.sortable && onSort ? 'cursor-pointer hover:bg-gray-200' : ''
+                column.sortable && onSort
+                  ? 'cursor-pointer hover:bg-gray-200'
+                  : ''
               }`}
-              onClick={() => handleSort(String(column.key), column.sortable || false)}
+              onClick={() =>
+                handleSort(String(column.key), column.sortable || false)
+              }
             >
               <div className="flex items-center gap-2">
                 {column.label}
-                {column.sortable && onSort && sortKey === String(column.key) && (
-                  <span>{sortDirection === 'asc' ? '↑' : '↓'}</span>
-                )}
+                {column.sortable &&
+                  onSort &&
+                  sortKey === String(column.key) && (
+                    <span>{sortDirection === 'asc' ? '↑' : '↓'}</span>
+                  )}
               </div>
             </th>
           ))}
@@ -70,7 +79,10 @@ export function Table<T extends Record<string, any>>({
       <tbody>
         {data.length === 0 ? (
           <tr>
-            <td colSpan={columns.length} className={`text-center text-gray-500 ${rowPadding}`}>
+            <td
+              colSpan={columns.length}
+              className={`text-center text-gray-500 ${rowPadding}`}
+            >
               No data available
             </td>
           </tr>
