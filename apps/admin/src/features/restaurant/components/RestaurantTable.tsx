@@ -57,9 +57,10 @@ export function RestaurantTable({
         <div className="flex gap-2">
           <Button
             size="sm"
-            variant="secondary"
+            variant="primary"
             onClick={() => onEdit(value)}
             disabled={isLoading}
+            className="px-2 py-1"
           >
             Edit
           </Button>
@@ -68,6 +69,7 @@ export function RestaurantTable({
             variant="danger"
             onClick={() => onDelete(value)}
             disabled={isLoading}
+            className="p-1"
           >
             Delete
           </Button>

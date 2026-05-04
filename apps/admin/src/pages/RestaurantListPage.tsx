@@ -34,8 +34,8 @@ export function RestaurantListPage() {
   };
 
   return (
-    <VStack gap="lg">
-      <div className="flex justify-between items-center">
+    <VStack gap="lg" className="px-5 py-2">
+      <div className="w-full flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">
             Restaurant Management
@@ -56,7 +56,7 @@ export function RestaurantListPage() {
       )}
 
       {isLoading ? (
-        <Card className="flex justify-center items-center py-12">
+        <Card className="w-full flex justify-center items-center py-12">
           <Spinner size="lg" />
         </Card>
       ) : restaurants.length === 0 ? (
@@ -67,7 +67,7 @@ export function RestaurantListPage() {
           </Button>
         </Card>
       ) : (
-        <Card>
+        <Card className="w-full overflow-x-auto">
           <RestaurantTable
             restaurants={restaurants}
             isLoading={isLoading}

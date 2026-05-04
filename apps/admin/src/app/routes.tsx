@@ -5,40 +5,46 @@ import { AdminLayout } from '../layouts';
 
 // Lazy load pages for better performance
 const LoginPage = lazy(() =>
-  import('../pages/LoginPage').then(m => ({ default: m.LoginPage }))
+  import('../pages/LoginPage').then((m) => ({ default: m.LoginPage }))
 );
 
 const DashboardPage = lazy(() =>
-  import('../pages/DashboardPage').then(m => ({ default: m.DashboardPage }))
+  import('../pages/DashboardPage').then((m) => ({ default: m.DashboardPage }))
 );
 
 const RestaurantListPage = lazy(() =>
-  import('../pages/RestaurantListPage').then(m => ({ default: m.RestaurantListPage }))
+  import('../pages/RestaurantListPage').then((m) => ({
+    default: m.RestaurantListPage,
+  }))
 );
 
 const RestaurantDetailPage = lazy(() =>
-  import('../pages/RestaurantDetailPage').then(m => ({ default: m.RestaurantDetailPage }))
+  import('../pages/RestaurantDetailPage').then((m) => ({
+    default: m.RestaurantDetailPage,
+  }))
 );
 
 const RestaurantCreatePage = lazy(() =>
-  import('../pages/RestaurantCreatePage').then(m => ({ default: m.RestaurantCreatePage }))
+  import('../pages/RestaurantCreatePage').then((m) => ({
+    default: m.RestaurantCreatePage,
+  }))
 );
 
-const FoodListPage = lazy(() =>
-  import('../pages/FoodListPage').then(m => ({ default: m.FoodListPage }))
-);
+// const FoodListPage = lazy(() =>
+//   import('../pages/FoodListPage').then(m => ({ default: m.FoodListPage }))
+// );
 
 // Placeholder pages for future features (CRUD pages)
-// const FoodListPage = lazy(() =>
-//   Promise.resolve({
-//     default: () => (
-//       <div className="p-8">
-//         <h1 className="text-3xl font-bold">Food Management</h1>
-//         <p className="text-slate-600 mt-2">Coming soon...</p>
-//       </div>
-//     ),
-//   })
-// );
+const FoodListPage = lazy(() =>
+  Promise.resolve({
+    default: () => (
+      <div className="p-8">
+        <h1 className="text-3xl font-bold">Food Management</h1>
+        <p className="text-slate-600 mt-2">Coming soon...</p>
+      </div>
+    ),
+  })
+);
 
 const TripListPage = lazy(() =>
   Promise.resolve({
