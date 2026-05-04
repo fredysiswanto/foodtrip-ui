@@ -12,6 +12,18 @@ const DashboardPage = lazy(() =>
   import('../pages/DashboardPage').then(m => ({ default: m.DashboardPage }))
 );
 
+const RestaurantListPage = lazy(() =>
+  import('../pages/RestaurantListPage').then(m => ({ default: m.RestaurantListPage }))
+);
+
+const RestaurantDetailPage = lazy(() =>
+  import('../pages/RestaurantDetailPage').then(m => ({ default: m.RestaurantDetailPage }))
+);
+
+const RestaurantCreatePage = lazy(() =>
+  import('../pages/RestaurantCreatePage').then(m => ({ default: m.RestaurantCreatePage }))
+);
+
 // Placeholder pages for future features (CRUD pages)
 const FoodListPage = lazy(() =>
   Promise.resolve({
@@ -29,17 +41,6 @@ const TripListPage = lazy(() =>
     default: () => (
       <div className="p-8">
         <h1 className="text-3xl font-bold">Trip Management</h1>
-        <p className="text-slate-600 mt-2">Coming soon...</p>
-      </div>
-    ),
-  })
-);
-
-const RestaurantListPage = lazy(() =>
-  Promise.resolve({
-    default: () => (
-      <div className="p-8">
-        <h1 className="text-3xl font-bold">Restaurant Management</h1>
         <p className="text-slate-600 mt-2">Coming soon...</p>
       </div>
     ),
@@ -123,6 +124,30 @@ export const adminRoutes: RouteObject[] = [
             element={
               <Suspense fallback={<LoadingFallback />}>
                 <RestaurantListPage />
+              </Suspense>
+            }
+          />
+        ),
+      },
+      {
+        path: 'restaurants/new',
+        element: (
+          <ProtectedRoute
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <RestaurantCreatePage />
+              </Suspense>
+            }
+          />
+        ),
+      },
+      {
+        path: 'restaurants/:id',
+        element: (
+          <ProtectedRoute
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <RestaurantDetailPage />
               </Suspense>
             }
           />

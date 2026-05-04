@@ -16,6 +16,10 @@
 - ✅ Part of 1.9 (localStorage token persistence)
 - ✅ Part of 2.1 (Dashboard page with summary cards & quick actions)
 
+**Completed in Phase 2**:
+
+- ✅ 2.4 Restaurant Management Feature (Full CRUD with list, detail, create, edit, delete)
+
 **What's Working**:
 
 - 🎯 Login page with email/password authentication
@@ -26,13 +30,17 @@
 - 🎯 Token persistence across page reloads
 - 🎯 Sidebar navigation with all features
 - 🎯 Error handling in LoginForm
+- 🎯 Restaurant Management - List, Create, Edit, Delete with full CRUD
+- 🎯 Restaurant forms with validation (Zod)
+- 🎯 Modal confirmations for destructive actions
+- 🎯 Responsive table display with edit/delete actions
 
 **Next Steps (Recommended)**:
 
 1. **1.7 Error Handling & Loading States** - Toast notifications, error boundaries
-2. **1.2 Core Entity Types** - Food, Restaurant, Trip, Category schemas
-3. **1.3 API Endpoints** - Complete API client with food, trip, restaurant endpoints
-4. **2.2-2.4 CRUD Features** - Food, Trip, Restaurant management
+2. **2.2-2.3 Food & Trip Management** - Similar CRUD features like restaurants
+3. **2.6 Form Validation & Error Messages** - Full validation with toasts and inline errors
+4. **2.7 Search & Filter** - Search/filter/sorting on all list pages
 
 ---
 
@@ -313,14 +321,14 @@ Core CRUD features that make the admin panel functional.
 
 ### 2.4 Restaurant Management Feature
 
-- [ ] **Create `features/restaurant/` structure** (same pattern as food):
-  - [ ] Hooks: useRestaurantList, useRestaurantDetail, useCreateRestaurant, etc.
-  - [ ] Components: RestaurantForm, RestaurantTable
-- [ ] **Create pages**:
-  - [ ] `pages/RestaurantListPage.tsx`
-  - [ ] `pages/RestaurantDetailPage.tsx`
-  - [ ] `pages/CreateRestaurantPage.tsx`
-- [ ] **Routes**: `/restaurants`, `/restaurants/:id`, `/restaurants/new`
+- [done] **Create `features/restaurant/` structure** (same pattern as food):
+  - [done] Hooks: useRestaurantList, useRestaurantDetail, useCreateRestaurant, useUpdateRestaurant, useDeleteRestaurant
+  - [done] Components: RestaurantForm, RestaurantTable, RestaurantCard
+- [done] **Create pages**:
+  - [done] `pages/RestaurantListPage.tsx` — list with delete modal
+  - [done] `pages/RestaurantDetailPage.tsx` — detail + edit form
+  - [done] `pages/RestaurantCreatePage.tsx` — create form
+- [done] **Routes**: `/restaurants`, `/restaurants/new`, `/restaurants/:id`
 
 ### 2.5 User Management (Optional)
 
