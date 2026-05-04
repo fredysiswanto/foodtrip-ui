@@ -24,17 +24,21 @@ const RestaurantCreatePage = lazy(() =>
   import('../pages/RestaurantCreatePage').then(m => ({ default: m.RestaurantCreatePage }))
 );
 
-// Placeholder pages for future features (CRUD pages)
 const FoodListPage = lazy(() =>
-  Promise.resolve({
-    default: () => (
-      <div className="p-8">
-        <h1 className="text-3xl font-bold">Food Management</h1>
-        <p className="text-slate-600 mt-2">Coming soon...</p>
-      </div>
-    ),
-  })
+  import('../pages/FoodListPage').then(m => ({ default: m.FoodListPage }))
 );
+
+// Placeholder pages for future features (CRUD pages)
+// const FoodListPage = lazy(() =>
+//   Promise.resolve({
+//     default: () => (
+//       <div className="p-8">
+//         <h1 className="text-3xl font-bold">Food Management</h1>
+//         <p className="text-slate-600 mt-2">Coming soon...</p>
+//       </div>
+//     ),
+//   })
+// );
 
 const TripListPage = lazy(() =>
   Promise.resolve({

@@ -12,14 +12,8 @@ export function useRestaurantList(params?: RestaurantListParams) {
     queryKey: ['admin', 'restaurant', 'list', { page, limit }],
     queryFn: async () => {
       try {
-        console.log(
-          'useRestaurantList - calling API with page:',
-          page,
-          'limit:',
-          limit
-        );
         const result = await restaurantApi.list(page, limit);
-        console.log('useRestaurantList - API result:', result);
+
         return result;
       } catch (error) {
         console.error('useRestaurantList - API error:', error);
