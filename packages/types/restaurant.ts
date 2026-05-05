@@ -39,14 +39,14 @@ export const CreateRestaurantSchema = z.object({
   resto_img: z.string().optional(),
 });
 
-export type CreateRestaurantInput = z.infer<typeof CreateRestaurantSchema>;
+export type CreateRestaurantInputType = z.infer<typeof CreateRestaurantSchema>;
 
 /**
  * Update restaurant request schema
  */
 export const UpdateRestaurantSchema = CreateRestaurantSchema.partial();
 
-export type UpdateRestaurantInput = z.infer<typeof UpdateRestaurantSchema>;
+export type UpdateRestaurantInputType = z.infer<typeof UpdateRestaurantSchema>;
 
 /**
  * Restaurant list response
@@ -58,7 +58,7 @@ export const RestaurantListSchema = z.object({
   recordsTotal: z.number(),
 });
 
-export type RestaurantListResponse = z.infer<typeof RestaurantListSchema>;
+export type RestaurantListResponseType = z.infer<typeof RestaurantListSchema>;
 
 /**
  * Single restaurant response
@@ -67,4 +67,6 @@ export const RestaurantDetailSchema = z.object({
   data: RestaurantSchema,
 });
 
-export type RestaurantDetailResponse = z.infer<typeof RestaurantDetailSchema>;
+export type RestaurantDetailResponseType = z.infer<
+  typeof RestaurantDetailSchema
+>;

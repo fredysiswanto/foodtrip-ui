@@ -7,3 +7,14 @@ export const RestaurantCategorySchema = z
   })
   .merge(AuditFieldsSchema);
 export type RestaurantCategoryType = z.infer<typeof RestaurantCategorySchema>;
+
+export const RestaurantCategoryListSchema = z.object({
+  draw: z.number(),
+  data: z.array(RestaurantCategorySchema),
+  recordsFiltered: z.number(),
+  recordsTotal: z.number(),
+});
+
+export type RestaurantCategoryListResponseType = z.infer<
+  typeof RestaurantCategoryListSchema
+>;

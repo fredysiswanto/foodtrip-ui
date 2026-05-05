@@ -19,3 +19,12 @@ export const DishSchema = z
   .merge(AuditFieldsSchema);
 
 export type DishType = z.infer<typeof DishSchema>;
+
+export const DishListSchema = z.object({
+  draw: z.number(),
+  data: z.array(DishSchema),
+  recordsFiltered: z.number(),
+  recordsTotal: z.number(),
+});
+
+export type DishListResponseType = z.infer<typeof DishListSchema>;

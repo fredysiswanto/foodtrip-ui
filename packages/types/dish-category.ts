@@ -13,3 +13,14 @@ export const DishCategorySchema = z
   .merge(AuditFieldsSchema);
 
 export type DishCategoryType = z.infer<typeof DishCategorySchema>;
+
+export const DishCategoryListSchema = z.object({
+  draw: z.number(),
+  data: z.array(DishCategorySchema),
+  recordsFiltered: z.number(),
+  recordsTotal: z.number(),
+});
+
+export type DishCategoryListResponseType = z.infer<
+  typeof DishCategoryListSchema
+>;
