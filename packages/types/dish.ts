@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { AuditFieldsSchema } from './common';
 import { DishCategorySchema } from './dish-category';
+import { RestaurantSchema } from './restaurant';
 
 /**
  * Dish entity schema
@@ -17,7 +18,14 @@ export const DishSchema = z
     status: z.enum(['Available', 'Unavailable', 'Open', 'Out of Stock']),
     dishcatg_id: z.string().uuid(),
     resto_id: z.string().uuid(),
-    dish_category: DishCategorySchema.nullable(),
+    dish_category: DishCategorySchema.pick({
+      dishcatg_id: true,
+      dishcatg_name: true,
+    }).nullable(),
+    restaurant: RestaurantSchema.pick({
+      resto_name: true,
+      resto_id: true,
+    }).nullable(),
   })
   .merge(AuditFieldsSchema);
 

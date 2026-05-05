@@ -16,6 +16,13 @@ export function DishTable({
 }: DishTableProps) {
   const columns = [
     {
+      key: 'restaurant',
+      label: 'Restaurant Name',
+      render: (value: { resto_name: string } | null) => (
+        <span className="font-medium">{value ? value.resto_name : 'N/A'}</span>
+      ),
+    },
+    {
       key: 'dish_category',
       label: 'Category',
       render: (value: { dishcatg_name: string } | null) => (
