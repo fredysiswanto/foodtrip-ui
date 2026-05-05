@@ -21,6 +21,8 @@ export function useLogin() {
       // Store token in localStorage
       localStorage.setItem('auth_token', data.token);
 
+      localStorage.setItem('resto_id', data.data.resto_id || '');
+
       // Update auth state
       setAuth({
         user: data.data,

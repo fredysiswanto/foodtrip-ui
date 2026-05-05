@@ -1,8 +1,8 @@
-import { Restaurant } from '@foodtrip/types';
+import { RestaurantType } from '@foodtrip/types';
 import { Table, Button, Badge } from '@foodtrip/ui';
 
 export interface RestaurantTableProps {
-  restaurants: Restaurant[];
+  restaurants: RestaurantType[];
   isLoading?: boolean;
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;

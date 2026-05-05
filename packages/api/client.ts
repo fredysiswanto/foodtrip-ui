@@ -5,7 +5,7 @@ import {
   RestaurantDetailSchema,
   CreateRestaurantSchema,
   UpdateRestaurantSchema,
-  Restaurant,
+  RestaurantType,
 } from '@foodtrip/types';
 
 const API_URL =
@@ -126,7 +126,7 @@ export const restaurantApi = {
       page: String(page),
       limit: String(limit),
     });
-    return apiFetch<Restaurant[]>(`/admin/restaurants?${params}`, {
+    return apiFetch<RestaurantType[]>(`/admin/restaurants?${params}`, {
       method: 'GET',
       validateWith: (data: unknown) => {
         console.log('restaurantApi.list - raw data:', data);
@@ -181,7 +181,7 @@ export const restaurantApi = {
   },
 
   getById: async (id: string) => {
-    return apiFetch<Restaurant>(`/admin/restaurant/${id}`, {
+    return apiFetch<RestaurantType>(`/admin/restaurant/${id}`, {
       method: 'GET',
       validateWith: (data: unknown) => {
         // Check if data has a 'data' wrapper
@@ -195,7 +195,7 @@ export const restaurantApi = {
 
   create: async (input: Record<string, unknown>) => {
     const validated = CreateRestaurantSchema.parse(input);
-    return apiFetch<Restaurant>('/admin/restaurants', {
+    return apiFetch<RestaurantType>('/admin/restaurants', {
       method: 'POST',
       body: JSON.stringify(validated),
       validateWith: (data: unknown) => {
@@ -209,7 +209,7 @@ export const restaurantApi = {
 
   update: async (id: string, input: Record<string, unknown>) => {
     const validated = UpdateRestaurantSchema.parse(input);
-    return apiFetch<Restaurant>(`/admin/restaurant/${id}`, {
+    return apiFetch<RestaurantType>(`/admin/restaurant/${id}`, {
       method: 'PUT',
       body: JSON.stringify(validated),
       validateWith: (data: unknown) => {

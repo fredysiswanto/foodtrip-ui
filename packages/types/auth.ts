@@ -1,24 +1,21 @@
 import { z } from 'zod';
+import { AuditFieldsSchema } from './common';
 
 // User schema based on API response
-export const UserSchema = z.object({
-  user_id: z.string().uuid(),
-  resto_id: z.string().uuid().nullable(),
-  user_no: z.string(),
-  first_name: z.string(),
-  middle_name: z.string().nullable(),
-  last_name: z.string(),
-  email_address: z.string().email(),
-  phone_number: z.string().nullable(),
-  gender: z.string().nullable(),
-  user_type: z.enum(['Admin', 'RestaurantOwner', 'User']),
-  created_by: z.string().uuid(),
-  updated_by: z.string().uuid().nullable(),
-  deleted_by: z.string().uuid().nullable(),
-  date_created: z.string().datetime(),
-  date_updated: z.string().datetime(),
-  date_deleted: z.string().datetime().nullable(),
-});
+export const UserSchema = z
+  .object({
+    user_id: z.string().uuid(),
+    resto_id: z.string().uuid().nullable(),
+    user_no: z.string(),
+    first_name: z.string(),
+    middle_name: z.string().nullable(),
+    last_name: z.string(),
+    email_address: z.string().email(),
+    phone_number: z.string().nullable(),
+    gender: z.string().nullable(),
+    user_type: z.enum(['Admin', 'Resto_Admin', 'User']),
+  })
+  .merge(AuditFieldsSchema);
 
 export type User = z.infer<typeof UserSchema>;
 

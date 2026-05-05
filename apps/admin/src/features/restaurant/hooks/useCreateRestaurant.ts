@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { restaurantApi } from '@foodtrip/api';
-import { CreateRestaurantInput } from '@foodtrip/types';
+import { CreateRestaurantInputType } from '@foodtrip/types';
 
 export function useCreateRestaurant() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: CreateRestaurantInput) => restaurantApi.create(data),
+    mutationFn: (data: CreateRestaurantInputType) => restaurantApi.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['admin', 'restaurant', 'list'],

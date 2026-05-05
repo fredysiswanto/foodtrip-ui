@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { restaurantApi } from '@foodtrip/api';
-import { Restaurant } from '@foodtrip/types';
 
 export function useRestaurantDetail(id: string) {
   return useQuery({
