@@ -1,8 +1,8 @@
-import { Restaurant } from '@foodtrip/types';
+import { RestaurantType } from '@foodtrip/types';
 import { Card, VStack, Badge, HStack, Button } from '@foodtrip/ui';
 
 export interface RestaurantCardProps {
-  restaurant: Restaurant;
+  restaurant: RestaurantType;
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
 }
@@ -14,10 +14,10 @@ export function RestaurantCard({
 }: RestaurantCardProps) {
   return (
     <Card className="h-full flex flex-col">
-      {restaurant.image && (
+      {restaurant.resto_name && (
         <img
-          src={restaurant.image}
-          alt={restaurant.name}
+          src={restaurant.resto_img}
+          alt={restaurant.resto_name}
           className="w-full h-48 object-cover rounded-t-lg -m-6 mb-4"
         />
       )}
@@ -25,31 +25,29 @@ export function RestaurantCard({
       <VStack gap="sm" className="flex-1">
         <div>
           <h3 className="text-lg font-semibold text-gray-900">
-            {restaurant.name}
+            {restaurant.resto_name}
           </h3>
-          <p className="text-sm text-gray-500">{restaurant.address}</p>
+          <p className="text-sm text-gray-500">{restaurant.resto_landline}</p>
         </div>
 
-        {restaurant.cuisine && (
-          <Badge variant="info">{restaurant.cuisine}</Badge>
-        )}
+        {restaurant.status && <Badge variant="info">{restaurant.status}</Badge>}
 
-        {restaurant.description && (
+        {restaurant.resto_phone && (
           <p className="text-sm text-gray-600 line-clamp-3">
-            {restaurant.description}
+            {restaurant.resto_phone}
           </p>
         )}
 
         <div className="space-y-1 text-sm">
-          {restaurant.phone && (
-            <p className="text-gray-600">📞 {restaurant.phone}</p>
+          {restaurant.resto_phone && (
+            <p className="text-gray-600">📞 {restaurant.resto_phone}</p>
           )}
-          {restaurant.email && (
-            <p className="text-gray-600">✉️ {restaurant.email}</p>
+          {restaurant.resto_email && (
+            <p className="text-gray-600">✉️ {restaurant.resto_email}</p>
           )}
-          {restaurant.website && (
+          {restaurant.resto_website && (
             <a
-              href={restaurant.website}
+              href={restaurant.resto_website}
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 hover:underline"
@@ -59,10 +57,8 @@ export function RestaurantCard({
           )}
         </div>
 
-        {restaurant.rating && (
-          <p className="text-lg font-semibold">
-            {restaurant.rating.toFixed(1)} ⭐
-          </p>
+        {restaurant.status && (
+          <p className="text-lg font-semibold">{restaurant.status} ⭐</p>
         )}
 
         {(onEdit || onDelete) && (
@@ -71,7 +67,7 @@ export function RestaurantCard({
               <Button
                 size="sm"
                 variant="secondary"
-                onClick={() => onEdit(restaurant.id)}
+                onClick={() => onEdit(restaurant.resto_id)}
               >
                 Edit
               </Button>
@@ -80,7 +76,7 @@ export function RestaurantCard({
               <Button
                 size="sm"
                 variant="danger"
-                onClick={() => onDelete(restaurant.id)}
+                onClick={() => onDelete(restaurant.resto_id)}
               >
                 Delete
               </Button>

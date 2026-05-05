@@ -1,6 +1,10 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CreateRestaurantSchema, CreateRestaurantInput, Restaurant } from '@foodtrip/types';
+import {
+  CreateRestaurantSchema,
+  CreateRestaurantInput,
+  Restaurant,
+} from '@foodtrip/types';
 import { Button, Input, Textarea, NumberInput, FormGroup } from '@foodtrip/ui';
 
 export interface RestaurantFormProps {
@@ -22,17 +26,13 @@ export function RestaurantForm({
     resolver: zodResolver(CreateRestaurantSchema),
     defaultValues: initialData
       ? {
-          name: initialData.name,
-          address: initialData.address,
-          description: initialData.description || '',
-          image: initialData.image || '',
-          cuisine: initialData.cuisine || '',
-          rating: initialData.rating || undefined,
-          phone: initialData.phone || '',
-          email: initialData.email || '',
-          website: initialData.website || '',
-          latitude: initialData.latitude || undefined,
-          longitude: initialData.longitude || undefined,
+          name: initialData.resto_name,
+          address: initialData.resto_landline,
+          image: initialData.resto_img || '',
+          status: initialData.status || undefined,
+          phone: initialData.resto_phone || '',
+          email: initialData.resto_email || '',
+          website: initialData.resto_website || '',
         }
       : {},
   });

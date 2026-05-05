@@ -1,7 +1,7 @@
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks';
-import { AdminRole, canAccessRoute } from '../roles';
+import { AdminRole } from '../roles';
 
 export interface ProtectedRouteProps {
   element: React.ReactElement;
@@ -10,7 +10,6 @@ export interface ProtectedRouteProps {
 
 export function ProtectedRoute({ element, allowedRoles }: ProtectedRouteProps) {
   const { isAuthenticated, isLoading, user } = useAuth();
-  const location = useLocation();
 
   if (isLoading) {
     return (

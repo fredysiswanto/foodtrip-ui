@@ -6,7 +6,7 @@ export interface BreadcrumbItem {
   onClick?: () => void;
 }
 
-export interface BreadcrumbProps extends HTMLAttributes<HTMLNavElement> {
+export interface BreadcrumbProps extends HTMLAttributes<HTMLDivElement> {
   items: BreadcrumbItem[];
   separator?: ReactNode;
 }
@@ -18,7 +18,11 @@ export function Breadcrumb({
   ...props
 }: BreadcrumbProps) {
   return (
-    <nav className={`flex items-center gap-2 ${className}`.trim()} aria-label="Breadcrumb" {...props}>
+    <nav
+      className={`flex items-center gap-2 ${className}`.trim()}
+      aria-label="Breadcrumb"
+      {...props}
+    >
       <ol className="flex items-center gap-2">
         {items.map((item, index) => (
           <li key={index} className="flex items-center gap-2">

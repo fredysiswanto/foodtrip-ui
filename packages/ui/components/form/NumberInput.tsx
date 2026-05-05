@@ -4,9 +4,9 @@ export interface NumberInputProps extends InputHTMLAttributes<HTMLInputElement> 
   error?: string;
   hint?: string;
   label?: ReactNode;
-  min?: number;
-  max?: number;
-  step?: number;
+  min?: number | string;
+  max?: number | string;
+  step?: number | string;
 }
 
 export function NumberInput({
@@ -20,13 +20,17 @@ export function NumberInput({
   step = 1,
   ...props
 }: NumberInputProps) {
-  const baseStyles = 'w-full px-4 py-2 border rounded-lg font-normal text-gray-900 transition-colors duration-200';
+  const baseStyles =
+    'w-full px-4 py-2 border rounded-lg font-normal text-gray-900 transition-colors duration-200';
   const borderStyles = error
     ? 'border-red-500 focus:border-red-600 focus:ring-1 focus:ring-red-500'
     : 'border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500';
-  const disabledStyles = disabled ? 'bg-gray-100 cursor-not-allowed opacity-60' : 'bg-white';
+  const disabledStyles = disabled
+    ? 'bg-gray-100 cursor-not-allowed opacity-60'
+    : 'bg-white';
 
-  const finalClassName = `${baseStyles} ${borderStyles} ${disabledStyles} ${className}`.trim();
+  const finalClassName =
+    `${baseStyles} ${borderStyles} ${disabledStyles} ${className}`.trim();
 
   return (
     <div className="w-full">

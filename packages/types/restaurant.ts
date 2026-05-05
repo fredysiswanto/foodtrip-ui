@@ -24,22 +24,30 @@ export const RestaurantSchema = z.object({
 });
 
 export type RestaurantType = z.infer<typeof RestaurantSchema>;
+export type Restaurant = RestaurantType; // Backward compatibility alias
 
 /**
  * Create restaurant request schema
+ * Matches the form UI expectations
  */
 export const CreateRestaurantSchema = z.object({
-  resto_name: z.string().min(1, 'Restaurant name is required'),
-  resto_email: z.string().email('Valid email is required').optional(),
-  resto_phone: z.string().optional(),
-  resto_landline: z.string().optional(),
-  resto_website: z.string().optional(),
-  restocatg_id: z.string().uuid('Valid category ID is required'),
-  status: z.string().default('Open'),
-  resto_img: z.string().optional(),
+  name: z.string().min(2, 'Restaurant name is required'),
+  address: z.string().min(5, 'Address is required'),
+  cuisine: z.string().min(1, 'Cuisine type is required'),
+  rating: z.number().min(0).max(5).optional(),
+  email: z.string().email('Valid email is required').optional(),
+  phone: z.string().optional(),
+  website: z.string().url('Valid URL is required').optional(),
+  image: z.string().url('Valid URL is required').optional(),
+  description: z.string().max(500).optional(),
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
+  restocatg_id: z.string().uuid('Valid category ID is required').optional(),
+  status: z.string().default('Open').optional(),
 });
 
 export type CreateRestaurantInputType = z.infer<typeof CreateRestaurantSchema>;
+export type CreateRestaurantInput = CreateRestaurantInputType; // Backward compatibility alias
 
 /**
  * Update restaurant request schema
@@ -47,6 +55,7 @@ export type CreateRestaurantInputType = z.infer<typeof CreateRestaurantSchema>;
 export const UpdateRestaurantSchema = CreateRestaurantSchema.partial();
 
 export type UpdateRestaurantInputType = z.infer<typeof UpdateRestaurantSchema>;
+export type UpdateRestaurantInput = UpdateRestaurantInputType; // Backward compatibility alias
 
 /**
  * Restaurant list response
