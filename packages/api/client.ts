@@ -6,6 +6,7 @@ import {
   CreateRestaurantSchema,
   UpdateRestaurantSchema,
   RestaurantType,
+  DishSchema,
 } from '@foodtrip/types';
 
 const API_URL =
@@ -226,6 +227,66 @@ export const restaurantApi = {
       method: 'DELETE',
     });
   },
+};
+
+export const dishApi = {
+  list: async (page = 1, limit = 10) => {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: String(limit),
+    });
+    return apiFetch(`/admin/dishes?${params}`, {
+      method: 'GET',
+      validateWith: (data: unknown) => {
+        console.log('dishApi.list - raw data:', data);
+
+        // Handle direct array response
+        if (Array.isArray(data)) {
+          console.log('dishApi.list - data is array, count:', data.length);
+          return data.map((item) => DishSchema.parse(item));
+        }
+
+        // Handle object with 'data' property
+        if (data && typeof data === 'object') {
+          const obj = data as Record<string, unknown>;
+
+          // Case: { data: [...] }
+          if ('data' in obj && Array.isArray(obj.data)) {
+            console.log(
+              'dishApi.list - data wrapped in .data, count:',
+              obj.data.length
+            );
+            return obj.data.map((item) => DishSchema.parse(item));
+          }
+
+          // Case: { items: [...] } or similar
+          // if ('items' in obj && Array.isArray(obj.items)) {
+          //   console.log(
+          //     'dishApi.list - data wrapped in .items, count:',
+          //     obj.items.length
+          //   );
+          //   return obj.items.map((item) => DishSchema.parse(item));
+          // }
+
+          // Case: { restaurants: [...] }
+          // if ('restaurants' in obj && Array.isArray(obj.restaurants)) {
+          //   console.log(
+          //     'dishApi.list - data wrapped in .restaurants, count:',
+          //     obj.restaurants.length
+          //   );
+          //   return obj.restaurants.map((item) => DishSchema.parse(item));
+          // }
+        }
+
+        console.warn(
+          'dishApi.list - data format not recognized, returning empty array'
+        );
+        return [];
+      },
+    });
+  },
+
+  // Implement other dish-related API methods (getById, create, update, delete) similarly
 };
 
 export { ApiError, apiFetch };

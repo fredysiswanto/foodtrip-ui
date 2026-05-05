@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { AuditFieldsSchema } from './common';
+import { DishCategorySchema } from './dish-category';
 
 /**
  * Dish entity schema
@@ -13,9 +14,10 @@ export const DishSchema = z
     dish_name: z.string().min(2).max(100),
     dish_desc: z.string().max(255).optional(),
     dish_price: z.string().regex(/^\d+(\.\d{1,2})?$/),
-    status: z.string(),
+    status: z.enum(['Available', 'Unavailable', 'Open', 'Out of Stock']),
     dishcatg_id: z.string().uuid(),
     resto_id: z.string().uuid(),
+    dish_category: DishCategorySchema.nullable(),
   })
   .merge(AuditFieldsSchema);
 
@@ -35,7 +37,9 @@ export const CreateDishSchema = z.object({
     .regex(/^\d+(\.\d{1,2})?$/, 'Price must be a valid number'),
   dishcatg_id: z.string().uuid('Valid category ID is required'),
   resto_id: z.string().uuid('Valid restaurant ID is required'),
-  status: z.string().default('Available'),
+  status: z
+    .enum(['Available', 'Unavailable', 'Open', 'Out of Stock'])
+    .default('Available'),
   dish_img: z.string().optional(),
 });
 

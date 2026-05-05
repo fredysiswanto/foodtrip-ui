@@ -30,6 +30,10 @@ const RestaurantCreatePage = lazy(() =>
   }))
 );
 
+const DishListPage = lazy(() =>
+  import('../pages/DishListPage').then((m) => ({ default: m.DishListPage }))
+);
+
 // const FoodListPage = lazy(() =>
 //   import('../pages/FoodListPage').then(m => ({ default: m.FoodListPage }))
 // );
@@ -111,6 +115,19 @@ export const adminRoutes: RouteObject[] = [
             element={
               <Suspense fallback={<LoadingFallback />}>
                 <FoodListPage />
+              </Suspense>
+            }
+          />
+        ),
+      },
+      {
+        path: 'dishes',
+        element: (
+          <ProtectedRoute
+            allowedRoles={[ADMIN_ROLES.ADMIN]}
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <DishListPage />
               </Suspense>
             }
           />
