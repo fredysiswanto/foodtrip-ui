@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import type { RouteObject } from 'react-router-dom';
-import { ProtectedRoute } from '../features/auth';
+import { ProtectedRoute, ADMIN_ROLES } from '../features/auth';
 import { AdminLayout } from '../layouts';
 
 // Lazy load pages for better performance
@@ -107,6 +107,7 @@ export const adminRoutes: RouteObject[] = [
         path: 'foods',
         element: (
           <ProtectedRoute
+            allowedRoles={[ADMIN_ROLES.ADMIN]}
             element={
               <Suspense fallback={<LoadingFallback />}>
                 <FoodListPage />
@@ -119,6 +120,7 @@ export const adminRoutes: RouteObject[] = [
         path: 'trips',
         element: (
           <ProtectedRoute
+            allowedRoles={[ADMIN_ROLES.ADMIN]}
             element={
               <Suspense fallback={<LoadingFallback />}>
                 <TripListPage />
@@ -131,6 +133,7 @@ export const adminRoutes: RouteObject[] = [
         path: 'restaurants',
         element: (
           <ProtectedRoute
+            allowedRoles={[ADMIN_ROLES.ADMIN]}
             element={
               <Suspense fallback={<LoadingFallback />}>
                 <RestaurantListPage />
@@ -143,6 +146,7 @@ export const adminRoutes: RouteObject[] = [
         path: 'restaurants/new',
         element: (
           <ProtectedRoute
+            allowedRoles={[ADMIN_ROLES.ADMIN]}
             element={
               <Suspense fallback={<LoadingFallback />}>
                 <RestaurantCreatePage />
@@ -155,6 +159,7 @@ export const adminRoutes: RouteObject[] = [
         path: 'restaurants/:id',
         element: (
           <ProtectedRoute
+            allowedRoles={[ADMIN_ROLES.ADMIN, ADMIN_ROLES.RESTO_ADMIN]}
             element={
               <Suspense fallback={<LoadingFallback />}>
                 <RestaurantDetailPage />
@@ -167,6 +172,7 @@ export const adminRoutes: RouteObject[] = [
         path: 'users',
         element: (
           <ProtectedRoute
+            allowedRoles={[ADMIN_ROLES.ADMIN]}
             element={
               <Suspense fallback={<LoadingFallback />}>
                 <UserListPage />
