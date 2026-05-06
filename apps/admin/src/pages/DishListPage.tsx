@@ -37,7 +37,7 @@ export function DishListPage() {
       ) : dishes.length === 0 ? (
         <Card className="text-center py-12">
           <p className="text-gray-500 mb-4">No dishes found</p>
-          <Button onClick={() => navigate('/admin/dishes/new')}>
+          <Button onClick={() => navigate('/dishes/new')}>
             Create your first dish
           </Button>
         </Card>
@@ -46,8 +46,8 @@ export function DishListPage() {
           <DishTable
             dishes={dishes}
             isLoading={isLoading}
-            onEdit={(id) => navigate(`/admin/dishes/${id}/edit`)}
-            onDelete={(id) => navigate(`/admin/dishes/${id}/delete`)}
+            onEdit={(id) => navigate(`/dishes/${id}/edit`)}
+            onDelete={(id) => navigate(`/dishes/${id}/delete`)}
           />
         </Card>
       )}

@@ -7,6 +7,8 @@ import {
   UpdateRestaurantSchema,
   RestaurantType,
   DishSchema,
+  UpdateDishSchema,
+  DishDetailSchema,
 } from '@foodtrip/types';
 
 const API_URL =
@@ -285,8 +287,33 @@ export const dishApi = {
       },
     });
   },
+  getById: async (id: string) => {
+    return apiFetch(`/admin/dish/${id}`, {
+      method: 'GET',
+      validateWith: (data: unknown) => {
+        // Check if data has a 'data' wrapper
+        if (data && typeof data === 'object' && 'data' in data) {
+          return DishDetailSchema.parse(data).data;
+        }
+        return DishSchema.parse(data);
+      },
+    });
+  },
+  update: async (id: string, input: Record<string, unknown>) => {
+    const validated = UpdateDishSchema.parse(input);
+    return apiFetch(`/admin/dish/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(validated),
+      validateWith: (data: unknown) => {
+        if (data && typeof data === 'object' && 'data' in data) {
+          return DishDetailSchema.parse(data).data;
+        }
+        console.log('diluar');
 
-  // Implement other dish-related API methods (getById, create, update, delete) similarly
+        return DishSchema.parse(data);
+      },
+    });
+  },
 };
 
 export { ApiError, apiFetch };
