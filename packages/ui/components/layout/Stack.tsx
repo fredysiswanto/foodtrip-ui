@@ -30,6 +30,7 @@ const justifyStyles = {
   around: 'justify-around',
 };
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface VStackProps extends StackProps {}
 
 export function VStack({
@@ -40,7 +41,8 @@ export function VStack({
   className = '',
   ...props
 }: VStackProps) {
-  const finalClassName = `flex flex-col ${gapStyles[gap]} ${alignStyles[align]} ${justifyStyles[justify]} ${className}`.trim();
+  const finalClassName =
+    `flex flex-col ${gapStyles[gap]} ${alignStyles[align]} ${justifyStyles[justify]} ${className}`.trim();
 
   return (
     <div className={finalClassName} {...props}>
@@ -49,6 +51,7 @@ export function VStack({
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface HStackProps extends StackProps {}
 
 export function HStack({
@@ -59,7 +62,8 @@ export function HStack({
   className = '',
   ...props
 }: HStackProps) {
-  const finalClassName = `flex flex-row ${gapStyles[gap]} ${alignStyles[align]} ${justifyStyles[justify]} ${className}`.trim();
+  const finalClassName =
+    `flex flex-row ${gapStyles[gap]} ${alignStyles[align]} ${justifyStyles[justify]} ${className}`.trim();
 
   return (
     <div className={finalClassName} {...props}>
