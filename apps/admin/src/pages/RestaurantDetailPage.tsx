@@ -1,5 +1,9 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useRestaurantDetail, useUpdateRestaurant } from '../features/restaurant';
+import {
+  CreateRestaurantInput,
+  useRestaurantDetail,
+  useUpdateRestaurant,
+} from '../features/restaurant';
 import { RestaurantForm } from '../features/restaurant/components';
 import { Button, Card, VStack, Spinner, Alert } from '@foodtrip/ui';
 
@@ -9,7 +13,7 @@ export function RestaurantDetailPage() {
   const { data: restaurant, isLoading, error } = useRestaurantDetail(id || '');
   const { mutate: updateRestaurant, isPending } = useUpdateRestaurant();
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: CreateRestaurantInput) => {
     if (!id) return;
 
     updateRestaurant(

@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom';
-import { DishForm, useCreateDish } from '../features/dish';
+import { CreateDishInputType, DishForm, useCreateDish } from '../features/dish';
 import { Button, Card, VStack, Spinner, Alert } from '@foodtrip/ui';
 
 export function DishCreatePage() {
   const navigate = useNavigate();
   const { mutate: createDish, isPending, error } = useCreateDish();
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: CreateDishInputType) => {
     createDish(data, {
       onSuccess: () => {
         navigate('/dishes');
@@ -15,7 +15,7 @@ export function DishCreatePage() {
   };
 
   return (
-    <VStack gap="lg" className="px-5 py-2">
+    <VStack gap="lg">
       <div>
         <Button variant="ghost" onClick={() => navigate('/dishes')}>
           ← Back to Dishes

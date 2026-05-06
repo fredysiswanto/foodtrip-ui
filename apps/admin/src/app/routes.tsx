@@ -54,7 +54,7 @@ const DishEditPage = lazy(() =>
 const FoodListPage = lazy(() =>
   Promise.resolve({
     default: () => (
-      <div className="p-8">
+      <div>
         <h1 className="text-3xl font-bold">Food Management</h1>
         <p className="text-slate-600 mt-2">Coming soon...</p>
       </div>
@@ -65,7 +65,7 @@ const FoodListPage = lazy(() =>
 const TripListPage = lazy(() =>
   Promise.resolve({
     default: () => (
-      <div className="p-8">
+      <div>
         <h1 className="text-3xl font-bold">Trip Management</h1>
         <p className="text-slate-600 mt-2">Coming soon...</p>
       </div>
@@ -76,7 +76,7 @@ const TripListPage = lazy(() =>
 const UserListPage = lazy(() =>
   Promise.resolve({
     default: () => (
-      <div className="p-8">
+      <div>
         <h1 className="text-3xl font-bold">User Management</h1>
         <p className="text-slate-600 mt-2">Coming soon...</p>
       </div>

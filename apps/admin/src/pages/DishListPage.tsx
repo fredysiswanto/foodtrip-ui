@@ -7,7 +7,7 @@ export function DishListPage() {
   const { data: dishes = [], isLoading, error } = useDishList();
 
   return (
-    <VStack gap="lg" className="px-5 py-2">
+    <VStack gap="lg">
       <div className="w-full flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Dish Management</h1>

@@ -73,7 +73,7 @@ export function Table<T extends Record<string, any>>({
     `w-full border-collapse border border-gray-200 rounded-lg overflow-hidden shadow-sm text-sm sm:text-base ${className}`.trim();
 
   const wrapperClassName =
-    `overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 ${containerClassName}`.trim();
+    `overflow-x-auto -mx-4 sm:mx-0 sm:px-0 ${containerClassName}`.trim();
 
   return (
     <div className={wrapperClassName}>
@@ -85,7 +85,7 @@ export function Table<T extends Record<string, any>>({
             {columns.map((column) => (
               <th
                 key={String(column.key)}
-                className={`${getAlignClass(column.align)} text-xs sm:text-sm font-semibold text-gray-900 ${rowPadding} whitespace-nowrap ${
+                className={`${getAlignClass(column.align)} text-sm sm:text-sm font-semibold text-gray-900 ${rowPadding} whitespace-nowrap ${
                   column.sortable && onSort
                     ? 'cursor-pointer hover:bg-gray-200 select-none'
                     : ''
@@ -133,7 +133,7 @@ export function Table<T extends Record<string, any>>({
                 {columns.map((column) => (
                   <td
                     key={`${String(row[rowKey as keyof T])}-${String(column.key)}`}
-                    className={`text-xs sm:text-sm text-gray-700 ${rowPadding} ${getAlignClass(column.align)} ${
+                    className={`text-sm sm:text-xs text-gray-700 ${rowPadding} ${getAlignClass(column.align)} ${
                       column.className || ''
                     }`}
                   >

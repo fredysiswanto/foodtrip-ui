@@ -42,7 +42,7 @@ export function DishEditPage() {
   }
 
   return (
-    <VStack gap="lg" className="px-5 py-2">
+    <VStack gap="lg">
       <div>
         <Button variant="ghost" onClick={() => navigate(`/dishes/${id}`)}>
           ← Back to Dish

@@ -29,7 +29,7 @@ export function DishDetailPage() {
 
   if (error || !dish) {
     return (
-      <VStack gap="lg" className="px-5 py-2">
+      <VStack gap="lg">
         <Alert type="error">
           {error instanceof Error ? error.message : 'Failed to load dish'}
         </Alert>
@@ -39,7 +39,7 @@ export function DishDetailPage() {
   }
 
   return (
-    <VStack gap="lg" className="px-5 py-2">
+    <VStack gap="lg">
       <div className="w-full flex justify-between items-center">
         <div>
           <Button variant="ghost" onClick={() => navigate('/dishes')}>
