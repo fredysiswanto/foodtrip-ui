@@ -1,15 +1,15 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  CreateRestaurantSchema,
-  CreateRestaurantInput,
+  CreateDishSchema,
+  CreateDishInputType,
   DishType,
 } from '@foodtrip/types';
 import { Button, Input, Textarea, NumberInput, FormGroup } from '@foodtrip/ui';
 
 export interface DishFormProps {
   initialData?: DishType;
-  onSubmit: (data: CreateRestaurantInput) => Promise<void>;
+  onSubmit: (data: CreateDishInputType) => Promise<void>;
   isLoading?: boolean;
 }
 
@@ -22,15 +22,17 @@ export function DishForm({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreateRestaurantInput>({
-    resolver: zodResolver(CreateRestaurantSchema),
+  } = useForm<CreateDishInputType>({
+    resolver: zodResolver(CreateDishSchema),
     defaultValues: initialData
       ? {
-          name: initialData.dish_name,
-          address: initialData.dish_desc,
-          image: initialData.dish_img || '',
-          status: initialData.status || undefined,
-          website: initialData.status || '',
+          dish_name: initialData.dish_name,
+          dish_desc: initialData.dish_desc || '',
+          dish_price: String(initialData.dish_price),
+          dishcatg_id: initialData.dishcatg_id,
+          resto_id: initialData.resto_id,
+          status: initialData.status,
+          dish_img: initialData.dish_img || '',
         }
       : {},
   });
@@ -41,98 +43,69 @@ export function DishForm({
         <Input
           label="Dish Name"
           placeholder="Enter dish name"
-          error={errors.name?.message}
-          {...register('name')}
+          error={errors.dish_name?.message}
+          {...register('dish_name')}
         />
         <Input
-          label="Address"
-          placeholder="Enter dish address"
-          error={errors.address?.message}
-          {...register('address')}
+          label="Restaurant ID"
+          placeholder="Enter restaurant ID"
+          error={errors.resto_id?.message}
+          {...register('resto_id')}
         />
       </FormGroup>
 
       <FormGroup>
         <Input
-          label="Cuisine Type"
-          placeholder="e.g., Italian, Japanese, etc."
-          error={errors.cuisine?.message}
-          {...register('cuisine')}
+          label="Category ID"
+          placeholder="Enter dish category ID"
+          error={errors.dishcatg_id?.message}
+          {...register('dishcatg_id')}
         />
         <NumberInput
-          label="Rating"
-          placeholder="0 - 5"
+          label="Price"
+          placeholder="Enter dish price"
           min={0}
-          max={5}
-          step={0.1}
-          error={errors.rating?.message}
-          {...register('rating', { valueAsNumber: true })}
+          step={0.01}
+          error={errors.dish_price?.message}
+          {...register('dish_price')}
         />
       </FormGroup>
 
       <Textarea
         label="Description"
-        placeholder="Enter restaurant description"
+        placeholder="Enter dish description"
         rows={4}
-        error={errors.description?.message}
-        {...register('description')}
+        error={errors.dish_desc?.message}
+        {...register('dish_desc')}
       />
 
       <FormGroup>
-        <Input
-          label="Email"
-          type="email"
-          placeholder="Enter email address"
-          error={errors.email?.message}
-          {...register('email')}
-        />
-        <Input
-          label="Phone"
-          type="tel"
-          placeholder="Enter phone number"
-          error={errors.phone?.message}
-          {...register('phone')}
-        />
-      </FormGroup>
-
-      <FormGroup>
-        <Input
-          label="Website"
-          type="url"
-          placeholder="Enter website URL"
-          error={errors.website?.message}
-          {...register('website')}
-        />
+        {/* <Select
+          label="Status"
+          error={errors.status?.message}
+          {...register('status')}
+        >
+          <option value="">Select Status</option>
+          <option value="Available">Available</option>
+          <option value="Unavailable">Unavailable</option>
+        </Select> */}
         <Input
           label="Image URL"
+          type="url"
           placeholder="Enter image URL"
-          error={errors.image?.message}
-          {...register('image')}
+          error={errors.dish_img?.message}
+          {...register('dish_img')}
         />
       </FormGroup>
 
-      <FormGroup column={false}>
-        <NumberInput
-          label="Latitude"
-          placeholder="Enter latitude"
-          step={0.0001}
-          error={errors.latitude?.message}
-          {...register('latitude', { valueAsNumber: true })}
-        />
-        <NumberInput
-          label="Longitude"
-          placeholder="Enter longitude"
-          step={0.0001}
-          error={errors.longitude?.message}
-          {...register('longitude', { valueAsNumber: true })}
-        />
-      </FormGroup>
-
-      <div className="flex gap-3 pt-4">
-        <Button type="submit" isLoading={isLoading} fullWidth>
-          {initialData ? 'Update Restaurant' : 'Create Restaurant'}
-        </Button>
-      </div>
+      <Button
+        type="submit"
+        variant="primary"
+        disabled={isLoading}
+        className="w-full"
+      >
+        {isLoading ? 'Saving...' : initialData ? 'Update Dish' : 'Create Dish'}
+      </Button>
     </form>
   );
 }

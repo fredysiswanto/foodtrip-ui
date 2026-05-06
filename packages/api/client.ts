@@ -7,6 +7,7 @@ import {
   UpdateRestaurantSchema,
   RestaurantType,
   DishSchema,
+  CreateDishSchema,
   UpdateDishSchema,
   DishDetailSchema,
 } from '@foodtrip/types';
@@ -306,12 +307,32 @@ export const dishApi = {
       body: JSON.stringify(validated),
       validateWith: (data: unknown) => {
         if (data && typeof data === 'object' && 'data' in data) {
+          console.log('di dalam');
+
           return DishDetailSchema.parse(data).data;
         }
         console.log('diluar');
 
         return DishSchema.parse(data);
       },
+    });
+  },
+  create: async (input: Record<string, unknown>) => {
+    const validated = CreateDishSchema.parse(input);
+    return apiFetch(`/admin/dish`, {
+      method: 'POST',
+      body: JSON.stringify(validated),
+      validateWith: (data: unknown) => {
+        if (data && typeof data === 'object' && 'data' in data) {
+          return DishDetailSchema.parse(data).data;
+        }
+        return DishSchema.parse(data);
+      },
+    });
+  },
+  delete: async (id: string) => {
+    return apiFetch(`/admin/dish/${id}`, {
+      method: 'DELETE',
     });
   },
 };

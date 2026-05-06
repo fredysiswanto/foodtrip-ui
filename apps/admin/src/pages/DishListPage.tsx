@@ -5,7 +5,6 @@ import { Alert, Breadcrumb, Button, Card, Spinner, VStack } from '@foodtrip/ui';
 export function DishListPage() {
   const navigate = useNavigate();
   const { data: dishes = [], isLoading, error } = useDishList();
-  console.log(dishes);
 
   return (
     <VStack gap="lg" className="px-5 py-2">
@@ -14,19 +13,23 @@ export function DishListPage() {
           <h1 className="text-3xl font-bold text-gray-900">Dish Management</h1>
           <p className="text-gray-600">Manage all dishes in the system</p>
         </div>
-        <Breadcrumb
-          items={[
-            { label: 'Home', href: '/dashboard' },
-            { label: 'Dish Management', href: '/dishes' },
-          ]}
-        />
+        <Button onClick={() => navigate('/dishes/new')} variant="primary">
+          + Create Dish
+        </Button>
       </div>
+
+      <Breadcrumb
+        items={[
+          { label: 'Home', href: '/dashboard' },
+          { label: 'Dish Management', href: '/dishes' },
+        ]}
+      />
 
       {error && (
         <Alert type="error" closeable>
           {error instanceof Error
             ? error.message
-            : 'Failed to load restaurants. Please try again.'}
+            : 'Failed to load dishes. Please try again.'}
         </Alert>
       )}
 
@@ -47,7 +50,7 @@ export function DishListPage() {
             dishes={dishes}
             isLoading={isLoading}
             onEdit={(id) => navigate(`/dishes/${id}/edit`)}
-            onDelete={(id) => navigate(`/dishes/${id}/delete`)}
+            onDelete={(id) => navigate(`/dishes/${id}`)}
           />
         </Card>
       )}
