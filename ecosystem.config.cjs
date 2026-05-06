@@ -7,7 +7,7 @@ module.exports = {
       args: 'run dev:admin',
       cwd: '/home/ubuntu/foodtrip-ui',
       instances: 1,
-      exec_mode: 'cluster',
+      exec_mode: 'fork',
       env: {
         NODE_ENV: 'development',
         PORT: 5174,
@@ -34,7 +34,7 @@ module.exports = {
       args: 'run dev:client',
       cwd: '/home/ubuntu/foodtrip-ui',
       instances: 1,
-      exec_mode: 'cluster',
+      exec_mode: 'fork',
       env: {
         NODE_ENV: 'development',
         PORT: 5173,
