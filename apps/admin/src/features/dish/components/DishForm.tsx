@@ -5,7 +5,14 @@ import {
   CreateDishInputType,
   DishType,
 } from '@foodtrip/types';
-import { Button, Input, Textarea, NumberInput, FormGroup } from '@foodtrip/ui';
+import {
+  Button,
+  Input,
+  Textarea,
+  NumberInput,
+  FormGroup,
+  Select,
+} from '@foodtrip/ui';
 
 export interface DishFormProps {
   initialData?: DishType;
@@ -38,7 +45,7 @@ export function DishForm({
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-full ">
       <FormGroup>
         <Input
           label="Dish Name"
@@ -80,7 +87,7 @@ export function DishForm({
       />
 
       <FormGroup>
-        {/* <Select
+        <Select
           label="Status"
           error={errors.status?.message}
           {...register('status')}
@@ -88,7 +95,7 @@ export function DishForm({
           <option value="">Select Status</option>
           <option value="Available">Available</option>
           <option value="Unavailable">Unavailable</option>
-        </Select> */}
+        </Select>
         <Input
           label="Image URL"
           type="url"
