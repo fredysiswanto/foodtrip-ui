@@ -22,6 +22,7 @@ Project ini menggunakan pendekatan:
 
 ## Struktur Project Folder
 
+```
 foodtrip-ui/
 ├── apps/
 │ ├── admin/
@@ -87,6 +88,7 @@ foodtrip-ui/
 ├── pnpm-workspace.yaml
 ├── package.json
 └── tsconfig.base.json
+```
 
 ## Apps
 
