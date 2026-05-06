@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { DishTable, useDishList } from '../features/dish';
-import { Alert, Breadcrumb, Button, Card, Spinner, VStack } from '@foodtrip/ui';
+import { Alert, Button, Card, Spinner, VStack } from '@foodtrip/ui';
 
 export function DishListPage() {
   const navigate = useNavigate();
@@ -17,13 +17,6 @@ export function DishListPage() {
           + Create Dish
         </Button>
       </div>
-
-      <Breadcrumb
-        items={[
-          { label: 'Home', href: '/dashboard' },
-          { label: 'Dish Management', href: '/dishes' },
-        ]}
-      />
 
       {error && (
         <Alert type="error" closeable>

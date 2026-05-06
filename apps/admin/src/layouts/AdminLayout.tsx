@@ -88,7 +88,7 @@ export function AdminLayout() {
 
         {/* Page Content */}
         <main className="flex-1 overflow-auto">
-          <div className="h-full sm:p-6 bg-amber-300">
+          <div className="h-full sm:p-6 bg-gray-50">
             <Outlet />
           </div>
         </main>
