@@ -60,9 +60,9 @@ pnpm build
 ```nginx
 server {
     listen 80;
-    server_name admin.yourdomain.com;  # Ganti domain
+    server_name admin-foodtrip-ui.panduanqa.blog;
 
-    root /home/user/foodtrip-ui/apps/admin/dist;
+    root /home/ubuntu/foodtrip-ui/apps/admin/dist;
     index index.html;
 
     location / {
@@ -82,9 +82,9 @@ server {
 ```nginx
 server {
     listen 80;
-    server_name yourdomain.com;  # Ganti domain
+    server_name foodtrip-ui.panduanqa.blog;  # Ganti domain
 
-    root /home/user/foodtrip-ui/apps/client/dist;
+    root /home/ubuntu/foodtrip-ui/apps/client/dist;
     index index.html;
 
     location / {
@@ -118,7 +118,7 @@ sudo systemctl restart nginx
 sudo apt install -y certbot python3-certbot-nginx
 
 # Generate certificates
-sudo certbot --nginx -d yourdomain.com -d admin.yourdomain.com
+sudo certbot --nginx -d foodtrip-ui.panduanqa.blog -d admin-foodtrip-ui.panduanqa.blog
 
 # Auto-renewal (already enabled)
 sudo systemctl enable certbot.timer
@@ -202,8 +202,8 @@ pnpm build
 sudo systemctl status nginx
 
 # Check domains resolving
-curl -I http://yourdomain.com
-curl -I http://admin.yourdomain.com
+curl -I http://foodtrip-ui.panduanqa.blog
+curl -I http://admin-foodtrip-ui.panduanqa.blog
 
 # Check SSL certificate
 sudo certbot certificates
