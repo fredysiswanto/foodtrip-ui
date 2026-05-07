@@ -122,13 +122,13 @@ const FoodSchema = z.object({
 Format:
 
 ```ts
-["<feature>", "<action>", params];
+['<feature>', '<action>', params];
 ```
 
 Examples:
 
 ```ts
-["food", "list"][("food", "detail", id)][("auth", "me")];
+['food', 'list'][('food', 'detail', id)][('auth', 'me')];
 ```
 
 ---
@@ -270,6 +270,15 @@ export const clientRoutes = [
 
 - Handlers: `src/mocks/handlers.ts`
 - Fixtures: `src/mocks/fixtures/`
+
+---
+
+## Before generating code:
+
+1. Explore existing feature patterns
+2. Reuse existing abstractions
+3. Check shared UI components
+4. Avoid creating duplicate hooks/components
 
 ---
 
