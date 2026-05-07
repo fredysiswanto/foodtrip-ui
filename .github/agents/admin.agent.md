@@ -43,11 +43,14 @@ Specialized agent for building admin features in the FoodTrip frontend monorepo.
 #### List View Hook (with pagination & filtering)
 
 ```typescript
-// apps/admin/src/features/food/hooks/useFoodList.ts
-export function useFoodList(filters?: FoodFilters, page?: number) {
+// apps/admin/src/features/dish/hooks/useDishList.ts
+export function useDishList(filters?: DishListParams, page?: number) {
   return useQuery({
-    queryKey: ['admin', 'food', 'list', filters, page],
-    queryFn: () => foodApi.getFoodList({ ...filters, page }),
+    queryKey: ['admin', 'dish', 'list', filters, page],
+    queryFn: () => dishApi.getDishList({ ...filters, page }),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
+    retry: 2,
   });
 }
 ```
@@ -55,21 +58,29 @@ export function useFoodList(filters?: FoodFilters, page?: number) {
 #### Detail/Edit Hook (with mutations)
 
 ```typescript
-// apps/admin/src/features/food/hooks/useFoodDetail.ts
-export function useFoodDetail(id: string) {
+// apps/admin/src/features/dish/hooks/useDishDetail.ts
+export function useDishDetail(id: string) {
   return useQuery({
-    queryKey: ['admin', 'food', 'detail', id],
-    queryFn: () => foodApi.getFoodById(id),
+    queryKey: ['admin', 'dish', 'detail', id],
+    queryFn: () => dishApi.getDishById(id),
+    enabled: !!id,
   });
 }
 
-// apps/admin/src/features/food/hooks/useFoodUpdate.ts
-export function useFoodUpdate() {
+// apps/admin/src/features/dish/hooks/useUpdateDish.ts
+export function useUpdateDish() {
   const queryClient = useQueryClient();
+  const { toast } = useToast();
+
   return useMutation({
-    mutationFn: (data: FoodUpdateInput) => foodApi.updateFood(data),
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['admin', 'food'] });
+    mutationFn: (data: UpdateDishInput) => dishApi.updateDish(data),
+    onSuccess: () => {
+      // Invalidate both list and detail queries
+      queryClient.invalidateQueries({ queryKey: ['admin', 'dish'] });
+      toast({ type: 'success', message: 'Dish updated successfully' });
+    },
+    onError: (error) => {
+      toast({ type: 'error', message: error.message });
     },
   });
 }
@@ -78,27 +89,42 @@ export function useFoodUpdate() {
 #### Form Component Pattern
 
 ```typescript
-// apps/admin/src/features/food/components/FoodForm.tsx
+// apps/admin/src/features/dish/components/DishForm.tsx
 import { useForm } from 'react-hook-form';
-import { FoodFormSchema } from '@foodtrip/types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { CreateDishSchema, Dish } from '@foodtrip/types';
+import { FormGroup, Input, Button, Alert } from '@foodtrip/ui';
 
-export interface FoodFormProps {
-  initialData?: Food;
-  onSubmit: (data: FoodFormInput) => Promise<void>;
+export interface DishFormProps {
+  initialData?: Dish;
+  onSubmit: (data: CreateDishInput) => Promise<void>;
   isLoading?: boolean;
+  error?: string;
 }
 
-export function FoodForm({ initialData, onSubmit, isLoading }: FoodFormProps) {
+export function DishForm({ initialData, onSubmit, isLoading, error }: DishFormProps) {
   const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: initialData,
-    resolver: zodResolver(FoodFormSchema),
+    resolver: zodResolver(CreateDishSchema),
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register('name')} placeholder="Food name" />
-      {errors.name && <span>{errors.name.message}</span>}
-      <button type="submit" disabled={isLoading}>Save</button>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {error && <Alert type="error">{error}</Alert>}
+
+      <FormGroup label="Dish Name">
+        <Input {...register('name')} placeholder="e.g., Spaghetti Carbonara" />
+        {errors.name && <p className="text-red-600">{errors.name.message}</p>}
+      </FormGroup>
+
+      <FormGroup label="Price">
+        <Input type="number" {...register('price', { valueAsNumber: true })} />
+        {errors.price && <p className="text-red-600">{errors.price.message}</p>}
+      </FormGroup>
+
+      <Button type="submit" disabled={isLoading} className="w-full">
+        {isLoading ? 'Saving...' : 'Save Dish'}
+      </Button>
     </form>
   );
 }
@@ -107,37 +133,106 @@ export function FoodForm({ initialData, onSubmit, isLoading }: FoodFormProps) {
 #### Data Table Component
 
 ```typescript
-// apps/admin/src/features/food/components/FoodTable.tsx
-export interface FoodTableProps {
-  foods: Food[];
+// apps/admin/src/features/dish/components/DishTable.tsx
+import { Dish } from '@foodtrip/types';
+import { Table, Button, Spinner } from '@foodtrip/ui';
+
+export interface DishTableProps {
+  dishes: Dish[];
   isLoading?: boolean;
   onEdit: (id: string) => void;
   onDelete: (id: string) => Promise<void>;
 }
 
-export function FoodTable({ foods, isLoading, onEdit, onDelete }: FoodTableProps) {
+export function DishTable({ dishes, isLoading, onEdit, onDelete }: DishTableProps) {
+  const [deleting, setDeleting] = React.useState<string | null>(null);
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Delete this dish?')) return;
+    try {
+      setDeleting(id);
+      await onDelete(id);
+    } finally {
+      setDeleting(null);
+    }
+  };
+
+  if (isLoading) return <Spinner />;
+
   return (
-    <table className="w-full">
+    <Table>
       <thead>
-        <tr className="border-b">
+        <tr>
           <th>Name</th>
           <th>Price</th>
+          <th>Restaurant</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        {foods.map(food => (
-          <tr key={food.id} className="border-b">
-            <td>{food.name}</td>
-            <td>${food.price}</td>
-            <td>
-              <button onClick={() => onEdit(food.id)}>Edit</button>
-              <button onClick={() => onDelete(food.id)}>Delete</button>
+        {dishes.map(dish => (
+          <tr key={dish.id}>
+            <td>{dish.name}</td>
+            <td>${dish.price.toFixed(2)}</td>
+            <td>{dish.restaurantId}</td>
+            <td className="space-x-2">
+              <Button size="sm" onClick={() => onEdit(dish.id)}>Edit</Button>
+              <Button
+                size="sm"
+                variant="destructive"
+                disabled={deleting === dish.id}
+                onClick={() => handleDelete(dish.id)}
+              >
+                {deleting === dish.id ? 'Deleting...' : 'Delete'}
+              </Button>
             </td>
           </tr>
         ))}
       </tbody>
-    </table>
+    </Table>
+  );
+}
+```
+
+#### Dashboard Pattern (Summary & Quick Actions)
+
+```typescript
+// apps/admin/src/pages/DashboardPage.tsx
+import { useDishList } from '../features/dish';
+import { useRestaurantList } from '../features/restaurant';
+import { SummaryCard, Button } from '@foodtrip/ui';
+
+export function DashboardPage() {
+  const { data: dishes } = useDishList();
+  const { data: restaurants } = useRestaurantList();
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-3 gap-4">
+        <SummaryCard
+          title="Total Dishes"
+          value={dishes?.length ?? 0}
+          icon="🍽️"
+        />
+        <SummaryCard
+          title="Total Restaurants"
+          value={restaurants?.length ?? 0}
+          icon="🏪"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <h2 className="text-lg font-semibold">Quick Actions</h2>
+        <div className="flex gap-2">
+          <Button onClick={() => navigate('/admin/dish/create')}>
+            + Add Dish
+          </Button>
+          <Button onClick={() => navigate('/admin/restaurant/create')}>
+            + Add Restaurant
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }
 ```
@@ -209,26 +304,34 @@ apps/admin/src/features/<feature>/
 
 ### Create a List View
 
-**Location**: `apps/admin/src/pages/FoodListPage.tsx`
+**Location**: `apps/admin/src/pages/DishListPage.tsx`
 
 ```typescript
-export function FoodListPage() {
-  const { data, isLoading } = useFoodList();
-  const { mutate: deleteFood } = useFoodDelete();
+import { useDishList, useDishDelete, DishTable } from '../features/dish';
+import { useNavigate } from 'react-router-dom';
+import { Button, Skeleton } from '@foodtrip/ui';
+
+export function DishListPage() {
+  const navigate = useNavigate();
+  const { data, isLoading } = useDishList();
+  const { mutate: deleteDish } = useDishDelete();
 
   return (
-    <div>
-      <h1>Food Management</h1>
-      <button onClick={() => navigate('/admin/food/create')}>
-        + Create Food
-      </button>
+    <div className="space-y-4">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Dishes</h1>
+        <Button onClick={() => navigate('/admin/dish/create')}>
+          + Create Dish
+        </Button>
+      </div>
+
       {isLoading ? (
-        <SkeletonTable />
+        <Skeleton className="h-96" />
       ) : (
-        <FoodTable
-          foods={data || []}
-          onEdit={(id) => navigate(`/admin/food/${id}`)}
-          onDelete={deleteFood}
+        <DishTable
+          dishes={data || []}
+          onEdit={(id) => navigate(`/admin/dish/${id}`)}
+          onDelete={deleteDish}
         />
       )}
     </div>
@@ -238,48 +341,106 @@ export function FoodListPage() {
 
 ### Create/Edit Form Page
 
-**Location**: `apps/admin/src/pages/FoodFormPage.tsx`
+**Location**: `apps/admin/src/pages/DishDetailPage.tsx`
 
 ```typescript
-export function FoodFormPage({ foodId }: { foodId?: string }) {
-  const { data } = useFoodDetail(foodId || '');
-  const { mutate: createFood, isPending: isCreating } = useFoodCreate();
-  const { mutate: updateFood, isPending: isUpdating } = useFoodUpdate();
+import { useParams, useNavigate } from 'react-router-dom';
+import { useDishDetail, useCreateDish, useUpdateDish, DishForm } from '../features/dish';
+import { useToast } from '../providers/toast';
 
-  const handleSubmit = async (formData: FoodFormInput) => {
-    if (foodId) {
-      updateFood(formData);
-    } else {
-      createFood(formData);
+export function DishDetailPage() {
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const { toast } = useToast();
+
+  const { data: initialData, isLoading: isLoadingDetail } = useDishDetail(id || '');
+  const { mutate: createDish, isPending: isCreating } = useCreateDish();
+  const { mutate: updateDish, isPending: isUpdating } = useUpdateDish();
+
+  const handleSubmit = async (formData: CreateDishInput) => {
+    try {
+      if (id) {
+        updateDish(
+          { ...formData, id },
+          {
+            onSuccess: () => {
+              navigate('/admin/dish');
+            },
+          }
+        );
+      } else {
+        createDish(formData, {
+          onSuccess: () => {
+            navigate('/admin/dish');
+          },
+        });
+      }
+    } catch (error) {
+      toast({ type: 'error', message: 'Something went wrong' });
     }
   };
 
   return (
-    <FoodForm
-      initialData={data}
-      onSubmit={handleSubmit}
-      isLoading={isCreating || isUpdating}
-    />
+    <div className="max-w-2xl">
+      <h1 className="text-2xl font-bold mb-6">
+        {id ? 'Edit Dish' : 'Create Dish'}
+      </h1>
+      <DishForm
+        initialData={initialData}
+        onSubmit={handleSubmit}
+        isLoading={isCreating || isUpdating || isLoadingDetail}
+      />
+    </div>
   );
 }
 ```
 
 ### Create a Delete Mutation
 
-**Location**: `apps/admin/src/features/food/hooks/useFoodDelete.ts`
+**Location**: `apps/admin/src/features/dish/hooks/useDeleteDish.ts`
 
 ```typescript
-export function useFoodDelete() {
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { dishApi } from '@foodtrip/api';
+import { useToast } from '../../providers/toast';
+
+export function useDeleteDish() {
   const queryClient = useQueryClient();
+  const { toast } = useToast();
+
   return useMutation({
-    mutationFn: (id: string) => foodApi.deleteFood(id),
+    mutationFn: (id: string) => dishApi.deleteDish(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['admin', 'food', 'list'],
-      });
+      // Invalidate all dish queries
+      queryClient.invalidateQueries({ queryKey: ['admin', 'dish'] });
+      toast({ type: 'success', message: 'Dish deleted successfully' });
     },
-    onError: (error) => {
-      toast.error(`Failed to delete: ${error.message}`);
+    onError: (error: Error) => {
+      toast({ type: 'error', message: error.message });
+    },
+  });
+}
+```
+
+### Handle API Errors
+
+**Pattern used in hooks**:
+
+```typescript
+// All mutations automatically handle ApiError from packages/api
+// ApiError includes: status, message, isNetworkError
+
+export function useCreateDish() {
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: (data: CreateDishInput) => dishApi.createDish(data),
+    onSuccess: () => {
+      toast({ type: 'success', message: 'Dish created' });
+    },
+    onError: (error: ApiError) => {
+      // Error already has user-friendly message
+      toast({ type: 'error', message: error.message });
     },
   });
 }
@@ -287,23 +448,25 @@ export function useFoodDelete() {
 
 ### Add Pagination & Filtering
 
-**Location**: `apps/admin/src/features/food/hooks/useFoodList.ts`
+**Location**: `apps/admin/src/features/dish/hooks/useDishList.ts`
 
-```typescript
-interface FoodListParams {
+````typescript
+export interface DishListParams {
   page?: number;
   limit?: number;
   search?: string;
-  category?: string;
+  restaurantId?: string;
 }
 
-export function useFoodList(params?: FoodListParams) {
+export function useDishList(params?: DishListParams) {
   return useQuery({
-    queryKey: ['admin', 'food', 'list', params],
-    queryFn: () => foodApi.getFoodList(params),
+    queryKey: ['admin', 'dish', 'list', params],
+    queryFn: () => dishApi.getDishList(params),
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    retry: 2,
   });
 }
-```
 
 ---
 
@@ -311,22 +474,69 @@ export function useFoodList(params?: FoodListParams) {
 
 ```bash
 # Development
-pnpm dev              # Start admin + client dev servers
+pnpm dev:admin              # Start admin dev server only
+pnpm dev                    # Start all apps (admin + client)
 
-# Type checking
-pnpm run build        # Check TS errors
+# Type checking & Building
+pnpm build                  # Typecheck and build all apps
 
-# Linting
-pnpm lint             # Run ESLint
+# Linting & Code Quality
+pnpm lint                   # Run ESLint on all code
+pnpm lint --fix             # Fix linting issues
+````
 
-# Testing (when setup)
-pnpm test             # Run unit tests
-pnpm test:e2e         # Run Playwright tests
+### Protected Routes & Auth
+
+All admin pages must be protected with `ProtectedRoute`:
+
+```typescript
+// apps/admin/src/app/routes.tsx
+import { ProtectedRoute } from '../features/auth';
+import { lazy } from 'react';
+
+const DishListPage = lazy(() => import('../pages/DishListPage'));
+const DashboardPage = lazy(() => import('../pages/DashboardPage'));
+
+export const adminRoutes = [
+  { path: '/admin', element: <ProtectedRoute><DashboardPage /></ProtectedRoute> },
+  { path: '/admin/dish', element: <ProtectedRoute><DishListPage /></ProtectedRoute> },
+];
+```
+
+Access current user in any component/hook:
+
+```typescript
+// Inside a component or hook
+const { user } = useAuth(); // returns { id, email, role, ... } or null if not logged in
 ```
 
 ---
 
-## Checklist for Admin Feature Development
+## Authentication Pattern
+
+The auth system uses:
+
+- **Context API** for global auth state
+- **localStorage** for token persistence
+- **Automatic token injection** in all API calls (via `apiFetch`)
+- **ProtectedRoute** component for access control
+
+Example login flow:
+
+```typescript
+// Hook: useLogin
+export function useLogin() {
+  return useMutation({
+    mutationFn: (credentials) => authApi.login(credentials),
+    onSuccess: (response) => {
+      // Token is auto-saved to localStorage by authApi
+      // User context is automatically updated
+    },
+  });
+}
+```
+
+---
 
 - [ ] Feature folder created under `apps/admin/src/features/<name>`
 - [ ] List hook created with error handling (retry, cache, stale time)
@@ -370,3 +580,93 @@ If you encounter:
 - **Shared form fields** → Create shared form components in `packages/ui`
 - **Cross-feature data** → Use `packages/api` for shared endpoints
 - **Global admin state** → Discuss before implementing (use React Context in `providers/`)
+
+---
+
+## Forbidden Patterns
+
+NEVER:
+
+- Put async API calls inside components
+- Use `useEffect` for server fetching (use React Query instead)
+- Create components larger than 200 lines
+- Use inline anonymous functions in large tables
+- Duplicate query keys manually
+- Use `any` type (strict typing required)
+- Mutate query cache directly without React Query utilities
+- Mix modal state with table logic
+- Place form validation outside Zod schemas
+- Import directly from other features (use shared `packages/*`)
+- Modify localStorage directly (use custom hooks)
+- Hardcode API URLs (use centralized config)
+
+---
+
+## API Layer Details
+
+All HTTP requests go through `packages/api/client.ts`:
+
+```typescript
+// packages/api/client.ts
+async function apiFetch<T>(url: string, init?: RequestInit): Promise<T> {
+  // - Adds Bearer token from localStorage
+  // - Validates response with Zod
+  // - Throws ApiError with message for user display
+  // - Handles 4xx/5xx automatically
+}
+```
+
+Creating a new endpoint:
+
+```typescript
+// packages/api/dish.ts
+import { apiFetch } from './client';
+
+export const dishApi = {
+  getDishList: (params?: DishListParams) =>
+    apiFetch<Dish[]>('/api/dishes', {
+      searchParams: params,
+    }),
+
+  getDishById: (id: string) => apiFetch<Dish>(`/api/dishes/${id}`),
+
+  createDish: (data: CreateDishInput) =>
+    apiFetch<Dish>('/api/dishes', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+};
+```
+
+---
+
+## Before Writing New Code
+
+ALWAYS:
+
+1. **Reference existing features** (Dish, Restaurant) for patterns
+2. **Reuse existing hooks** from `packages/*` and other features
+3. **Check `packages/ui` components** before creating new ones
+4. **Follow the same file structure** as Dish or Restaurant features
+5. **Don't create new patterns** - stick with established conventions
+
+Example: If adding a "User" feature, copy structure from `features/dish`:
+
+```
+apps/admin/src/features/user/
+├── hooks/
+│   ├── useUserList.ts
+│   ├── useUserDetail.ts
+│   ├── useCreateUser.ts
+│   ├── useUpdateUser.ts
+│   └── useDeleteUser.ts
+├── components/
+│   ├── UserTable.tsx
+│   ├── UserForm.tsx
+│   └── index.ts
+├── types/
+│   └── index.ts
+└── index.ts
+```
+
+---
