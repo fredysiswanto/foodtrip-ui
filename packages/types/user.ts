@@ -8,7 +8,7 @@ export const AdminSchema = z
   .object({
     user_id: z.string().uuid(),
     user_no: z.string(),
-    password: z.string(),
+    password: z.string().optional(),
     first_name: z.string(),
     middle_name: z.string().nullable(),
     last_name: z.string(),
@@ -29,7 +29,7 @@ export const RestaurantAdminSchema = z
     user_id: z.string().uuid(),
     resto_id: z.string().uuid(),
     user_no: z.string(),
-    password: z.string(),
+    password: z.string().optional(),
     first_name: z.string(),
     middle_name: z.string().nullable(),
     last_name: z.string(),
@@ -49,14 +49,14 @@ export const CustomerSchema = z
   .object({
     user_id: z.string().uuid(),
     user_no: z.string(),
-    password: z.string(),
+    password: z.string().optional(),
     first_name: z.string(),
     middle_name: z.string().nullable(),
     last_name: z.string(),
     email_address: z.string().email(),
     phone_number: z.string().nullable(),
     gender: z.string().nullable(),
-    user_type: z.literal('User'),
+    user_type: z.literal('Customer'),
   })
   .merge(AuditFieldsSchema);
 
@@ -138,3 +138,71 @@ export const UserDetailSchema = z.object({
 });
 
 export type UserDetailResponseType = z.infer<typeof UserDetailSchema>;
+
+/**
+ * Minimal restaurant schema for nested user response
+ */
+export const RestaurantInUserSchema = z
+  .object({
+    resto_img: z.string(),
+    resto_id: z.string().uuid(),
+    resto_no: z.string(),
+    resto_name: z.string(),
+    resto_email: z.string().email(),
+    resto_phone: z.string(),
+    resto_landline: z.string(),
+    resto_website: z.string().optional(),
+    restocatg_id: z.string().uuid(),
+    status: z.string(),
+  })
+  .merge(AuditFieldsSchema);
+
+export type RestaurantInUserType = z.infer<typeof RestaurantInUserSchema>;
+
+/**
+ * Restaurant Admin user with nested restaurant
+ */
+export const RestaurantAdminWithRestaurantSchema = z
+  .object({
+    user_id: z.string().uuid(),
+    resto_id: z.string().uuid(),
+    user_no: z.string(),
+    first_name: z.string(),
+    middle_name: z.string().nullable(),
+    last_name: z.string(),
+    email_address: z.string().email(),
+    phone_number: z.string().nullable(),
+    gender: z.string().nullable(),
+    user_type: z.enum(['Resto_Admin']),
+    restaurant: RestaurantInUserSchema.optional(),
+  })
+  .merge(AuditFieldsSchema);
+
+export type RestaurantAdminWithRestaurantType = z.infer<
+  typeof RestaurantAdminWithRestaurantSchema
+>;
+
+/**
+ * Union type for users that can have restaurant (used in list response)
+ */
+export const UserWithRestaurantSchema = z.union([
+  AdminSchema,
+  RestaurantAdminWithRestaurantSchema,
+  CustomerSchema,
+]);
+
+export type UserWithRestaurantType = z.infer<typeof UserWithRestaurantSchema>;
+
+/**
+ * User list response with restaurant data
+ */
+export const UserListWithRestaurantSchema = z.object({
+  draw: z.number(),
+  data: z.array(UserWithRestaurantSchema),
+  recordsFiltered: z.number(),
+  recordsTotal: z.number(),
+});
+
+export type UserListWithRestaurantResponseType = z.infer<
+  typeof UserListWithRestaurantSchema
+>;

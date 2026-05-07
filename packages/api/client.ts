@@ -6,10 +6,23 @@ import {
   CreateRestaurantSchema,
   UpdateRestaurantSchema,
   RestaurantType,
+  RestaurantCategoryWithRestaurantsSchema,
+  RestaurantCategoryDetailSchema,
+  CreateRestaurantCategorySchema,
+  UpdateRestaurantCategorySchema,
+  RestaurantCategoryWithRestaurantsType,
   DishSchema,
   CreateDishSchema,
   UpdateDishSchema,
   DishDetailSchema,
+  DishCategoryWithDishesSchema,
+  DishCategoryDetailSchema,
+  CreateDishCategorySchema,
+  UpdateDishCategorySchema,
+  DishCategoryWithDishesType,
+  UserWithRestaurantType,
+  UserListWithRestaurantSchema,
+  UpdateUserSchema,
 } from '@foodtrip/types';
 
 const API_URL =
@@ -232,6 +245,110 @@ export const restaurantApi = {
   },
 };
 
+// Restaurant Category endpoints
+export const restaurantCategoryApi = {
+  list: async (page = 1, limit = 10) => {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: String(limit),
+    });
+    return apiFetch<RestaurantCategoryWithRestaurantsType[]>(
+      `/admin/resto-cat?${params}`,
+      {
+        method: 'GET',
+        validateWith: (data: unknown) => {
+          console.log('restaurantCategoryApi.list - raw data:', data);
+
+          // Handle direct array response
+          if (Array.isArray(data)) {
+            console.log(
+              'restaurantCategoryApi.list - data is array, count:',
+              data.length
+            );
+            return data.map((item) =>
+              RestaurantCategoryWithRestaurantsSchema.parse(item)
+            );
+          }
+
+          // Handle object with 'data' property
+          if (data && typeof data === 'object') {
+            const obj = data as Record<string, unknown>;
+
+            // Case: { data: [...] }
+            if ('data' in obj && Array.isArray(obj.data)) {
+              console.log(
+                'restaurantCategoryApi.list - data wrapped in .data, count:',
+                obj.data.length
+              );
+              return obj.data.map((item) =>
+                RestaurantCategoryWithRestaurantsSchema.parse(item)
+              );
+            }
+          }
+
+          console.warn(
+            'restaurantCategoryApi.list - data format not recognized, returning empty array'
+          );
+          return [];
+        },
+      }
+    );
+  },
+
+  getById: async (id: string) => {
+    return apiFetch<RestaurantCategoryWithRestaurantsType>(
+      `/admin/resto-cat/${id}`,
+      {
+        method: 'GET',
+        validateWith: (data: unknown) => {
+          // Check if data has a 'data' wrapper
+          if (data && typeof data === 'object' && 'data' in data) {
+            return RestaurantCategoryDetailSchema.parse(data).data;
+          }
+          return RestaurantCategoryWithRestaurantsSchema.parse(data);
+        },
+      }
+    );
+  },
+
+  create: async (input: Record<string, unknown>) => {
+    const validated = CreateRestaurantCategorySchema.parse(input);
+    return apiFetch<RestaurantCategoryWithRestaurantsType>('/admin/resto-cat', {
+      method: 'POST',
+      body: JSON.stringify(validated),
+      validateWith: (data: unknown) => {
+        if (data && typeof data === 'object' && 'data' in data) {
+          return RestaurantCategoryDetailSchema.parse(data).data;
+        }
+        return RestaurantCategoryWithRestaurantsSchema.parse(data);
+      },
+    });
+  },
+
+  update: async (id: string, input: Record<string, unknown>) => {
+    const validated = UpdateRestaurantCategorySchema.parse(input);
+    return apiFetch<RestaurantCategoryWithRestaurantsType>(
+      `/admin/resto-cat/${id}`,
+      {
+        method: 'PUT',
+        body: JSON.stringify(validated),
+        validateWith: (data: unknown) => {
+          if (data && typeof data === 'object' && 'data' in data) {
+            return RestaurantCategoryDetailSchema.parse(data).data;
+          }
+          return RestaurantCategoryWithRestaurantsSchema.parse(data);
+        },
+      }
+    );
+  },
+
+  delete: async (id: string) => {
+    return apiFetch<void>(`/admin/resto-cat/${id}`, {
+      method: 'DELETE',
+    });
+  },
+};
+
 export const dishApi = {
   list: async (page = 1, limit = 10) => {
     const params = new URLSearchParams({
@@ -332,6 +449,177 @@ export const dishApi = {
   },
   delete: async (id: string) => {
     return apiFetch(`/admin/dish/${id}`, {
+      method: 'DELETE',
+    });
+  },
+};
+
+// Dish Category endpoints
+export const dishCategoryApi = {
+  list: async (page = 1, limit = 10) => {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: String(limit),
+    });
+    return apiFetch<DishCategoryWithDishesType[]>(`/admin/dish-cat?${params}`, {
+      method: 'GET',
+      validateWith: (data: unknown) => {
+        console.log('dishCategoryApi.list - raw data:', data);
+
+        // Handle direct array response
+        if (Array.isArray(data)) {
+          console.log(
+            'dishCategoryApi.list - data is array, count:',
+            data.length
+          );
+          return data.map((item) => DishCategoryWithDishesSchema.parse(item));
+        }
+
+        // Handle object with 'data' property
+        if (data && typeof data === 'object') {
+          const obj = data as Record<string, unknown>;
+
+          // Case: { data: [...] }
+          if ('data' in obj && Array.isArray(obj.data)) {
+            console.log(
+              'dishCategoryApi.list - data wrapped in .data, count:',
+              obj.data.length
+            );
+            return obj.data.map((item) =>
+              DishCategoryWithDishesSchema.parse(item)
+            );
+          }
+        }
+
+        console.warn(
+          'dishCategoryApi.list - data format not recognized, returning empty array'
+        );
+        return [];
+      },
+    });
+  },
+
+  getById: async (id: string) => {
+    return apiFetch<DishCategoryWithDishesType>(`/admin/dish-cat/${id}`, {
+      method: 'GET',
+      validateWith: (data: unknown) => {
+        // Check if data has a 'data' wrapper
+        if (data && typeof data === 'object' && 'data' in data) {
+          return DishCategoryDetailSchema.parse(data).data;
+        }
+        return DishCategoryWithDishesSchema.parse(data);
+      },
+    });
+  },
+
+  create: async (input: Record<string, unknown>) => {
+    const validated = CreateDishCategorySchema.parse(input);
+    return apiFetch<DishCategoryWithDishesType>('/admin/dish-cat', {
+      method: 'POST',
+      body: JSON.stringify(validated),
+      validateWith: (data: unknown) => {
+        if (data && typeof data === 'object' && 'data' in data) {
+          return DishCategoryDetailSchema.parse(data).data;
+        }
+        return DishCategoryWithDishesSchema.parse(data);
+      },
+    });
+  },
+
+  update: async (id: string, input: Record<string, unknown>) => {
+    const validated = UpdateDishCategorySchema.parse(input);
+    return apiFetch<DishCategoryWithDishesType>(`/admin/dish-cat/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(validated),
+      validateWith: (data: unknown) => {
+        if (data && typeof data === 'object' && 'data' in data) {
+          return DishCategoryDetailSchema.parse(data).data;
+        }
+        return DishCategoryWithDishesSchema.parse(data);
+      },
+    });
+  },
+
+  delete: async (id: string) => {
+    return apiFetch<void>(`/admin/dish-cat/${id}`, {
+      method: 'DELETE',
+    });
+  },
+};
+
+// User endpoints
+export const userApi = {
+  list: async (
+    typeUser: 'admin' | 'resto-admin' | 'customer',
+    page = 1,
+    limit = 10
+  ) => {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: String(limit),
+    });
+    return apiFetch<UserWithRestaurantType[]>(
+      `/admin/user/${typeUser}?${params}`,
+      {
+        method: 'GET',
+        validateWith: (data: unknown) => {
+          console.log('userApi.list - raw data:', data);
+
+          // Handle direct array response
+          if (Array.isArray(data)) {
+            console.log('userApi.list - data is array, count:', data.length);
+            return data.map((item) =>
+              UserListWithRestaurantSchema.shape.data.element.parse(item)
+            );
+          }
+
+          // Handle object with 'data' property
+          if (data && typeof data === 'object') {
+            const obj = data as Record<string, unknown>;
+
+            // Case: { data: [...] }
+            if ('data' in obj && Array.isArray(obj.data)) {
+              console.log(
+                'userApi.list - data wrapped in .data, count:',
+                obj.data.length
+              );
+              return obj.data.map((item) =>
+                UserListWithRestaurantSchema.shape.data.element.parse(item)
+              );
+            }
+          }
+
+          console.warn(
+            'userApi.list - data format not recognized, returning empty array'
+          );
+          return [];
+        },
+      }
+    );
+  },
+
+  getById: async (id: string) => {
+    return apiFetch<UserWithRestaurantType>(`/admin/user/${id}`, {
+      method: 'GET',
+      validateWith: (data: unknown) => {
+        return UserListWithRestaurantSchema.shape.data.element.parse(data);
+      },
+    });
+  },
+
+  update: async (id: string, input: Record<string, unknown>) => {
+    const validated = UpdateUserSchema.parse(input);
+    return apiFetch<UserWithRestaurantType>(`/admin/user/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(validated),
+      validateWith: (data: unknown) => {
+        return UserListWithRestaurantSchema.shape.data.element.parse(data);
+      },
+    });
+  },
+
+  delete: async (id: string) => {
+    return apiFetch<void>(`/admin/user/${id}`, {
       method: 'DELETE',
     });
   },
