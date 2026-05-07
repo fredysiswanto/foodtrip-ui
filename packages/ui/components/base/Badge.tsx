@@ -13,7 +13,8 @@ export function Badge({
   className = '',
   ...props
 }: BadgeProps) {
-  const baseStyles = 'inline-flex items-center font-medium rounded-full whitespace-nowrap';
+  const baseStyles =
+    'inline-flex items-center font-medium rounded whitespace-nowrap';
 
   const variantStyles = {
     default: 'bg-gray-200 text-gray-800',
@@ -25,10 +26,11 @@ export function Badge({
 
   const sizeStyles = {
     sm: 'px-2 py-1 text-xs',
-    md: 'px-3 py-1 text-sm',
+    md: 'px-2 py-1 text-sm',
   };
 
-  const finalClassName = `${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`.trim();
+  const finalClassName =
+    `${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`.trim();
 
   return (
     <span className={finalClassName} {...props}>

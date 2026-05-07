@@ -46,8 +46,8 @@ export const navigationItems: NavItem[] = [
     icon: '✈️',
   },
   {
-    label: 'User Management',
+    label: 'Users Management',
     path: '/users',
-    icon: '👥',
+    icon: '👤',
   },
 ];

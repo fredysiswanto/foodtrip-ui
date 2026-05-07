@@ -94,6 +94,18 @@ const DishCategoryDishesPage = lazy(() =>
   }))
 );
 
+const UserListPage = lazy(() =>
+  import('../pages/UserListPage').then((m) => ({
+    default: m.UserListPage,
+  }))
+);
+
+const UserDetailPage = lazy(() =>
+  import('../pages/UserDetailPage').then((m) => ({
+    default: m.UserDetailPage,
+  }))
+);
+
 // const FoodListPage = lazy(() =>
 //   import('../pages/FoodListPage').then(m => ({ default: m.FoodListPage }))
 // );
@@ -383,6 +395,32 @@ export const adminRoutes: RouteObject[] = [
             element={
               <Suspense fallback={<LoadingFallback />}>
                 <DishCategoryDishesPage />
+              </Suspense>
+            }
+          />
+        ),
+      },
+      {
+        path: 'users',
+        element: (
+          <ProtectedRoute
+            allowedRoles={[ADMIN_ROLES.ADMIN]}
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <UserListPage />
+              </Suspense>
+            }
+          />
+        ),
+      },
+      {
+        path: 'users/:id',
+        element: (
+          <ProtectedRoute
+            allowedRoles={[ADMIN_ROLES.ADMIN]}
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <UserDetailPage />
               </Suspense>
             }
           />
