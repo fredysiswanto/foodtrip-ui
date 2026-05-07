@@ -70,6 +70,30 @@ const RestaurantCategoryRestaurantsPage = lazy(() =>
   }))
 );
 
+const DishCategoryListPage = lazy(() =>
+  import('../pages/DishCategoryListPage').then((m) => ({
+    default: m.DishCategoryListPage,
+  }))
+);
+
+const DishCategoryCreatePage = lazy(() =>
+  import('../pages/DishCategoryCreatePage').then((m) => ({
+    default: m.DishCategoryCreatePage,
+  }))
+);
+
+const DishCategoryDetailPage = lazy(() =>
+  import('../pages/DishCategoryDetailPage').then((m) => ({
+    default: m.DishCategoryDetailPage,
+  }))
+);
+
+const DishCategoryDishesPage = lazy(() =>
+  import('../pages/DishCategoryDishesPage').then((m) => ({
+    default: m.DishCategoryDishesPage,
+  }))
+);
+
 // const FoodListPage = lazy(() =>
 //   import('../pages/FoodListPage').then(m => ({ default: m.FoodListPage }))
 // );
@@ -313,12 +337,52 @@ export const adminRoutes: RouteObject[] = [
         ),
       },
       {
-        index: true,
+        path: 'dish-categories',
         element: (
           <ProtectedRoute
+            allowedRoles={[ADMIN_ROLES.ADMIN]}
             element={
               <Suspense fallback={<LoadingFallback />}>
-                <DashboardPage />
+                <DishCategoryListPage />
+              </Suspense>
+            }
+          />
+        ),
+      },
+      {
+        path: 'dish-categories/create',
+        element: (
+          <ProtectedRoute
+            allowedRoles={[ADMIN_ROLES.ADMIN]}
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <DishCategoryCreatePage />
+              </Suspense>
+            }
+          />
+        ),
+      },
+      {
+        path: 'dish-categories/:id',
+        element: (
+          <ProtectedRoute
+            allowedRoles={[ADMIN_ROLES.ADMIN]}
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <DishCategoryDetailPage />
+              </Suspense>
+            }
+          />
+        ),
+      },
+      {
+        path: 'dish-categories/:id/dishes',
+        element: (
+          <ProtectedRoute
+            allowedRoles={[ADMIN_ROLES.ADMIN]}
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <DishCategoryDishesPage />
               </Suspense>
             }
           />

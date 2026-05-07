@@ -4,6 +4,7 @@ export {
   restaurantApi,
   restaurantCategoryApi,
   dishApi,
+  dishCategoryApi,
   apiFetch,
   ApiError,
 } from './client';

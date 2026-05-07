@@ -26,6 +26,11 @@ export const navigationItems: NavItem[] = [
     icon: '🍽️',
   },
   {
+    label: 'Dish Categories',
+    path: '/dish-categories',
+    icon: '📋',
+  },
+  {
     label: 'Restaurant Categories',
     path: '/restaurant-categories',
     icon: '📂',

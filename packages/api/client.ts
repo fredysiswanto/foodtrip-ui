@@ -15,6 +15,11 @@ import {
   CreateDishSchema,
   UpdateDishSchema,
   DishDetailSchema,
+  DishCategoryWithDishesSchema,
+  DishCategoryDetailSchema,
+  CreateDishCategorySchema,
+  UpdateDishCategorySchema,
+  DishCategoryWithDishesType,
 } from '@foodtrip/types';
 
 const API_URL =
@@ -441,6 +446,99 @@ export const dishApi = {
   },
   delete: async (id: string) => {
     return apiFetch(`/admin/dish/${id}`, {
+      method: 'DELETE',
+    });
+  },
+};
+
+// Dish Category endpoints
+export const dishCategoryApi = {
+  list: async (page = 1, limit = 10) => {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: String(limit),
+    });
+    return apiFetch<DishCategoryWithDishesType[]>(`/admin/dish-cat?${params}`, {
+      method: 'GET',
+      validateWith: (data: unknown) => {
+        console.log('dishCategoryApi.list - raw data:', data);
+
+        // Handle direct array response
+        if (Array.isArray(data)) {
+          console.log(
+            'dishCategoryApi.list - data is array, count:',
+            data.length
+          );
+          return data.map((item) => DishCategoryWithDishesSchema.parse(item));
+        }
+
+        // Handle object with 'data' property
+        if (data && typeof data === 'object') {
+          const obj = data as Record<string, unknown>;
+
+          // Case: { data: [...] }
+          if ('data' in obj && Array.isArray(obj.data)) {
+            console.log(
+              'dishCategoryApi.list - data wrapped in .data, count:',
+              obj.data.length
+            );
+            return obj.data.map((item) =>
+              DishCategoryWithDishesSchema.parse(item)
+            );
+          }
+        }
+
+        console.warn(
+          'dishCategoryApi.list - data format not recognized, returning empty array'
+        );
+        return [];
+      },
+    });
+  },
+
+  getById: async (id: string) => {
+    return apiFetch<DishCategoryWithDishesType>(`/admin/dish-cat/${id}`, {
+      method: 'GET',
+      validateWith: (data: unknown) => {
+        // Check if data has a 'data' wrapper
+        if (data && typeof data === 'object' && 'data' in data) {
+          return DishCategoryDetailSchema.parse(data).data;
+        }
+        return DishCategoryWithDishesSchema.parse(data);
+      },
+    });
+  },
+
+  create: async (input: Record<string, unknown>) => {
+    const validated = CreateDishCategorySchema.parse(input);
+    return apiFetch<DishCategoryWithDishesType>('/admin/dish-cat', {
+      method: 'POST',
+      body: JSON.stringify(validated),
+      validateWith: (data: unknown) => {
+        if (data && typeof data === 'object' && 'data' in data) {
+          return DishCategoryDetailSchema.parse(data).data;
+        }
+        return DishCategoryWithDishesSchema.parse(data);
+      },
+    });
+  },
+
+  update: async (id: string, input: Record<string, unknown>) => {
+    const validated = UpdateDishCategorySchema.parse(input);
+    return apiFetch<DishCategoryWithDishesType>(`/admin/dish-cat/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(validated),
+      validateWith: (data: unknown) => {
+        if (data && typeof data === 'object' && 'data' in data) {
+          return DishCategoryDetailSchema.parse(data).data;
+        }
+        return DishCategoryWithDishesSchema.parse(data);
+      },
+    });
+  },
+
+  delete: async (id: string) => {
+    return apiFetch<void>(`/admin/dish-cat/${id}`, {
       method: 'DELETE',
     });
   },
