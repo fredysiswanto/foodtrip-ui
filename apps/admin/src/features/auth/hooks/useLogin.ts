@@ -2,9 +2,13 @@ import { useMutation } from '@tanstack/react-query';
 import { authApi, ApiError } from '@foodtrip/api';
 import { useAuth } from './useAuth';
 import { useToast } from '../../../providers/toast';
-import { isAnyAdmin, getRoleDisplayName } from '../roles';
+import { isAnyAdmin, getRoleDisplayName, ADMIN_ROLES } from '../roles';
 
-export function useLogin() {
+interface UseLoginOptions {
+  onRoleDetected?: (role: string) => void;
+}
+
+export function useLogin(options?: UseLoginOptions) {
   const { setAuth } = useAuth();
   const toast = useToast();
 
@@ -31,6 +35,7 @@ export function useLogin() {
       // Store token in localStorage
       localStorage.setItem('auth_token', data.token);
       localStorage.setItem('resto_id', data.data.resto_id || '');
+      localStorage.setItem('user_role', data.data.user_type);
 
       // Update auth state
       setAuth({
@@ -40,10 +45,18 @@ export function useLogin() {
         isLoading: false,
       });
 
-      // Show success toast with role info
+      // Notify parent component about detected role
+      options?.onRoleDetected?.(data.data.user_type);
+
+      // Show role-specific welcome message
+      const roleMessage =
+        data.data.user_type === ADMIN_ROLES.ADMIN
+          ? 'System Administrator'
+          : 'Restaurant Manager';
+
       toast.success(
         'Welcome back!',
-        `Logged in as ${data.data.first_name} ${data.data.last_name} (${getRoleDisplayName(data.data.user_type)})`
+        `${data.data.first_name} ${data.data.last_name} • ${roleMessage}`
       );
     },
     onError: (error) => {
@@ -55,6 +68,8 @@ export function useLogin() {
           errorMessage = 'Invalid email or password';
         } else if (error.status === 403) {
           errorMessage = 'Access denied';
+        } else if (error.status === 0) {
+          errorMessage = 'Network error. Please check your connection.';
         } else {
           errorMessage = error.message;
         }

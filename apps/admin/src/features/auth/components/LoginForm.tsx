@@ -8,7 +8,10 @@ export interface LoginFormProps {
 export function LoginForm({ onSuccess }: LoginFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
 
   const loginMutation = useLogin();
   const isLoading = loginMutation.isPending;
@@ -16,14 +19,30 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setValidationError(null);
+    setEmailError(null);
+    setPasswordError(null);
 
-    if (!email || !password) {
-      setValidationError('Please fill in all fields');
-      return;
+    let hasError = false;
+
+    // Validate email
+    if (!email.trim()) {
+      setEmailError('Email is required');
+      hasError = true;
+    } else if (!email.includes('@')) {
+      setEmailError('Please enter a valid email address');
+      hasError = true;
     }
 
-    if (!email.includes('@')) {
-      setValidationError('Please enter a valid email address');
+    // Validate password
+    if (!password) {
+      setPasswordError('Password is required');
+      hasError = true;
+    } else if (password.length < 6) {
+      setPasswordError('Password must be at least 6 characters');
+      hasError = true;
+    }
+
+    if (hasError) {
       return;
     }
 
@@ -40,63 +59,134 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
     }
   };
 
+  const handleEmailChange = (value: string) => {
+    setEmail(value);
+    if (emailError && value.includes('@')) {
+      setEmailError(null);
+    }
+  };
+
+  const handlePasswordChange = (value: string) => {
+    setPassword(value);
+    if (passwordError && value.length >= 6) {
+      setPasswordError(null);
+    }
+  };
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">FoodTrip Admin</h1>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {validationError && (
-            <div className="p-4 bg-red-50 border border-red-200 rounded text-red-700 text-sm">
-              {validationError}
-            </div>
-          )}
-
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              Email Address
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={isLoading}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-50 disabled:cursor-not-allowed"
-              placeholder="you@example.com"
-            />
+    <div className="flex items-center justify-center min-h-screen bg-linear-to-br from-blue-50 to-indigo-100">
+      <div className="w-full max-w-md">
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 text-center">
+              FoodTrip
+            </h1>
+            <p className="text-center text-sm text-gray-600 mt-2">
+              Admin Dashboard
+            </p>
           </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              disabled={isLoading}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-50 disabled:cursor-not-allowed"
-              placeholder="••••••••"
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium rounded-lg transition-colors disabled:cursor-not-allowed flex items-center justify-center gap-2"
-          >
-            {isLoading && (
-              <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {validationError && (
+              <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-start gap-2">
+                <span className="mt-0.5 text-lg">⚠️</span>
+                <span>{validationError}</span>
+              </div>
             )}
-            {isLoading ? 'Signing in...' : 'Sign In'}
-          </button>
-        </form>
 
-        <p className="text-center text-sm text-gray-600 mt-6">
-          Demo Account: <code className="bg-gray-100 px-2 py-1 rounded">paultulod@pm.me</code>
-        </p>
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-semibold text-gray-700 mb-2"
+              >
+                Email Address
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => handleEmailChange(e.target.value)}
+                disabled={isLoading}
+                className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-50 disabled:cursor-not-allowed transition-all ${
+                  emailError ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                }`}
+                placeholder="you@example.com"
+              />
+              {emailError && (
+                <p className="mt-1.5 text-sm text-red-600 flex items-center gap-1">
+                  <span>✕</span> {emailError}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-semibold text-gray-700 mb-2"
+              >
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => handlePasswordChange(e.target.value)}
+                  disabled={isLoading}
+                  className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-50 disabled:cursor-not-allowed transition-all ${
+                    passwordError
+                      ? 'border-red-300 bg-red-50'
+                      : 'border-gray-300'
+                  }`}
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  disabled={isLoading}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-900 disabled:cursor-not-allowed text-sm font-medium"
+                >
+                  {showPassword ? '👁️ Hide' : '🙈 Show'}
+                </button>
+              </div>
+              {passwordError && (
+                <p className="mt-1.5 text-sm text-red-600 flex items-center gap-1">
+                  <span>✕</span> {passwordError}
+                </p>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold rounded-lg transition-all disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6"
+            >
+              {isLoading && (
+                <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              )}
+              {isLoading ? 'Signing in...' : 'Sign In'}
+            </button>
+          </form>
+        </div>
+
+        <div className="mt-6 bg-white rounded-lg shadow-md p-4">
+          <p className="text-xs text-gray-600 font-medium mb-3">
+            Demo Credentials:
+          </p>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between bg-blue-50 p-2.5 rounded">
+              <code className="text-sm font-mono text-blue-900">
+                resto@admin.com | password admin@admin.com | password
+              </code>
+              <span className="text-xs bg-blue-200 text-blue-900 px-2 py-1 rounded font-semibold">
+                Admin
+              </span>
+            </div>
+          </div>
+          <p className="text-xs text-gray-600 mt-2 italic">
+            Use these credentials for demo login
+          </p>
+        </div>
       </div>
     </div>
   );
