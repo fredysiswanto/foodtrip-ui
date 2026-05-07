@@ -181,6 +181,13 @@ const TripListPage = lazy(() =>
 //   })
 // );
 
+// 404 Not Found Page
+const NotFoundPage = lazy(() =>
+  import('../pages/NotFoundPage').then((m) => ({
+    default: m.NotFoundPage,
+  }))
+);
+
 // Loading fallback
 const LoadingFallback = () => (
   <div className="flex items-center justify-center min-h-screen">
@@ -204,7 +211,7 @@ export const adminRoutes: RouteObject[] = [
   {
     path: '/admin',
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute allowedRoles={[ADMIN_ROLES.ADMIN]}>
         <RoleGuard requiredRole={ADMIN_ROLES.ADMIN}>
           <AdminLayout />
         </RoleGuard>
@@ -418,7 +425,7 @@ export const adminRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'info',
+        path: 'restaurant-info',
         element: (
           <Suspense fallback={<LoadingFallback />}>
             <RestaurantAdminInfoPage />
@@ -442,6 +449,16 @@ export const adminRoutes: RouteObject[] = [
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <LoginPage />
+      </Suspense>
+    ),
+  },
+
+  // Catch-all route for undefined paths (404)
+  {
+    path: '*',
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <NotFoundPage />
       </Suspense>
     ),
   },

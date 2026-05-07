@@ -71,7 +71,7 @@ export const navigationRestaurantAdmin: NavItem[] = [
   },
   {
     label: 'Restaurant Info',
-    path: '/restaurant-admin/info',
+    path: '/restaurant-admin/restaurant-info',
     icon: '🏪',
   },
   {

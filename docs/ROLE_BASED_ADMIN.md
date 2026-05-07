@@ -5,7 +5,7 @@
 The FoodTrip admin system now supports two distinct roles with separate feature sets and access scopes:
 
 - **System Admin** (`/admin/*`): Global access to all restaurants, dishes, categories, users, and orders
-- **Restaurant Admin** (`/restaurant-admin/*`): Scoped access to manage a single restaurant
+- **Restaurant Admin** (`/*`): Scoped access to manage a single restaurant
 
 ---
 
