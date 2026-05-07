@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks';
-import { AdminRole } from '../roles';
+import { AdminRole, ADMIN_ROLES } from '../roles';
 
 export interface ProtectedRouteProps {
   children: ReactNode;
@@ -34,12 +34,25 @@ export function ProtectedRoute({
     const userRole = user?.user_type as AdminRole | undefined;
 
     if (!userRole || !allowedRoles.includes(userRole)) {
+      // Determine redirect destination based on actual user role
+      const getDashboardPath = (): string => {
+        if (!userRole) return '/login';
+        return userRole === ADMIN_ROLES.ADMIN
+          ? '/admin/dashboard'
+          : '/restaurant-admin/dashboard';
+      };
+
+      const allowedRolesList =
+        allowedRoles.length === 1
+          ? `${allowedRoles[0]}`
+          : `one of: ${allowedRoles.join(', ')}`;
+
       return (
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <div className="mb-4">
+        <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4">
+          <div className="text-center max-w-md">
+            <div className="mb-4 flex justify-center">
               <svg
-                className="w-16 h-16 text-red-500 mx-auto"
+                className="w-16 h-16 text-red-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -53,15 +66,31 @@ export function ProtectedRoute({
               </svg>
             </div>
             <h1 className="text-2xl font-bold text-gray-900">Access Denied</h1>
-            <p className="text-gray-600 mt-2">
-              You don't have permission to access this page.
+            <p className="text-gray-600 mt-3 text-sm">
+              Your account role{' '}
+              <span className="font-semibold text-gray-900">{userRole}</span>{' '}
+              does not have permission to access this page.
             </p>
-            <button
-              onClick={() => (window.location.href = '/dashboard')}
-              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-            >
-              Go to Dashboard
-            </button>
+            <p className="text-gray-500 mt-2 text-xs">
+              Required role:{' '}
+              <span className="font-mono font-semibold">
+                {allowedRolesList}
+              </span>
+            </p>
+            <div className="flex gap-2 mt-6 justify-center">
+              <button
+                onClick={() => (window.location.href = getDashboardPath())}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium transition-colors"
+              >
+                Go to Your Dashboard
+              </button>
+              <button
+                onClick={() => (window.location.href = '/login')}
+                className="px-4 py-2 bg-gray-200 text-gray-900 rounded-md hover:bg-gray-300 font-medium transition-colors"
+              >
+                Logout
+              </button>
+            </div>
           </div>
         </div>
       );
