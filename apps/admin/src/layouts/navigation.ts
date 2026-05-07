@@ -26,14 +26,19 @@ export const navigationItems: NavItem[] = [
     icon: '🍽️',
   },
   {
-    label: 'Trip Management',
-    path: '/trips',
-    icon: '✈️',
+    label: 'Restaurant Categories',
+    path: '/restaurant-categories',
+    icon: '📂',
   },
   {
     label: 'Restaurant Management',
     path: '/restaurants',
     icon: '🏪',
+  },
+  {
+    label: 'Trip Management',
+    path: '/trips',
+    icon: '✈️',
   },
   {
     label: 'User Management',

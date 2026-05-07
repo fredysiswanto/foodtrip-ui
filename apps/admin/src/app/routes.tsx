@@ -46,6 +46,30 @@ const DishEditPage = lazy(() =>
   import('../pages/DishEditPage').then((m) => ({ default: m.DishEditPage }))
 );
 
+const RestaurantCategoryListPage = lazy(() =>
+  import('../pages/RestaurantCategoryListPage').then((m) => ({
+    default: m.RestaurantCategoryListPage,
+  }))
+);
+
+const RestaurantCategoryCreatePage = lazy(() =>
+  import('../pages/RestaurantCategoryCreatePage').then((m) => ({
+    default: m.RestaurantCategoryCreatePage,
+  }))
+);
+
+const RestaurantCategoryDetailPage = lazy(() =>
+  import('../pages/RestaurantCategoryDetailPage').then((m) => ({
+    default: m.RestaurantCategoryDetailPage,
+  }))
+);
+
+const RestaurantCategoryRestaurantsPage = lazy(() =>
+  import('../pages/RestaurantCategoryRestaurantsPage').then((m) => ({
+    default: m.RestaurantCategoryRestaurantsPage,
+  }))
+);
+
 // const FoodListPage = lazy(() =>
 //   import('../pages/FoodListPage').then(m => ({ default: m.FoodListPage }))
 // );
@@ -73,16 +97,16 @@ const TripListPage = lazy(() =>
   })
 );
 
-const UserListPage = lazy(() =>
-  Promise.resolve({
-    default: () => (
-      <div>
-        <h1 className="text-3xl font-bold">User Management</h1>
-        <p className="text-slate-600 mt-2">Coming soon...</p>
-      </div>
-    ),
-  })
-);
+// const UserListPage = lazy(() =>
+//   Promise.resolve({
+//     default: () => (
+//       <div>
+//         <h1 className="text-3xl font-bold">User Management</h1>
+//         <p className="text-slate-600 mt-2">Coming soon...</p>
+//       </div>
+//     ),
+//   })
+// );
 
 // Loading fallback
 const LoadingFallback = () => (
@@ -237,13 +261,52 @@ export const adminRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'users',
+        path: 'restaurant-categories',
         element: (
           <ProtectedRoute
             allowedRoles={[ADMIN_ROLES.ADMIN]}
             element={
               <Suspense fallback={<LoadingFallback />}>
-                <UserListPage />
+                <RestaurantCategoryListPage />
+              </Suspense>
+            }
+          />
+        ),
+      },
+      {
+        path: 'restaurant-categories/create',
+        element: (
+          <ProtectedRoute
+            allowedRoles={[ADMIN_ROLES.ADMIN]}
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <RestaurantCategoryCreatePage />
+              </Suspense>
+            }
+          />
+        ),
+      },
+      {
+        path: 'restaurant-categories/:id',
+        element: (
+          <ProtectedRoute
+            allowedRoles={[ADMIN_ROLES.ADMIN]}
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <RestaurantCategoryDetailPage />
+              </Suspense>
+            }
+          />
+        ),
+      },
+      {
+        path: 'restaurant-categories/:id/restaurants',
+        element: (
+          <ProtectedRoute
+            allowedRoles={[ADMIN_ROLES.ADMIN]}
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <RestaurantCategoryRestaurantsPage />
               </Suspense>
             }
           />

@@ -1,2 +1,9 @@
 // API client and endpoints
-export { authApi, restaurantApi, dishApi, apiFetch, ApiError } from './client';
+export {
+  authApi,
+  restaurantApi,
+  restaurantCategoryApi,
+  dishApi,
+  apiFetch,
+  ApiError,
+} from './client';
