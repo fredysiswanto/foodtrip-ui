@@ -34,6 +34,14 @@ skills:
     applyWhen:
       - creating dashboard or overview pages
       - adding summary statistics or data visualization
+  - name: admin-code-review
+    description: 'Reviews admin feature code for rule violations, type safety issues, missing error handlers, data mapping bugs, and pattern inconsistencies'
+    applyWhen:
+      - asked to review or audit code
+      - before committing new features
+      - checking for Record<string, unknown> violations
+      - verifying onError handlers and toast patterns
+      - ensuring cross-feature pattern consistency
 ---
 
 # Admin App Development Agent

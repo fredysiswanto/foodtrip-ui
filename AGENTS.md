@@ -78,8 +78,19 @@ Features must be independent. No cross-feature imports inside `apps/*/src/featur
 - Admin: `['admin', '<feature>', '<action>', ...params]`
 - Client: `['<feature>', '<action>', ...params]`
 
+## Skills & Agents (OpenCode)
+
+5 skills defined in `.opencode/agents/admin.agent.md`:
+- `admin-crud-feature` — scaffold full CRUD (hook + component + type)
+- `admin-data-table` — table views with pagination/filtering/sorting
+- `admin-form-builder` — react-hook-form + Zod forms
+- `admin-dashboard` — summary cards, stats panels
+- `admin-code-review` — audit: type safety, error handling, pattern consistency
+
 ## Existing Instruction Sources
 
 - `.github/copilot-instructions.md` — comprehensive architecture and coding rules (298 lines)
 - `.github/agents/admin.agent.md` — admin-specific patterns, CRUD templates, checklists
 - `.github/agents/client.agent.md` — client-specific patterns and examples
+- `.opencode/agents/admin.agent.md` — admin agent with skills (source of truth for agent behavior)
+- `.opencode/agents/client.agent.md` — client agent with skills
