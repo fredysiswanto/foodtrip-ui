@@ -176,7 +176,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
           <div className="space-y-2">
             <div className="flex items-center justify-between bg-blue-50 p-2.5 rounded">
               <code className="text-sm font-mono text-blue-900">
-                paultulod@pm.me
+                resto@admin.com | password admin@admin.com | password
               </code>
               <span className="text-xs bg-blue-200 text-blue-900 px-2 py-1 rounded font-semibold">
                 Admin
@@ -184,7 +184,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
             </div>
           </div>
           <p className="text-xs text-gray-600 mt-2 italic">
-            Any password works for demo
+            Use these credentials for demo login
           </p>
         </div>
       </div>
