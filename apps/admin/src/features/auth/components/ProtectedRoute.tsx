@@ -1,14 +1,17 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks';
 import { AdminRole } from '../roles';
 
 export interface ProtectedRouteProps {
-  element: React.ReactElement;
+  children: ReactNode;
   allowedRoles?: AdminRole[];
 }
 
-export function ProtectedRoute({ element, allowedRoles }: ProtectedRouteProps) {
+export function ProtectedRoute({
+  children,
+  allowedRoles,
+}: ProtectedRouteProps) {
   const { isAuthenticated, isLoading, user } = useAuth();
 
   if (isLoading) {
@@ -65,5 +68,5 @@ export function ProtectedRoute({ element, allowedRoles }: ProtectedRouteProps) {
     }
   }
 
-  return element;
+  return <>{children}</>;
 }

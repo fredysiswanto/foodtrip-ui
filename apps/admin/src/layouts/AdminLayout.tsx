@@ -1,12 +1,28 @@
 import { useState } from 'react';
 import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
-import { useAuth, useLogout } from '../features/auth';
-import { navigationItems, NavItem } from './navigation';
+import { useAuth, useLogout, ADMIN_ROLES } from '../features/auth';
+import {
+  navigationAdmin,
+  navigationRestaurantAdmin,
+  NavItem,
+} from './navigation';
 
 export function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const { user } = useAuth();
+
+  // Determine which navigation to use based on user role
+  const navigation =
+    user?.user_type === ADMIN_ROLES.ADMIN
+      ? navigationAdmin
+      : navigationRestaurantAdmin;
+
+  // Determine the home path based on role
+  const homePath =
+    user?.user_type === ADMIN_ROLES.ADMIN
+      ? '/admin/dashboard'
+      : '/restaurant-admin/dashboard';
 
   const isActive = (path: string) => {
     return location.pathname.startsWith(path);
@@ -34,14 +50,14 @@ export function AdminLayout() {
       >
         {/* Logo */}
         <div className="h-16 flex items-center justify-center border-b border-slate-800 px-4">
-          <Link to="/dashboard" className="font-bold text-xl">
+          <Link to={homePath} className="font-bold text-xl">
             FoodTrip
           </Link>
         </div>
 
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto px-2 py-4 space-y-1">
-          {navigationItems.map((item) => (
+          {navigation.map((item) => (
             <NavLink
               key={item.path}
               item={item}

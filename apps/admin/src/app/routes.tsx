@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import type { RouteObject } from 'react-router-dom';
-import { ProtectedRoute, ADMIN_ROLES } from '../features/auth';
-import { AdminLayout } from '../layouts';
+import { ProtectedRoute, RoleGuard, ADMIN_ROLES } from '../features/auth';
+import { AdminLayout, RestaurantAdminLayout } from '../layouts';
 
 // Lazy load pages for better performance
 const LoginPage = lazy(() =>
@@ -106,6 +106,43 @@ const UserDetailPage = lazy(() =>
   }))
 );
 
+// Restaurant Admin Pages
+const RestaurantAdminDashboardPage = lazy(() =>
+  import('../pages/RestaurantAdminDashboardPage').then((m) => ({
+    default: m.RestaurantAdminDashboardPage,
+  }))
+);
+
+const RestaurantAdminMenuPage = lazy(() =>
+  import('../pages/RestaurantAdminMenuPage').then((m) => ({
+    default: m.RestaurantAdminMenuPage,
+  }))
+);
+
+const RestaurantAdminOrdersPage = lazy(() =>
+  import('../pages/RestaurantAdminOrdersPage').then((m) => ({
+    default: m.RestaurantAdminOrdersPage,
+  }))
+);
+
+const RestaurantAdminOpeningHoursPage = lazy(() =>
+  import('../pages/RestaurantAdminOpeningHoursPage').then((m) => ({
+    default: m.RestaurantAdminOpeningHoursPage,
+  }))
+);
+
+const RestaurantAdminInfoPage = lazy(() =>
+  import('../pages/RestaurantAdminInfoPage').then((m) => ({
+    default: m.RestaurantAdminInfoPage,
+  }))
+);
+
+const RestaurantAdminAccountPage = lazy(() =>
+  import('../pages/RestaurantAdminAccountPage').then((m) => ({
+    default: m.RestaurantAdminAccountPage,
+  }))
+);
+
 // const FoodListPage = lazy(() =>
 //   import('../pages/FoodListPage').then(m => ({ default: m.FoodListPage }))
 // );
@@ -163,269 +200,249 @@ export const adminRoutes: RouteObject[] = [
       </Suspense>
     ),
   },
+  // System Admin Routes
   {
-    path: '/',
-    element: <AdminLayout />,
+    path: '/admin',
+    element: (
+      <ProtectedRoute>
+        <RoleGuard requiredRole={ADMIN_ROLES.ADMIN}>
+          <AdminLayout />
+        </RoleGuard>
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: 'dashboard',
         element: (
-          <ProtectedRoute
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <DashboardPage />
-              </Suspense>
-            }
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <DashboardPage />
+          </Suspense>
         ),
       },
       {
         path: 'foods',
         element: (
-          <ProtectedRoute
-            allowedRoles={[ADMIN_ROLES.ADMIN]}
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <FoodListPage />
-              </Suspense>
-            }
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <FoodListPage />
+          </Suspense>
         ),
       },
       {
         path: 'dishes',
         element: (
-          <ProtectedRoute
-            allowedRoles={[ADMIN_ROLES.ADMIN]}
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <DishListPage />
-              </Suspense>
-            }
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <DishListPage />
+          </Suspense>
         ),
       },
       {
         path: 'dishes/new',
         element: (
-          <ProtectedRoute
-            allowedRoles={[ADMIN_ROLES.ADMIN]}
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <DishCreatePage />
-              </Suspense>
-            }
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <DishCreatePage />
+          </Suspense>
         ),
       },
       {
         path: 'dishes/:id',
         element: (
-          <ProtectedRoute
-            allowedRoles={[ADMIN_ROLES.ADMIN]}
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <DishDetailPage />
-              </Suspense>
-            }
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <DishDetailPage />
+          </Suspense>
         ),
       },
       {
         path: 'dishes/:id/edit',
         element: (
-          <ProtectedRoute
-            allowedRoles={[ADMIN_ROLES.ADMIN]}
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <DishEditPage />
-              </Suspense>
-            }
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <DishEditPage />
+          </Suspense>
         ),
       },
       {
         path: 'trips',
         element: (
-          <ProtectedRoute
-            allowedRoles={[ADMIN_ROLES.ADMIN]}
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <TripListPage />
-              </Suspense>
-            }
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <TripListPage />
+          </Suspense>
         ),
       },
       {
         path: 'restaurants',
         element: (
-          <ProtectedRoute
-            allowedRoles={[ADMIN_ROLES.ADMIN]}
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <RestaurantListPage />
-              </Suspense>
-            }
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <RestaurantListPage />
+          </Suspense>
         ),
       },
       {
         path: 'restaurants/new',
         element: (
-          <ProtectedRoute
-            allowedRoles={[ADMIN_ROLES.ADMIN]}
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <RestaurantCreatePage />
-              </Suspense>
-            }
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <RestaurantCreatePage />
+          </Suspense>
         ),
       },
       {
         path: 'restaurants/:id',
         element: (
-          <ProtectedRoute
-            allowedRoles={[ADMIN_ROLES.ADMIN, ADMIN_ROLES.RESTO_ADMIN]}
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <RestaurantDetailPage />
-              </Suspense>
-            }
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <RestaurantDetailPage />
+          </Suspense>
         ),
       },
       {
         path: 'restaurant-categories',
         element: (
-          <ProtectedRoute
-            allowedRoles={[ADMIN_ROLES.ADMIN]}
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <RestaurantCategoryListPage />
-              </Suspense>
-            }
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <RestaurantCategoryListPage />
+          </Suspense>
         ),
       },
       {
         path: 'restaurant-categories/create',
         element: (
-          <ProtectedRoute
-            allowedRoles={[ADMIN_ROLES.ADMIN]}
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <RestaurantCategoryCreatePage />
-              </Suspense>
-            }
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <RestaurantCategoryCreatePage />
+          </Suspense>
         ),
       },
       {
         path: 'restaurant-categories/:id',
         element: (
-          <ProtectedRoute
-            allowedRoles={[ADMIN_ROLES.ADMIN]}
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <RestaurantCategoryDetailPage />
-              </Suspense>
-            }
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <RestaurantCategoryDetailPage />
+          </Suspense>
         ),
       },
       {
         path: 'restaurant-categories/:id/restaurants',
         element: (
-          <ProtectedRoute
-            allowedRoles={[ADMIN_ROLES.ADMIN]}
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <RestaurantCategoryRestaurantsPage />
-              </Suspense>
-            }
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <RestaurantCategoryRestaurantsPage />
+          </Suspense>
         ),
       },
       {
         path: 'dish-categories',
         element: (
-          <ProtectedRoute
-            allowedRoles={[ADMIN_ROLES.ADMIN]}
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <DishCategoryListPage />
-              </Suspense>
-            }
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <DishCategoryListPage />
+          </Suspense>
         ),
       },
       {
         path: 'dish-categories/create',
         element: (
-          <ProtectedRoute
-            allowedRoles={[ADMIN_ROLES.ADMIN]}
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <DishCategoryCreatePage />
-              </Suspense>
-            }
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <DishCategoryCreatePage />
+          </Suspense>
         ),
       },
       {
         path: 'dish-categories/:id',
         element: (
-          <ProtectedRoute
-            allowedRoles={[ADMIN_ROLES.ADMIN]}
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <DishCategoryDetailPage />
-              </Suspense>
-            }
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <DishCategoryDetailPage />
+          </Suspense>
         ),
       },
       {
         path: 'dish-categories/:id/dishes',
         element: (
-          <ProtectedRoute
-            allowedRoles={[ADMIN_ROLES.ADMIN]}
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <DishCategoryDishesPage />
-              </Suspense>
-            }
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <DishCategoryDishesPage />
+          </Suspense>
         ),
       },
       {
         path: 'users',
         element: (
-          <ProtectedRoute
-            allowedRoles={[ADMIN_ROLES.ADMIN]}
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <UserListPage />
-              </Suspense>
-            }
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <UserListPage />
+          </Suspense>
         ),
       },
       {
         path: 'users/:id',
         element: (
-          <ProtectedRoute
-            allowedRoles={[ADMIN_ROLES.ADMIN]}
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <UserDetailPage />
-              </Suspense>
-            }
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <UserDetailPage />
+          </Suspense>
         ),
       },
     ],
+  },
+
+  // Restaurant Admin Routes
+  {
+    path: '/restaurant-admin',
+    element: (
+      <ProtectedRoute>
+        <RoleGuard requiredRole={ADMIN_ROLES.RESTO_ADMIN}>
+          <RestaurantAdminLayout />
+        </RoleGuard>
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        path: 'dashboard',
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <RestaurantAdminDashboardPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'menu',
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <RestaurantAdminMenuPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'orders',
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <RestaurantAdminOrdersPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'opening-hours',
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <RestaurantAdminOpeningHoursPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'info',
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <RestaurantAdminInfoPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'account',
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <RestaurantAdminAccountPage />
+          </Suspense>
+        ),
+      },
+    ],
+  },
+
+  // Default redirect to login
+  {
+    path: '/',
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <LoginPage />
+      </Suspense>
+    ),
   },
 ];
