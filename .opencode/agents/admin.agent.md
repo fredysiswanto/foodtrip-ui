@@ -13,6 +13,27 @@ toolRestrictions:
     - file_search and semantic_search (codebase exploration)
     - read_file and replace_string_in_file (code editing)
     - run_in_terminal (dev server, type checking)
+skills:
+  - name: admin-crud-feature
+    description: 'Creates complete CRUD features with hooks, components, and types following FoodTrip patterns'
+    applyWhen:
+      - creating new admin feature from scratch
+      - adding CRUD operations (create, read, update, delete)
+  - name: admin-data-table
+    description: 'Implements data table views with pagination, filtering, sorting, and bulk actions'
+    applyWhen:
+      - building list views with tabular data
+      - adding filtering, sorting, or pagination to existing tables
+  - name: admin-form-builder
+    description: 'Creates forms with react-hook-form, Zod validation, and proper error handling'
+    applyWhen:
+      - building create/edit forms
+      - adding form validation or complex form fields
+  - name: admin-dashboard
+    description: 'Builds dashboard pages with summary cards, charts, and quick action panels'
+    applyWhen:
+      - creating dashboard or overview pages
+      - adding summary statistics or data visualization
 ---
 
 # Admin App Development Agent
