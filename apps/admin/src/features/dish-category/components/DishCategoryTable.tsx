@@ -45,7 +45,7 @@ export function DishCategoryTable({
           {
             key: 'dishes',
             label: 'Dishes',
-            render: (dishes: any[]) => (
+            render: (dishes: { length: number }) => (
               <Badge variant="info">{dishes?.length || 0} dishes</Badge>
             ),
             align: 'center',

@@ -18,7 +18,7 @@ export function NotFoundPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 px-4">
+    <div className="flex items-center justify-center min-h-screen bg-linear-to-br from-gray-50 to-gray-100 px-4">
       <div className="text-center max-w-md">
         {/* 404 Icon */}
         <div className="mb-6">

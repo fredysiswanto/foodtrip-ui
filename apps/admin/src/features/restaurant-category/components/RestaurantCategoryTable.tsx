@@ -45,7 +45,7 @@ export function RestaurantCategoryTable({
           {
             key: 'restaurants',
             label: 'Restaurants',
-            render: (restaurants: any[]) => (
+            render: (restaurants: { length: number }) => (
               <Badge variant="info">
                 {restaurants?.length || 0} restaurants
               </Badge>

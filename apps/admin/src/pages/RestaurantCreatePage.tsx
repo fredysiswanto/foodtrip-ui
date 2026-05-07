@@ -1,5 +1,8 @@
 import { useNavigate } from 'react-router-dom';
-import { useCreateRestaurant } from '../features/restaurant';
+import {
+  CreateRestaurantInput,
+  useCreateRestaurant,
+} from '../features/restaurant';
 import { RestaurantForm } from '../features/restaurant/components';
 import { Button, Card, VStack } from '@foodtrip/ui';
 
@@ -7,7 +10,7 @@ export function RestaurantCreatePage() {
   const navigate = useNavigate();
   const { mutate: createRestaurant, isPending } = useCreateRestaurant();
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: CreateRestaurantInput) => {
     createRestaurant(data, {
       onSuccess: () => {
         navigate('/admin/restaurants');
@@ -27,10 +30,7 @@ export function RestaurantCreatePage() {
       </div>
 
       <Card>
-        <RestaurantForm
-          onSubmit={handleSubmit}
-          isLoading={isPending}
-        />
+        <RestaurantForm onSubmit={handleSubmit} isLoading={isPending} />
       </Card>
     </VStack>
   );

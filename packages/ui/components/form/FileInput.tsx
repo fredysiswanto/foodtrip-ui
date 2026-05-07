@@ -1,6 +1,9 @@
 import { InputHTMLAttributes, useState, ReactNode } from 'react';
 
-export interface FileInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
+export interface FileInputProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'type'
+> {
   label?: ReactNode;
   error?: string;
   hint?: string;
@@ -19,6 +22,7 @@ export function FileInput({
 }: FileInputProps) {
   const [preview, setPreview] = useState<string | null>(null);
 
+  // eslint-disable-next-line no-undef
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && file.type.startsWith('image/')) {
@@ -31,8 +35,11 @@ export function FileInput({
     props.onChange?.(e);
   };
 
-  const baseStyles = 'w-full px-4 py-2 border-2 border-dashed rounded-lg font-normal text-gray-500 transition-colors duration-200 cursor-pointer';
-  const borderStyles = error ? 'border-red-500' : 'border-gray-300 hover:border-gray-400 focus:border-blue-500';
+  const baseStyles =
+    'w-full px-4 py-2 border-2 border-dashed rounded-lg font-normal text-gray-500 transition-colors duration-200 cursor-pointer';
+  const borderStyles = error
+    ? 'border-red-500'
+    : 'border-gray-300 hover:border-gray-400 focus:border-blue-500';
   const finalClassName = `${baseStyles} ${borderStyles} ${className}`.trim();
 
   return (
