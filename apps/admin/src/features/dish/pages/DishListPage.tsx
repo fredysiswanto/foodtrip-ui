@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { DishTable, useDishList } from '../../features/dish';
+import { DishTable, useDishList } from '..';
 import { Alert, Button, Card, Spinner, VStack } from '@foodtrip/ui';
 
 export function DishListPage() {

@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDishDetail, useDeleteDish } from '../../features/dish';
+import { useDishDetail, useDeleteDish } from '..';
 import { Button, Card, VStack, Spinner, Alert, Modal } from '@foodtrip/ui';
 import { useState } from 'react';
 
@@ -54,6 +54,7 @@ export function DishDetailPage() {
         <div className="flex gap-2">
           <Button
             variant="secondary"
+            className="border"
             onClick={() => navigate(`/admin/dishes/${id}/edit`)}
           >
             Edit

@@ -64,7 +64,7 @@ export function Modal({
           <h2 className="text-lg font-semibold text-gray-900 mb-4">{title}</h2>
           <div className="text-gray-600 mb-6">{children}</div>
 
-          <div className="flex gap-3 justify-end">
+          <div className="flex gap-3 justify-center">
             <Button
               variant="ghost"
               className="border"

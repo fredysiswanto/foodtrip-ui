@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { DishForm, useDishDetail, useUpdateDish } from '../../features/dish';
+import { DishForm, useDishDetail, useUpdateDish } from '..';
 import { Button, Card, VStack, Spinner, Alert } from '@foodtrip/ui';
 import { CreateDishInputType } from '@foodtrip/types';
 
@@ -16,7 +16,7 @@ export function DishEditPage() {
       { id, data },
       {
         onSuccess: () => {
-          navigate(`/dishes/${id}`);
+          navigate(`/admin/dishes/${id}`);
         },
       }
     );

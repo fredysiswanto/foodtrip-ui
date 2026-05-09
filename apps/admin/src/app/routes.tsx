@@ -31,25 +31,25 @@ const RestaurantCreatePage = lazy(() =>
 );
 
 const DishListPage = lazy(() =>
-  import('../pages/dish/DishListPage').then((m) => ({
+  import('../features/dish/pages/DishListPage').then((m) => ({
     default: m.DishListPage,
   }))
 );
 
 const DishCreatePage = lazy(() =>
-  import('../pages/dish/DishCreatePage').then((m) => ({
+  import('../features/dish/pages/DishCreatePage').then((m) => ({
     default: m.DishCreatePage,
   }))
 );
 
 const DishDetailPage = lazy(() =>
-  import('../pages/dish/DishDetailPage').then((m) => ({
+  import('../features/dish/pages/DishDetailPage').then((m) => ({
     default: m.DishDetailPage,
   }))
 );
 
 const DishEditPage = lazy(() =>
-  import('../pages/dish/DishEditPage').then((m) => ({
+  import('../features/dish/pages/DishEditPage').then((m) => ({
     default: m.DishEditPage,
   }))
 );
