@@ -1,10 +1,16 @@
 import { useNavigate } from 'react-router-dom';
-import { DishTable, useDishList } from '../features/dish';
+import { DishTable, useDishList } from '../../features/dish';
 import { Alert, Button, Card, Spinner, VStack } from '@foodtrip/ui';
 
 export function DishListPage() {
   const navigate = useNavigate();
   const { data: dishes = [], isLoading, error } = useDishList();
+  const handelEdit = (id: string) => {
+    navigate(`/admin/dishes/${id}/edit`);
+  };
+  const handelDelete = (id: string) => {
+    navigate(`/admin/dishes/${id}`);
+  };
 
   return (
     <VStack gap="lg">
@@ -42,8 +48,8 @@ export function DishListPage() {
           <DishTable
             dishes={dishes}
             isLoading={isLoading}
-            onEdit={(id) => navigate(`/dishes/${id}/edit`)}
-            onDelete={(id) => navigate(`/dishes/${id}`)}
+            onEdit={handelEdit}
+            onDelete={handelDelete}
           />
         </Card>
       )}

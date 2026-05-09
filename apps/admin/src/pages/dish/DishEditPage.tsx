@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { DishForm, useDishDetail, useUpdateDish } from '../features/dish';
+import { DishForm, useDishDetail, useUpdateDish } from '../../features/dish';
 import { Button, Card, VStack, Spinner, Alert } from '@foodtrip/ui';
 import { CreateDishInputType } from '@foodtrip/types';
 
@@ -36,7 +36,9 @@ export function DishEditPage() {
         <Alert type="error">
           {error instanceof Error ? error.message : 'Failed to load dish'}
         </Alert>
-        <Button onClick={() => navigate('/dishes')}>Back to Dishes</Button>
+        <Button onClick={() => navigate('/admin/dishes')}>
+          Back to Dishes
+        </Button>
       </VStack>
     );
   }
@@ -44,7 +46,7 @@ export function DishEditPage() {
   return (
     <VStack gap="lg">
       <div>
-        <Button variant="ghost" onClick={() => navigate(`/dishes/${id}`)}>
+        <Button variant="ghost" onClick={() => navigate(`/admin/dishes/${id}`)}>
           ← Back to Dish
         </Button>
         <h1 className="text-3xl font-bold text-gray-900 mt-4">Edit Dish</h1>

@@ -45,7 +45,9 @@ export function Modal({
   };
 
   return (
-    <div className={`fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+    >
       {/* Backdrop */}
       <div
         className={`absolute inset-0 bg-black transition-opacity duration-300 ${isVisible ? 'opacity-50' : 'opacity-0'}`}
@@ -63,7 +65,12 @@ export function Modal({
           <div className="text-gray-600 mb-6">{children}</div>
 
           <div className="flex gap-3 justify-end">
-            <Button variant="ghost" onClick={handleClose} disabled={isLoading}>
+            <Button
+              variant="ghost"
+              className="border"
+              onClick={handleClose}
+              disabled={isLoading}
+            >
               {cancelText}
             </Button>
             {onConfirm && (

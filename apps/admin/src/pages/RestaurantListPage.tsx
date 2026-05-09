@@ -11,11 +11,6 @@ export function RestaurantListPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  // Debug logging
-  // console.log('RestaurantListPage - data:', restaurants);
-  // console.log('RestaurantListPage - isLoading:', isLoading);
-  // console.log('RestaurantListPage - error:', error);
-
   const handleEdit = (id: string) => {
     navigate(`/admin/restaurants/${id}`);
   };

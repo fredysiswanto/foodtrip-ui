@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDishDetail, useDeleteDish } from '../features/dish';
+import { useDishDetail, useDeleteDish } from '../../features/dish';
 import { Button, Card, VStack, Spinner, Alert, Modal } from '@foodtrip/ui';
 import { useState } from 'react';
 
@@ -14,7 +14,7 @@ export function DishDetailPage() {
     if (!id) return;
     deleteDish(id, {
       onSuccess: () => {
-        navigate('/dishes');
+        navigate('/admin/dishes');
       },
     });
   };
@@ -33,7 +33,9 @@ export function DishDetailPage() {
         <Alert type="error">
           {error instanceof Error ? error.message : 'Failed to load dish'}
         </Alert>
-        <Button onClick={() => navigate('/dishes')}>Back to Dishes</Button>
+        <Button onClick={() => navigate('/admin/dishes')}>
+          Back to Dishes
+        </Button>
       </VStack>
     );
   }
@@ -42,7 +44,7 @@ export function DishDetailPage() {
     <VStack gap="lg">
       <div className="w-full flex justify-between items-center">
         <div>
-          <Button variant="ghost" onClick={() => navigate('/dishes')}>
+          <Button variant="ghost" onClick={() => navigate('/admin/dishes')}>
             ← Back to Dishes
           </Button>
           <h1 className="text-3xl font-bold text-gray-900 mt-4">
@@ -52,7 +54,7 @@ export function DishDetailPage() {
         <div className="flex gap-2">
           <Button
             variant="secondary"
-            onClick={() => navigate(`/dishes/${id}/edit`)}
+            onClick={() => navigate(`/admin/dishes/${id}/edit`)}
           >
             Edit
           </Button>
@@ -110,23 +112,14 @@ export function DishDetailPage() {
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
         title="Confirm Delete"
+        onConfirm={handleDelete}
+        isDangerous
+        isLoading={isDeleting}
       >
         <p className="text-gray-700 mb-4">
           Are you sure you want to delete "{dish.dish_name}"? This action cannot
           be undone.
         </p>
-        <div className="flex gap-2 justify-end">
-          <Button
-            variant="secondary"
-            onClick={() => setShowDeleteModal(false)}
-            disabled={isDeleting}
-          >
-            Cancel
-          </Button>
-          <Button variant="danger" onClick={handleDelete} disabled={isDeleting}>
-            {isDeleting ? 'Deleting...' : 'Delete'}
-          </Button>
-        </div>
       </Modal>
     </VStack>
   );

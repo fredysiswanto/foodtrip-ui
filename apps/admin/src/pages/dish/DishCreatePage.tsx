@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { CreateDishInputType, DishForm, useCreateDish } from '../features/dish';
+import { CreateDishInputType, DishForm, useCreateDish } from '@/features/dish';
 import { Button, Card, VStack, Spinner, Alert } from '@foodtrip/ui';
 
 export function DishCreatePage() {
