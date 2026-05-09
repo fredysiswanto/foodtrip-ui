@@ -1,0 +1,156 @@
+{
+  "name": "foodtrip-context-injector",
+  "description": "Injects FoodTrip project context and enforces architecture rules for copilot agent",
+  "version": "1.0.0",
+  "triggers": ["SessionStart", "PreToolUse"],
+  "config": {
+    "projectName": "FoodTrip Frontend",
+    "monorepo": true,
+    "enforceStrictArchitecture": true,
+    "enforceFeatureIsolation": true,
+    "requireTypeScript": true,
+    "enforceReactQueryOnly": true
+  },
+  "projectContext": {
+    "apps": [
+      {
+        "name": "admin",
+        "path": "apps/admin",
+        "features": [
+          "restaurant",
+          "dish",
+          "dish-category",
+          "restaurant-category",
+          "user"
+        ],
+        "layouts": ["AdminLayout", "RestaurantAdminLayout"]
+      },
+      {
+        "name": "client",
+        "path": "apps/client",
+        "features": ["food", "trip"],
+        "layouts": ["ClientLayout"]
+      }
+    ],
+    "sharedPackages": [
+      {
+        "name": "api",
+        "path": "packages/api",
+        "description": "API clients - auth, admin, client, restaurantAdmin",
+        "files": ["auth.ts", "admin.ts", "client.ts", "restaurantAdmin.ts"]
+      },
+      {
+        "name": "types",
+        "path": "packages/types",
+        "description": "Zod schemas and TypeScript types",
+        "files": [
+          "auth.ts",
+          "user.ts",
+          "restaurant.ts",
+          "dish.ts",
+          "dish-category.ts",
+          "restaurant-category.ts",
+          "trip.ts",
+          "order.ts"
+        ]
+      },
+      {
+        "name": "ui",
+        "path": "packages/ui",
+        "description": "Reusable UI components"
+      },
+      {
+        "name": "utils",
+        "path": "packages/utils",
+        "description": "Shared utilities and helpers"
+      }
+    ],
+    "queryKeyPatterns": {
+      "admin": [
+        "restaurant",
+        "dish",
+        "dish-category",
+        "restaurant-category",
+        "user"
+      ],
+      "client": ["food", "trip"],
+      "restaurantAdmin": ["dish", "menu", "opening-hours", "orders"],
+      "auth": ["me", "login", "logout"]
+    }
+  },
+  "rules": [
+    {
+      "id": "feature-isolation",
+      "severity": "error",
+      "description": "No direct imports between features",
+      "pattern": "apps/*/src/features/*/components|hooks should not import from apps/*/src/features/*/",
+      "action": "block",
+      "suggestion": "Use packages/types or packages/utils for sharing"
+    },
+    {
+      "id": "no-useeffect-fetching",
+      "severity": "error",
+      "description": "Never use useEffect for data fetching",
+      "pattern": "useEffect.*fetch|axios|request",
+      "action": "warn",
+      "suggestion": "Use React Query useQuery hook instead"
+    },
+    {
+      "id": "no-direct-fetch",
+      "severity": "error",
+      "description": "Never call fetch directly",
+      "pattern": "fetch\\(|new Request\\(",
+      "action": "warn",
+      "suggestion": "Use apiFetch from packages/api"
+    },
+    {
+      "id": "strict-types",
+      "severity": "error",
+      "description": "No any types",
+      "pattern": ": any",
+      "action": "warn",
+      "suggestion": "Use proper TypeScript types or Zod schemas"
+    },
+    {
+      "id": "api-isolation",
+      "severity": "error",
+      "description": "All API calls through packages/api",
+      "pattern": "apps/*/src/(components|pages|features)/.*fetch|axios",
+      "action": "block",
+      "suggestion": "Move API logic to hooks in packages/api or feature hooks"
+    },
+    {
+      "id": "presentational-components",
+      "severity": "warning",
+      "description": "Components should be presentational",
+      "pattern": "components/.*useQuery|useMutation|api\\.get|api\\.post",
+      "action": "warn",
+      "suggestion": "Move API/Query logic to hooks, pass data via props"
+    }
+  ],
+  "onSessionStart": {
+    "injectContext": [
+      "Load FoodTrip architecture rules from copilot-instructions.md",
+      "Reference existing feature patterns (restaurant, dish as templates)",
+      "Remind about feature isolation requirements",
+      "Highlight query key naming conventions",
+      "Note strict TypeScript requirement (no any)"
+    ]
+  },
+  "onPreToolUse": {
+    "validate": [
+      "Check for feature isolation violations",
+      "Ensure API calls use apiFetch",
+      "Verify components are presentational",
+      "Confirm React Query usage for data fetching",
+      "Check TypeScript strictness"
+    ]
+  },
+  "excludePaths": [
+    "node_modules/**",
+    "dist/**",
+    "build/**",
+    ".git/**",
+    "TODO/**"
+  ]
+}
