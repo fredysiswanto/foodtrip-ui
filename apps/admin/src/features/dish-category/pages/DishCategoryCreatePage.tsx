@@ -1,8 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import {
-  useCreateDishCategory,
-  DishCategoryForm,
-} from '../features/dish-category';
+import { useCreateDishCategory, DishCategoryForm } from '..';
 import { Button, Card, VStack } from '@foodtrip/ui';
 
 export function DishCategoryCreatePage() {

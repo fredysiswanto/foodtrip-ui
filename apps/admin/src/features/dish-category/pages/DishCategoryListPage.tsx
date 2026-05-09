@@ -3,7 +3,7 @@ import {
   useDishCategoryList,
   useDeleteDishCategory,
   DishCategoryTable,
-} from '../features/dish-category';
+} from '..';
 import { Button, Card, VStack, Spinner, Alert } from '@foodtrip/ui';
 
 export function DishCategoryListPage() {

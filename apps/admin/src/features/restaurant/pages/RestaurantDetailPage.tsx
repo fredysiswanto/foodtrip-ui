@@ -3,8 +3,8 @@ import {
   CreateRestaurantInput,
   useRestaurantDetail,
   useUpdateRestaurant,
-} from '../features/restaurant';
-import { RestaurantForm } from '../features/restaurant/components';
+} from '..';
+import { RestaurantForm } from '../components';
 import { Button, Card, VStack, Spinner, Alert } from '@foodtrip/ui';
 
 export function RestaurantDetailPage() {

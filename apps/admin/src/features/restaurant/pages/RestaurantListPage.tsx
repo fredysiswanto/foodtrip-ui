@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRestaurantList, useDeleteRestaurant } from '../features/restaurant';
-import { RestaurantTable } from '../features/restaurant/components';
+import { useRestaurantList, useDeleteRestaurant } from '..';
+import { RestaurantTable } from '../components';
 import { Button, Card, VStack, Spinner, Alert, Modal } from '@foodtrip/ui';
 
 export function RestaurantListPage() {

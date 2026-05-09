@@ -13,19 +13,19 @@ const DashboardPage = lazy(() =>
 );
 
 const RestaurantListPage = lazy(() =>
-  import('../pages/RestaurantListPage').then((m) => ({
+  import('../features/restaurant/pages/RestaurantListPage').then((m) => ({
     default: m.RestaurantListPage,
   }))
 );
 
 const RestaurantDetailPage = lazy(() =>
-  import('../pages/RestaurantDetailPage').then((m) => ({
+  import('../features/restaurant/pages/RestaurantDetailPage').then((m) => ({
     default: m.RestaurantDetailPage,
   }))
 );
 
 const RestaurantCreatePage = lazy(() =>
-  import('../pages/RestaurantCreatePage').then((m) => ({
+  import('../features/restaurant/pages/RestaurantCreatePage').then((m) => ({
     default: m.RestaurantCreatePage,
   }))
 );
@@ -79,27 +79,33 @@ const RestaurantCategoryRestaurantsPage = lazy(() =>
 );
 
 const DishCategoryListPage = lazy(() =>
-  import('../pages/DishCategoryListPage').then((m) => ({
+  import('../features/dish-category/pages/DishCategoryListPage').then((m) => ({
     default: m.DishCategoryListPage,
   }))
 );
 
 const DishCategoryCreatePage = lazy(() =>
-  import('../pages/DishCategoryCreatePage').then((m) => ({
-    default: m.DishCategoryCreatePage,
-  }))
+  import('../features/dish-category/pages/DishCategoryCreatePage').then(
+    (m) => ({
+      default: m.DishCategoryCreatePage,
+    })
+  )
 );
 
 const DishCategoryDetailPage = lazy(() =>
-  import('../pages/DishCategoryDetailPage').then((m) => ({
-    default: m.DishCategoryDetailPage,
-  }))
+  import('../features/dish-category/pages/DishCategoryDetailPage').then(
+    (m) => ({
+      default: m.DishCategoryDetailPage,
+    })
+  )
 );
 
 const DishCategoryDishesPage = lazy(() =>
-  import('../pages/DishCategoryDishesPage').then((m) => ({
-    default: m.DishCategoryDishesPage,
-  }))
+  import('../features/dish-category/pages/DishCategoryDishesPage').then(
+    (m) => ({
+      default: m.DishCategoryDishesPage,
+    })
+  )
 );
 
 const UserListPage = lazy(() =>

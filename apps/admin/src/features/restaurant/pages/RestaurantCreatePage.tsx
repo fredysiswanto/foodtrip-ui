@@ -1,9 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import {
-  CreateRestaurantInput,
-  useCreateRestaurant,
-} from '../features/restaurant';
-import { RestaurantForm } from '../features/restaurant/components';
+import { CreateRestaurantInput, useCreateRestaurant } from '..';
+import { RestaurantForm } from '../components';
 import { Button, Card, VStack } from '@foodtrip/ui';
 
 export function RestaurantCreatePage() {

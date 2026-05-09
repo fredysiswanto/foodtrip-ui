@@ -1,5 +1,5 @@
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { useDishCategoryDetail, DishList } from '../features/dish-category';
+import { useDishCategoryDetail, DishList } from '..';
 import { Button, Card, VStack, Spinner, Alert } from '@foodtrip/ui';
 
 interface LocationState {
