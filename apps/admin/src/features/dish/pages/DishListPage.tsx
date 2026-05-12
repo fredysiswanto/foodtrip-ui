@@ -5,10 +5,13 @@ import { Alert, Button, Card, Spinner, VStack } from '@foodtrip/ui';
 export function DishListPage() {
   const navigate = useNavigate();
   const { data: dishes = [], isLoading, error } = useDishList();
-  const handelEdit = (id: string) => {
+  const handleEdit = (id: string) => {
     navigate(`/admin/dishes/${id}/edit`);
   };
-  const handelDelete = (id: string) => {
+  const handleDelete = (id: string) => {
+    navigate(`/admin/dishes/${id}`);
+  };
+  const handleView = (id: string) => {
     navigate(`/admin/dishes/${id}`);
   };
 
@@ -19,7 +22,7 @@ export function DishListPage() {
           <h1 className="text-3xl font-bold text-gray-900">Dish Management</h1>
           <p className="text-gray-600">Manage all dishes in the system</p>
         </div>
-        <Button onClick={() => navigate('/dishes/new')} variant="primary">
+        <Button onClick={() => navigate('/admin/dishes/new')} variant="primary">
           + Create Dish
         </Button>
       </div>
@@ -39,7 +42,7 @@ export function DishListPage() {
       ) : dishes.length === 0 ? (
         <Card className="text-center py-12">
           <p className="text-gray-500 mb-4">No dishes found</p>
-          <Button onClick={() => navigate('/dishes/new')}>
+          <Button onClick={() => navigate('/admin/dishes/new')}>
             Create your first dish
           </Button>
         </Card>
@@ -48,8 +51,9 @@ export function DishListPage() {
           <DishTable
             dishes={dishes}
             isLoading={isLoading}
-            onEdit={handelEdit}
-            onDelete={handelDelete}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            onView={handleView}
           />
         </Card>
       )}

@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useUserDetail, useUpdateUser, UserForm } from '../features/user';
+import { useUserDetail, useUpdateUser, UserForm } from '..';
 import { Card, Spinner, Alert } from '@foodtrip/ui';
 
 export function UserDetailPage() {

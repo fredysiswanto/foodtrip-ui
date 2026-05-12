@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUserList, useDeleteUser, UserTable } from '../features/user';
+import { useUserList, useDeleteUser, UserTable } from '..';
 import { Card, Spinner, Alert } from '@foodtrip/ui';
 
 type UserType = 'admin' | 'resto-admin' | 'customer';
@@ -58,13 +58,14 @@ export function UserListPage() {
           <UserTable
             users={data || []}
             onEdit={(id) => navigate(`/admin/users/${id}`)}
-            onDelete={(id) =>
-              new Promise<void>((resolve) => {
+            onDelete={(id) => {
+              console.log(id, 'id user currenctly');
+              return new Promise<void>((resolve) => {
                 deleteUser(id, {
                   onSuccess: () => resolve(),
                 });
-              })
-            }
+              });
+            }}
           />
         </Card>
       )}

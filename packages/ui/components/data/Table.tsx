@@ -25,8 +25,8 @@ export interface TableProps<T> extends HTMLAttributes<HTMLTableElement> {
   emptyMessage?: string;
   containerClassName?: string;
 }
-//  eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function Table<T extends Record<string, any>>({
+
+export function Table<T extends Record<string, unknown>>({
   columns,
   data,
   rowKey,
@@ -122,28 +122,31 @@ export function Table<T extends Record<string, any>>({
               </td>
             </tr>
           ) : (
-            data.map((row) => (
-              <tr
-                key={String(row[rowKey as keyof T])}
-                className={`border-b border-gray-200 ${stripeClass} ${hoverClass} ${
-                  onRowClick ? 'cursor-pointer' : ''
-                }`}
-                onClick={() => onRowClick?.(row)}
-              >
-                {columns.map((column) => (
-                  <td
-                    key={`${String(row[rowKey as keyof T])}-${String(column.key)}`}
-                    className={`text-sm sm:text-xs text-gray-700 ${rowPadding} ${getAlignClass(column.align)} ${
-                      column.className || ''
-                    }`}
-                  >
-                    {column.render
-                      ? column.render(row[column.key as keyof T], row)
-                      : String(row[column.key as keyof T])}
-                  </td>
-                ))}
-              </tr>
-            ))
+            data.map((row) => {
+              const rowId = String(row[rowKey]);
+              return (
+                <tr
+                  key={rowId}
+                  className={`border-b border-gray-200 ${stripeClass} ${hoverClass} ${
+                    onRowClick ? 'cursor-pointer' : ''
+                  }`}
+                  onClick={() => onRowClick?.(row)}
+                >
+                  {columns.map((column) => (
+                    <td
+                      key={`${rowId}-${String(column.key)}`}
+                      className={`text-sm sm:text-xs text-gray-700 ${rowPadding} ${getAlignClass(column.align)} ${
+                        column.className || ''
+                      }`}
+                    >
+                      {column.render
+                        ? column.render(row[column.key as keyof T], row)
+                        : String(row[column.key as keyof T])}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })
           )}
         </tbody>
       </table>

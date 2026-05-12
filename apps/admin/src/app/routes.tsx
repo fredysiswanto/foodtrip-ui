@@ -109,13 +109,13 @@ const DishCategoryDishesPage = lazy(() =>
 );
 
 const UserListPage = lazy(() =>
-  import('../pages/UserListPage').then((m) => ({
+  import('../features/user/pages/UserListPage').then((m) => ({
     default: m.UserListPage,
   }))
 );
 
 const UserDetailPage = lazy(() =>
-  import('../pages/UserDetailPage').then((m) => ({
+  import('../features/user/pages/UserDetailPage').then((m) => ({
     default: m.UserDetailPage,
   }))
 );

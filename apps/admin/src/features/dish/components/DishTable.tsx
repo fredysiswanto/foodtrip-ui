@@ -6,6 +6,7 @@ export interface DishTableProps {
   isLoading?: boolean;
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
+  onView: (id: string) => void;
 }
 
 export function DishTable({
@@ -13,6 +14,7 @@ export function DishTable({
   isLoading,
   onEdit,
   onDelete,
+  onView,
 }: DishTableProps) {
   const columns = [
     {
@@ -75,6 +77,15 @@ export function DishTable({
         <div className="flex gap-2">
           <Button
             size="sm"
+            variant="secondary"
+            onClick={() => onView(value)}
+            disabled={isLoading}
+            className="px-2 py-1 border border-gray-300"
+          >
+            View
+          </Button>
+          <Button
+            size="sm"
             variant="primary"
             onClick={() => onEdit(value)}
             disabled={isLoading}
@@ -97,6 +108,14 @@ export function DishTable({
   ];
 
   return (
-    <Table columns={columns} data={dishes} rowKey="dish_id" striped hoverable />
+    <Table
+      sortKey="desc"
+      sortDirection="asc"
+      columns={columns}
+      data={dishes}
+      rowKey="dish_id"
+      striped
+      hoverable
+    />
   );
 }
