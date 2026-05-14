@@ -128,7 +128,7 @@ const RestaurantAdminDashboardPage = lazy(() =>
 );
 
 const RestaurantDishPage = lazy(() =>
-  import('../features/restaurant-dish/pages/RestaurantDishPage').then((m) => ({
+  import('../features/resto-dish/pages/RestaurantDishPage').then((m) => ({
     default: m.RestoDishListPage,
   }))
 );

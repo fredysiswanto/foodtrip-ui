@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   useCreateRestaurantCategory,
   RestaurantCategoryForm,
-} from '../features/restaurant-category';
+} from '../features/resto-category';
 import { Button, Card, VStack } from '@foodtrip/ui';
 
 export function RestaurantCategoryCreatePage() {

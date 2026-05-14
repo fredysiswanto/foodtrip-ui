@@ -3,7 +3,7 @@ import {
   useRestaurantCategoryDetail,
   useUpdateRestaurantCategory,
   RestaurantCategoryForm,
-} from '../features/restaurant-category';
+} from '../features/resto-category';
 import { Button, Card, VStack, Spinner, Alert } from '@foodtrip/ui';
 
 export function RestaurantCategoryDetailPage() {

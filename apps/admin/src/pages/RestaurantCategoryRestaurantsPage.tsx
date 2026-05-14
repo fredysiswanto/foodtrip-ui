@@ -2,7 +2,7 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import {
   useRestaurantCategoryDetail,
   RestaurantList,
-} from '../features/restaurant-category';
+} from '../features/resto-category';
 import { Button, Card, VStack, Spinner, Alert } from '@foodtrip/ui';
 
 interface LocationState {
