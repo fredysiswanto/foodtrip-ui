@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { restaurantAdminDishApi } from '@foodtrip/api';
 
 interface DishListParams {
@@ -23,5 +23,42 @@ export function useRestoDishList(restoID: string, params?: DishListParams) {
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
     retry: 1,
+  });
+}
+
+export function useRestoDishDetail(dishID: string) {
+  return useQuery({
+    queryKey: ['admin', 'dish', 'detail', dishID],
+    queryFn: async () => {
+      try {
+        const result = await restaurantAdminDishApi.getById(dishID);
+
+        return result;
+      } catch (error) {
+        console.error('useRestoDishDetail - API error:', error);
+        throw error;
+      }
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
+    retry: 1,
+  });
+}
+
+export function useDeleteDish() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (dishID: string) => {
+      try {
+        await restaurantAdminDishApi.delete(dishID);
+      } catch (error) {
+        console.error('useDeleteDish - API error:', error);
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'dish', 'list'] });
+    },
   });
 }

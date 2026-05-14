@@ -1,0 +1,66 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "dev:admin",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["dev:admin"],
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^.*$",
+          "file": 1,
+          "location": 2,
+          "message": 3
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*?VITE.*?ready in.*?ms.*$",
+          "endsPattern": "^.*?ready in.*?ms.*$"
+        }
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true
+      }
+    },
+    {
+      "label": "dev:client",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["dev:client"],
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^.*$",
+          "file": 1,
+          "location": 2,
+          "message": 3
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*?VITE.*?ready in.*?ms.*$",
+          "endsPattern": "^.*?ready in.*?ms.*$"
+        }
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true
+      }
+    },
+    {
+      "label": "Terminate All",
+      "command": "echo",
+      "args": ["Terminating all tasks"],
+      "type": "shell",
+      "problemMatcher": []
+    }
+  ]
+}

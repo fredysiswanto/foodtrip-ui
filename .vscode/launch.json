@@ -1,0 +1,70 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Admin App - Debug",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/apps/admin",
+      "sourceMaps": true,
+      "runtimeExecutable": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+      "runtimeArgs": ["--no-first-run", "--no-default-browser-check"],
+      "preLaunchTask": "dev:admin",
+      "postDebugTask": "Terminate All",
+      "presentation": {
+        "order": 1
+      }
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Client App - Debug",
+      "url": "http://localhost:5174",
+      "webRoot": "${workspaceFolder}/apps/client",
+      "sourceMaps": true,
+      "runtimeExecutable": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+      "runtimeArgs": ["--no-first-run", "--no-default-browser-check"],
+      "preLaunchTask": "dev:client",
+      "postDebugTask": "Terminate All",
+      "presentation": {
+        "order": 2
+      }
+    },
+    {
+      "type": "chrome",
+      "request": "attach",
+      "name": "Admin App - Attach",
+      "port": 9222,
+      "pathMapping": {
+        "/": "${workspaceFolder}/apps/admin/",
+        "/@vite/": "${workspaceFolder}/"
+      },
+      "presentation": {
+        "order": 3
+      }
+    },
+    {
+      "type": "chrome",
+      "request": "attach",
+      "name": "Client App - Attach",
+      "port": 9222,
+      "pathMapping": {
+        "/": "${workspaceFolder}/apps/client/",
+        "/@vite/": "${workspaceFolder}/"
+      },
+      "presentation": {
+        "order": 4
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "All Apps - Debug",
+      "configurations": ["Admin App - Debug", "Client App - Debug"],
+      "presentation": {
+        "order": 0
+      }
+    }
+  ]
+}
