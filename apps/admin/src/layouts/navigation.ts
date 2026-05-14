@@ -55,6 +55,11 @@ export const navigationRestaurantAdmin: NavItem[] = [
     icon: '📊',
   },
   {
+    label: 'Dishes Management',
+    path: '/restaurant-admin/dishes',
+    icon: '🍽️',
+  },
+  {
     label: 'Menu Management',
     path: '/restaurant-admin/menu',
     icon: '🍽️',
