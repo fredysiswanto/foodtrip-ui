@@ -137,6 +137,12 @@ const RestoDishDetailPage = lazy(() =>
     default: m.RestoDishDetailPage,
   }))
 );
+
+const RestoDishEditPage = lazy(() =>
+  import('../features/resto-dish/pages/RestoDishEditPage').then((m) => ({
+    default: m.RestoDishEditPage,
+  }))
+);
 const RestaurantAdminMenuPage = lazy(() =>
   import('../pages/RestaurantAdminMenuPage').then((m) => ({
     default: m.RestaurantAdminMenuPage,
@@ -433,10 +439,18 @@ export const adminRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'dishes/:dishId',
+        path: 'dishes/:id',
         element: (
           <Suspense fallback={<LoadingFallback />}>
             <RestoDishDetailPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'dishes/:id/edit',
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <RestoDishEditPage />
           </Suspense>
         ),
       },

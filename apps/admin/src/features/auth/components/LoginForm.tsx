@@ -48,7 +48,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 
     try {
       await loginMutation.mutateAsync({
-        email_address: email,
+        email: email,
         password,
       });
       // Toast notification is handled in useLogin hook
@@ -176,10 +176,34 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
           <div className="space-y-2">
             <div className="flex items-center justify-between bg-blue-50 p-2.5 rounded">
               <code className="text-sm font-mono text-blue-900">
-                resto@admin.com | password admin@admin.com | password
+                admin@example.com | Password123!
               </code>
               <span className="text-xs bg-blue-200 text-blue-900 px-2 py-1 rounded font-semibold">
                 Admin
+              </span>
+            </div>
+            <div className="flex items-center justify-between bg-blue-50 p-2.5 rounded">
+              <code className="text-sm font-mono text-blue-900">
+                owner@example.com | Password123!
+              </code>
+              <span className="text-xs bg-blue-200 text-blue-900 px-2 py-1 rounded font-semibold">
+                Owner
+              </span>
+            </div>
+            <div className="flex items-center justify-between bg-blue-50 p-2.5 rounded">
+              <code className="text-sm font-mono text-blue-900">
+                staff@example.com | Password123!
+              </code>
+              <span className="text-xs bg-blue-200 text-blue-900 px-2 py-1 rounded font-semibold">
+                Staff
+              </span>
+            </div>
+            <div className="flex items-center justify-between bg-blue-50 p-2.5 rounded">
+              <code className="text-sm font-mono text-blue-900">
+                customer@example.com | Password123!
+              </code>
+              <span className="text-xs bg-blue-200 text-blue-900 px-2 py-1 rounded font-semibold">
+                Customer
               </span>
             </div>
           </div>

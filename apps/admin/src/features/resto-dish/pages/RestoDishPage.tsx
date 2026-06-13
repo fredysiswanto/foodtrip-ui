@@ -3,7 +3,7 @@
  */
 
 import { useNavigate } from 'react-router-dom';
-import { useRestoDishList } from '../hooks/useRestoDishList';
+import { useRestoDishList } from '../hooks/useRestoDish';
 import { Alert, Button, Card, Spinner, VStack } from '@foodtrip/ui';
 import { RestoDishTable } from '../components';
 

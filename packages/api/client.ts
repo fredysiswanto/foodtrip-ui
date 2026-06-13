@@ -26,7 +26,8 @@ import {
 } from '@foodtrip/types';
 
 const API_URL =
-  import.meta.env.VITE_API_URL || 'https://foodtrip-api.panduanqa.blog/api/v1';
+  (import.meta as ImportMeta & { env?: { VITE_API_URL?: string } }).env
+    ?.VITE_API_URL || 'http://localhost:3003/api';
 
 interface FetchOptions extends Record<string, unknown> {
   method?: string;
@@ -53,7 +54,7 @@ async function apiFetch<T>(
   options?: FetchOptions & { validateWith?: (data: unknown) => T }
 ): Promise<T> {
   const { validateWith, ...fetchOptions } = options || {};
-
+  console.log('apiFetch called with endpoint:', endpoint, 'options:', options);
   const url = `${API_URL}${endpoint}`;
   const headers = new Headers(fetchOptions.headers || {});
 
@@ -111,10 +112,10 @@ async function apiFetch<T>(
 
 // Auth endpoints
 export const authApi = {
-  login: async (email_address: string, password: string) => {
-    return apiFetch<LoginResponse>('/home/login', {
+  login: async (email: string, password: string) => {
+    return apiFetch<LoginResponse>('/auth/login', {
       method: 'POST',
-      body: JSON.stringify({ email_address, password }),
+      body: JSON.stringify({ email, password }),
       validateWith: (data) => LoginResponseSchema.parse(data),
     });
   },
@@ -130,7 +131,7 @@ export const authApi = {
   getCurrentUser: async () => {
     // This would be called to validate/refresh user data
     // Adjust endpoint based on your backend
-    return apiFetch('/home/me', {
+    return apiFetch('/me', {
       method: 'GET',
     });
   },

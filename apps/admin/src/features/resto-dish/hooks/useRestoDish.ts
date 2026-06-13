@@ -1,9 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { restaurantAdminDishApi } from '@foodtrip/api';
+import { CreateDishInputType } from '@foodtrip/types';
 
 interface DishListParams {
   page?: number;
   limit?: number;
+}
+
+interface UpdateDishParams {
+  id: string;
+  data: CreateDishInputType;
 }
 
 export function useRestoDishList(restoID: string, params?: DishListParams) {
@@ -59,6 +65,23 @@ export function useDeleteDish() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'dish', 'list'] });
+    },
+  });
+}
+
+export function useRestoUpdateDish() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, data }: UpdateDishParams) =>
+      restaurantAdminDishApi.update(id, data),
+    onSuccess: (_, { id }) => {
+      queryClient.invalidateQueries({
+        queryKey: ['admin', 'dish', 'list'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['admin', 'dish', 'detail', id],
+      });
     },
   });
 }

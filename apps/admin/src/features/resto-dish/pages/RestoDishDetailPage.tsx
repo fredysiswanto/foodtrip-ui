@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 // import { useDishDetail, useDeleteDish } from '..';
 import { Button, Card, VStack, Spinner, Alert, Modal } from '@foodtrip/ui';
 import { useState } from 'react';
-import { useRestoDishDetail, useDeleteDish } from '../hooks/useRestoDishList';
+import { useRestoDishDetail, useDeleteDish } from '../hooks/useRestoDish';
 
 export function RestoDishDetailPage() {
   const navigate = useNavigate();
@@ -10,12 +10,13 @@ export function RestoDishDetailPage() {
   const { data: dish, isLoading, error } = useRestoDishDetail(id || '');
   const { mutate: deleteDish, isPending: isDeleting } = useDeleteDish();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  console.log(dish);
 
   const handleDelete = () => {
     if (!id) return;
     deleteDish(id, {
       onSuccess: () => {
-        navigate('/admin/dishes');
+        navigate('/restaurant-admin/dishes');
       },
     });
   };
@@ -34,7 +35,7 @@ export function RestoDishDetailPage() {
         <Alert type="error">
           {error instanceof Error ? error.message : 'Failed to load dish'}
         </Alert>
-        <Button onClick={() => navigate('/admin/dishes')}>
+        <Button onClick={() => navigate('/restaurant-admin/dishes')}>
           Back to Dishes
         </Button>
       </VStack>
@@ -45,7 +46,10 @@ export function RestoDishDetailPage() {
     <VStack gap="lg">
       <div className="w-full flex justify-between items-center">
         <div>
-          <Button variant="ghost" onClick={() => navigate('/admin/dishes')}>
+          <Button
+            variant="ghost"
+            onClick={() => navigate('/restaurant-admin/dishes')}
+          >
             ← Back to Dishes
           </Button>
           <h1 className="text-3xl font-bold text-gray-900 mt-4">
@@ -56,7 +60,7 @@ export function RestoDishDetailPage() {
           <Button
             variant="secondary"
             className="border"
-            onClick={() => navigate(`/admin/dishes/${id}/edit`)}
+            onClick={() => navigate(`/restaurant-admin/dishes/${id}/edit`)}
           >
             Edit
           </Button>
