@@ -10,7 +10,6 @@ export function RestoDishDetailPage() {
   const { data: dish, isLoading, error } = useRestoDishDetail(id || '');
   const { mutate: deleteDish, isPending: isDeleting } = useDeleteDish();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  console.log(dish);
 
   const handleDelete = () => {
     if (!id) return;

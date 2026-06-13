@@ -1,5 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { useLogin } from '../hooks';
+import { Button } from '@foodtrip/ui';
 
 export interface LoginFormProps {
   onSuccess?: () => void;
@@ -48,7 +49,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 
     try {
       await loginMutation.mutateAsync({
-        email: email,
+        email,
         password,
       });
       // Toast notification is handled in useLogin hook
@@ -181,6 +182,16 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
               <span className="text-xs bg-blue-200 text-blue-900 px-2 py-1 rounded font-semibold">
                 Admin
               </span>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => {
+                  setEmail('admin@example.com');
+                  setPassword('Password123!');
+                }}
+              >
+                Copy
+              </Button>
             </div>
             <div className="flex items-center justify-between bg-blue-50 p-2.5 rounded">
               <code className="text-sm font-mono text-blue-900">
@@ -189,6 +200,16 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
               <span className="text-xs bg-blue-200 text-blue-900 px-2 py-1 rounded font-semibold">
                 Owner
               </span>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => {
+                  setEmail('owner@example.com');
+                  setPassword('Password123!');
+                }}
+              >
+                Copy
+              </Button>
             </div>
             <div className="flex items-center justify-between bg-blue-50 p-2.5 rounded">
               <code className="text-sm font-mono text-blue-900">
@@ -197,6 +218,16 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
               <span className="text-xs bg-blue-200 text-blue-900 px-2 py-1 rounded font-semibold">
                 Staff
               </span>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => {
+                  setEmail('staff@example.com');
+                  setPassword('Password123!');
+                }}
+              >
+                Copy
+              </Button>
             </div>
             <div className="flex items-center justify-between bg-blue-50 p-2.5 rounded">
               <code className="text-sm font-mono text-blue-900">
@@ -205,6 +236,16 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
               <span className="text-xs bg-blue-200 text-blue-900 px-2 py-1 rounded font-semibold">
                 Customer
               </span>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => {
+                  setEmail('customer@example.com');
+                  setPassword('Password123!');
+                }}
+              >
+                Copy
+              </Button>
             </div>
           </div>
           <p className="text-xs text-gray-600 mt-2 italic">

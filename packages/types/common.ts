@@ -14,15 +14,21 @@ export const AuditFieldsSchema = z.object({
 
 export type AuditFieldsType = z.infer<typeof AuditFieldsSchema>;
 
+export const MetaSchema = z.object({
+  page: z.number().int().positive(),
+  limit: z.number().int().positive(),
+  totalPages: z.number().int().positive(),
+  previousPage: z.number().int().positive().nullable(),
+  nextPage: z.number().int().positive().nullable(),
+});
+
+export type MetaType = z.infer<typeof MetaSchema>;
+
 /**
  * Pagination query parameters
  */
 export const PaginationParamsSchema = z.object({
-  page: z.number().int().positive().default(1),
-  limit: z.number().int().positive().default(10),
-  skip: z.number().int().nonnegative().optional(),
-  sortBy: z.string().optional(),
-  order: z.enum(['ASC', 'DESC']).optional(),
+  meta: MetaSchema,
 });
 
 export type PaginationParamsType = z.infer<typeof PaginationParamsSchema>;
@@ -32,10 +38,12 @@ export type PaginationParamsType = z.infer<typeof PaginationParamsSchema>;
  */
 export const ListResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
   z.object({
-    draw: z.number(),
+    success: z.boolean().default(true),
+    message: z.string().optional(),
     data: z.array(dataSchema),
-    recordsFiltered: z.number(),
-    recordsTotal: z.number(),
+    meta: MetaSchema.optional(),
+    statusCode: z.number().int(),
+    error: z.string().optional(),
   });
 
 /**
@@ -50,10 +58,11 @@ export const DetailResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
  * Generic API error response
  */
 export const ApiErrorResponseSchema = z.object({
-  error: z.boolean().default(true),
-  message: z.string(),
-  code: z.string().optional(),
-  details: z.unknown().optional(),
+  success: z.boolean().default(false),
+  message: z.string().optional(),
+  data: z.null(),
+  statusCode: z.number().int(),
+  error: z.string().optional(),
 });
 
 export type ApiErrorResponseType = z.infer<typeof ApiErrorResponseSchema>;
@@ -65,9 +74,10 @@ export const ApiSuccessResponseSchema = <T extends z.ZodTypeAny>(
   dataSchema: T
 ) =>
   z.object({
-    error: z.boolean().default(false),
-    data: dataSchema,
+    success: z.boolean().default(false),
     message: z.string().optional(),
+    data: dataSchema,
+    statusCode: z.number().int(),
   });
 
 /**

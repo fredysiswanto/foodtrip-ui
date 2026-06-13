@@ -4,7 +4,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@/features/*": ["src/features/*"]
+      "@/features/*": ["src/features/*"],
+      "@api/utils/*": ["../../packages/utils/*"]
     }
   },
   "include": ["src"],

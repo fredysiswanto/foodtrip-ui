@@ -1,4 +1,5 @@
 import { CompactEncrypt, compactDecrypt } from 'jose';
+
 export function isTokenExpired(token: string): boolean {
   try {
     const payloadBase64 = token.split('.')[1];
@@ -20,16 +21,16 @@ export function isTokenValid(token: string): boolean {
   return !isTokenExpired(token);
 }
 
-export function decodeToken(token: string): Record<string, unknown> | null {
-  try {
-    const payloadBase64 = token.split('.')[1];
-    const payloadJson = atob(payloadBase64);
-    return JSON.parse(payloadJson);
-  } catch (error) {
-    console.error('Error decoding token:', error);
-    return null;
-  }
-}
+// export function decodeToken(token: string): Record<string, unknown> | null {
+//   try {
+//     const payloadBase64 = token.split('.')[1];
+//     const payloadJson = atob(payloadBase64);
+//     return JSON.parse(payloadJson);
+//   } catch (error) {
+//     console.error('Error decoding token:', error);
+//     return null;
+//   }
+// }
 
 // 1. Definisikan struktur data (Payload) yang ingin Anda simpan di dalam token
 export interface JwtPayload {
@@ -50,9 +51,9 @@ export interface FullTokenPayload extends JwtPayload {
 }
 
 // PENTING: Kunci rahasia HARUS tepat 32 karakter untuk algoritma AES-256 (A256GCM)
-const SECRET_KEY: string =
-  (import.meta as ImportMeta & { env?: { JWT_SECRET?: string } }).env
-    ?.JWT_SECRET || 'key-harus-32-karakter';
+const SECRET_KEY = 'kunci-rahasia-anda-32-karakter!!';
+const encoder = new TextEncoder();
+const buf = encoder.encode(SECRET_KEY) as unknown as Uint8Array;
 
 export class JwtHelper {
   /**
@@ -90,7 +91,7 @@ export class JwtHelper {
       // Proses enkripsi total terhadap payload menggunakan AES-256-GCM
       const token = await new CompactEncrypt(dataToEncrypt)
         .setProtectedHeader({ alg: 'dir', enc: 'A256GCM' })
-        .encrypt(SECRET_KEY as unknown as Uint8Array);
+        .encrypt(buf);
 
       return token;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -111,10 +112,7 @@ export class JwtHelper {
 
     try {
       // Proses dekripsi token menggunakan kunci rahasia
-      const { plaintext } = await compactDecrypt(
-        token,
-        SECRET_KEY as unknown as Uint8Array
-      );
+      const { plaintext } = await compactDecrypt(token, buf);
 
       // Ubah kembali data biner menjadi objek JavaScript
       const decoder = new TextDecoder();

@@ -59,7 +59,6 @@ export function UserListPage() {
             users={data || []}
             onEdit={(id) => navigate(`/admin/users/${id}`)}
             onDelete={(id) => {
-              console.log(id, 'id user currenctly');
               return new Promise<void>((resolve) => {
                 deleteUser(id, {
                   onSuccess: () => resolve(),

@@ -12,8 +12,6 @@ export function RestoDishEditPage() {
   const { mutate: updateDish, isPending } = useRestoUpdateDish();
 
   const handleSubmit = async (data: CreateDishInputType) => {
-    console.log(data, id, 'handel Submit');
-
     if (!id) return;
 
     updateDish(

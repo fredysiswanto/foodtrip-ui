@@ -5,7 +5,9 @@ interface AuthContextType extends AuthState {
   setAuth: (state: AuthState) => void;
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined
+);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [authState, setAuthState] = useState<AuthState>(() => {
@@ -24,7 +26,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const setAuth = useCallback((state: AuthState) => {
     setAuthState(state);
-    
+
     // Persist to localStorage
     if (state.token && state.user) {
       localStorage.setItem('auth_token', state.token);

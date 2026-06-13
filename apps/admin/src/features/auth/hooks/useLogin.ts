@@ -1,8 +1,9 @@
+import { ApiError, authApi } from '@foodtrip/api';
+import { JwtHelper } from '@foodtrip/utils';
 import { useMutation } from '@tanstack/react-query';
-import { authApi, ApiError } from '@foodtrip/api';
-import { useAuth } from './useAuth';
 import { useToast } from '../../../providers/toast';
-import { isAnyAdmin, getRoleDisplayName, ADMIN_ROLES } from '../roles';
+import { getRoleDisplayName } from '../roles';
+import { useAuth } from './useAuth';
 
 interface UseLoginOptions {
   onRoleDetected?: (role: string) => void;
@@ -11,64 +12,103 @@ interface UseLoginOptions {
 export function useLogin(options?: UseLoginOptions) {
   const { setAuth } = useAuth();
   const toast = useToast();
+  const decodeToken = new JwtHelper().decodeToken;
 
   return useMutation({
     mutationFn: async ({
-      email_address,
+      email,
       password,
     }: {
-      email_address: string;
+      email: string;
       password: string;
     }) => {
-      return authApi.login(email_address, password);
+      return authApi.login(email, password);
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
+      if (!data || !data.data.accessToken) {
+        toast.error('Login Failed', 'No token received from server');
+        return;
+      }
+      const dataUser = await decodeToken(data.data.accessToken);
+
+      if (!dataUser) {
+        toast.error('Login Failed', 'Invalid token received from server');
+        return;
+      }
       // Validate that user has admin role
-      if (!isAnyAdmin(data.data)) {
+      if (dataUser.role === 'CUSTOMER') {
         toast.error(
           'Access Denied',
-          `Only admins can access this application. Your role: ${getRoleDisplayName(data.data.user_type)}`
+          `Only admins can access this application. Your role: ${getRoleDisplayName(dataUser.role)}`
         );
         return;
       }
 
+      // if (dataUser.restaurants && dataUser.restaurants.length === 0) {
+      //   toast.error(
+      //     'Access Denied',
+      //     'You are not assigned to any restaurant. Please contact your administrator.'
+      //   );
+      //   return;
+      // }
+
+      if (dataUser.role === 'SUPER_ADMIN') {
+        // Store token in localStorage
+        localStorage.setItem('auth_token', data.data?.accessToken);
+        localStorage.setItem('user_role', dataUser.role);
+      } else {
+        localStorage.setItem('auth_token', data.data?.accessToken);
+        localStorage.setItem(
+          'resto_id',
+          dataUser.restaurants?.[0].restaurantId || ''
+        );
+        localStorage.setItem('user_role', dataUser.role);
+      }
+      const user = dataUser;
+
       // Store token in localStorage
-      localStorage.setItem('auth_token', data.token);
-      localStorage.setItem('resto_id', data.data.resto_id || '');
-      localStorage.setItem('user_role', data.data.user_type);
 
       // Update auth state
+
       setAuth({
-        user: data.data,
-        token: data.token,
+        user: {
+          userId: user.userId,
+          email: user.email,
+          role: user.role,
+          permissions: user.permissions,
+          restaurants: user.restaurants as
+            | {
+                restaurantId: string;
+                restaurantRole: 'ADMIN' | 'SUPER_ADMIN' | 'OWNER' | 'STAFF';
+              }[]
+            | undefined,
+        },
+        token: data.data?.accessToken,
         isAuthenticated: true,
         isLoading: false,
       });
 
       // Notify parent component about detected role
-      options?.onRoleDetected?.(data.data.user_type);
+      options?.onRoleDetected?.(dataUser.role);
 
       // Show role-specific welcome message
       const roleMessage =
-        data.data.user_type === ADMIN_ROLES.ADMIN
+        dataUser.role === 'SUPER_ADMIN'
           ? 'System Administrator'
           : 'Restaurant Manager';
 
-      toast.success(
-        'Welcome back!',
-        `${data.data.first_name} ${data.data.last_name} • ${roleMessage}`
-      );
+      toast.success('Welcome back!', `${dataUser.email} • ${roleMessage}`);
     },
     onError: (error) => {
       // Handle different error types
       let errorMessage = 'Login failed';
 
       if (error instanceof ApiError) {
-        if (error.status === 401) {
+        if (error.statusCode === 401) {
           errorMessage = 'Invalid email or password';
-        } else if (error.status === 403) {
+        } else if (error.statusCode === 403) {
           errorMessage = 'Access denied';
-        } else if (error.status === 0) {
+        } else if (error.statusCode === 0) {
           errorMessage = 'Network error. Please check your connection.';
         } else {
           errorMessage = error.message;

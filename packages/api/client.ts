@@ -39,10 +39,11 @@ interface FetchOptions extends Record<string, unknown> {
 
 class ApiError extends Error {
   constructor(
-    public status: number,
-    public code: string,
+    public success: boolean,
+    public statusCode: number,
+    public data: null,
     message: string,
-    public details?: unknown
+    public error?: unknown
   ) {
     super(message);
     this.name = 'ApiError';
@@ -54,7 +55,6 @@ async function apiFetch<T>(
   options?: FetchOptions & { validateWith?: (data: unknown) => T }
 ): Promise<T> {
   const { validateWith, ...fetchOptions } = options || {};
-  console.log('apiFetch called with endpoint:', endpoint, 'options:', options);
   const url = `${API_URL}${endpoint}`;
   const headers = new Headers(fetchOptions.headers || {});
 
@@ -69,21 +69,20 @@ async function apiFetch<T>(
   headers.set('Content-Type', 'application/json');
 
   try {
-    console.log('apiFetch - Requesting:', url);
     const response = await fetch(url, {
       ...fetchOptions,
       headers,
     });
 
     const data = await response.json();
-    console.log('apiFetch - Response status:', response.status, 'data:', data);
 
     if (!response.ok) {
       const error = new ApiError(
+        false,
         response.status,
-        data.code || 'UNKNOWN_ERROR',
-        data.message || 'An error occurred',
-        data.details
+        null,
+        data?.message || 'API request failed',
+        data?.error || null
       );
       console.error('apiFetch - API error:', error);
       throw error;
@@ -102,11 +101,17 @@ async function apiFetch<T>(
 
     if (error instanceof SyntaxError) {
       console.error('apiFetch - Parse error:', error);
-      throw new ApiError(500, 'PARSE_ERROR', 'Failed to parse response');
+      throw new ApiError(
+        true,
+        400,
+        null,
+        'Failed to parse API response',
+        error
+      );
     }
 
     console.error('apiFetch - Network error:', error);
-    throw new ApiError(500, 'NETWORK_ERROR', 'Network request failed', error);
+    throw new ApiError(true, 500, null, 'Network request failed', error);
   }
 }
 
@@ -147,14 +152,8 @@ export const restaurantApi = {
     return apiFetch<RestaurantType[]>(`/admin/restaurants?${params}`, {
       method: 'GET',
       validateWith: (data: unknown) => {
-        console.log('restaurantApi.list - raw data:', data);
-
         // Handle direct array response
         if (Array.isArray(data)) {
-          console.log(
-            'restaurantApi.list - data is array, count:',
-            data.length
-          );
           return data.map((item) => RestaurantSchema.parse(item));
         }
 
@@ -164,28 +163,16 @@ export const restaurantApi = {
 
           // Case: { data: [...] }
           if ('data' in obj && Array.isArray(obj.data)) {
-            console.log(
-              'restaurantApi.list - data wrapped in .data, count:',
-              obj.data.length
-            );
             return obj.data.map((item) => RestaurantSchema.parse(item));
           }
 
           // Case: { items: [...] } or similar
           if ('items' in obj && Array.isArray(obj.items)) {
-            console.log(
-              'restaurantApi.list - data wrapped in .items, count:',
-              obj.items.length
-            );
             return obj.items.map((item) => RestaurantSchema.parse(item));
           }
 
           // Case: { restaurants: [...] }
           if ('restaurants' in obj && Array.isArray(obj.restaurants)) {
-            console.log(
-              'restaurantApi.list - data wrapped in .restaurants, count:',
-              obj.restaurants.length
-            );
             return obj.restaurants.map((item) => RestaurantSchema.parse(item));
           }
         }
@@ -258,14 +245,8 @@ export const restaurantCategoryApi = {
       {
         method: 'GET',
         validateWith: (data: unknown) => {
-          console.log('restaurantCategoryApi.list - raw data:', data);
-
           // Handle direct array response
           if (Array.isArray(data)) {
-            console.log(
-              'restaurantCategoryApi.list - data is array, count:',
-              data.length
-            );
             return data.map((item) =>
               RestaurantCategoryWithRestaurantsSchema.parse(item)
             );
@@ -277,10 +258,6 @@ export const restaurantCategoryApi = {
 
             // Case: { data: [...] }
             if ('data' in obj && Array.isArray(obj.data)) {
-              console.log(
-                'restaurantCategoryApi.list - data wrapped in .data, count:',
-                obj.data.length
-              );
               return obj.data.map((item) =>
                 RestaurantCategoryWithRestaurantsSchema.parse(item)
               );
@@ -359,11 +336,8 @@ export const dishApi = {
     return apiFetch(`/admin/dishes?${params}`, {
       method: 'GET',
       validateWith: (data: unknown) => {
-        console.log('dishApi.list - raw data:', data);
-
         // Handle direct array response
         if (Array.isArray(data)) {
-          console.log('dishApi.list - data is array, count:', data.length);
           return data.map((item) => DishSchema.parse(item));
         }
 
@@ -373,10 +347,6 @@ export const dishApi = {
 
           // Case: { data: [...] }
           if ('data' in obj && Array.isArray(obj.data)) {
-            console.log(
-              'dishApi.list - data wrapped in .data, count:',
-              obj.data.length
-            );
             return obj.data.map((item) => DishSchema.parse(item));
           }
 
@@ -425,11 +395,8 @@ export const dishApi = {
       body: JSON.stringify(validated),
       validateWith: (data: unknown) => {
         if (data && typeof data === 'object' && 'data' in data) {
-          console.log('di dalam');
-
           return DishDetailSchema.parse(data).data;
         }
-        console.log('diluar');
 
         return DishSchema.parse(data);
       },
@@ -465,14 +432,8 @@ export const dishCategoryApi = {
     return apiFetch<DishCategoryWithDishesType[]>(`/admin/dish-cat?${params}`, {
       method: 'GET',
       validateWith: (data: unknown) => {
-        console.log('dishCategoryApi.list - raw data:', data);
-
         // Handle direct array response
         if (Array.isArray(data)) {
-          console.log(
-            'dishCategoryApi.list - data is array, count:',
-            data.length
-          );
           return data.map((item) => DishCategoryWithDishesSchema.parse(item));
         }
 
@@ -482,10 +443,6 @@ export const dishCategoryApi = {
 
           // Case: { data: [...] }
           if ('data' in obj && Array.isArray(obj.data)) {
-            console.log(
-              'dishCategoryApi.list - data wrapped in .data, count:',
-              obj.data.length
-            );
             return obj.data.map((item) =>
               DishCategoryWithDishesSchema.parse(item)
             );
@@ -564,11 +521,8 @@ export const userApi = {
       {
         method: 'GET',
         validateWith: (data: unknown) => {
-          console.log('userApi.list - raw data:', data);
-
           // Handle direct array response
           if (Array.isArray(data)) {
-            console.log('userApi.list - data is array, count:', data.length);
             return data.map((item) =>
               UserListWithRestaurantSchema.shape.data.element.parse(item)
             );
@@ -580,10 +534,6 @@ export const userApi = {
 
             // Case: { data: [...] }
             if ('data' in obj && Array.isArray(obj.data)) {
-              console.log(
-                'userApi.list - data wrapped in .data, count:',
-                obj.data.length
-              );
               return obj.data.map((item) =>
                 UserListWithRestaurantSchema.shape.data.element.parse(item)
               );

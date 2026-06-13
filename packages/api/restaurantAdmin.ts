@@ -110,7 +110,6 @@ export const restaurantAdminDishApi = {
 
   update: async (dishID: string, input: Record<string, unknown>) => {
     const formData = new FormData();
-    console.log(formData, 'form data');
 
     Object.entries(input).forEach(([key, value]) => {
       if (value !== null && value !== undefined) {
@@ -122,8 +121,6 @@ export const restaurantAdminDishApi = {
       method: 'PUT',
       body: formData,
       validateWith: (data: unknown): DishType => {
-        console.log(data, 'API response data');
-
         if (data && typeof data === 'object' && 'data' in data) {
           const wrapper = data as Record<string, unknown>;
           return DishSchema.parse(wrapper.data);
