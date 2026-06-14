@@ -1,7 +1,8 @@
 import { lazy, Suspense } from 'react';
 import type { RouteObject } from 'react-router-dom';
-import { ProtectedRoute, RoleGuard, ADMIN_ROLES } from '../features/auth';
+import { ProtectedRoute, RoleGuard } from '../features/auth';
 import { AdminLayout, RestaurantAdminLayout } from '../layouts';
+import { USER_ROLES } from '../features/auth/roles';
 
 // Lazy load pages for better performance
 const LoginPage = lazy(() =>
@@ -241,8 +242,8 @@ export const adminRoutes: RouteObject[] = [
   {
     path: '/admin',
     element: (
-      <ProtectedRoute allowedRoles={[ADMIN_ROLES.ADMIN]}>
-        <RoleGuard requiredRole={ADMIN_ROLES.ADMIN}>
+      <ProtectedRoute allowedRoles={[USER_ROLES.ADMIN]}>
+        <RoleGuard requiredRole={USER_ROLES.ADMIN}>
           <AdminLayout />
         </RoleGuard>
       </ProtectedRoute>
@@ -416,7 +417,7 @@ export const adminRoutes: RouteObject[] = [
     path: '/restaurant-admin',
     element: (
       <ProtectedRoute>
-        <RoleGuard requiredRole={ADMIN_ROLES.RESTO_ADMIN}>
+        <RoleGuard requiredRole={USER_ROLES.ADMIN}>
           <RestaurantAdminLayout />
         </RoleGuard>
       </ProtectedRoute>

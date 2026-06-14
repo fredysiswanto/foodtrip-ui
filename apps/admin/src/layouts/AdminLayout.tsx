@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
-import { useAuth, useLogout, ADMIN_ROLES } from '../features/auth';
+import { useAuth, useLogout, USER_ROLES } from '../features/auth';
 import {
   navigationAdmin,
   navigationRestaurantAdmin,
@@ -14,13 +14,13 @@ export function AdminLayout() {
 
   // Determine which navigation to use based on user role
   const navigation =
-    user?.user_type === ADMIN_ROLES.ADMIN
+    user?.role === USER_ROLES.ADMIN
       ? navigationAdmin
       : navigationRestaurantAdmin;
 
   // Determine the home path based on role
   const homePath =
-    user?.user_type === ADMIN_ROLES.ADMIN
+    user?.role === USER_ROLES.ADMIN
       ? '/admin/dashboard'
       : '/restaurant-admin/dashboard';
 
@@ -138,8 +138,9 @@ function NavLink({ item, isActive, onClick }: NavLinkProps) {
 
 interface UserMenuProps {
   user: {
-    first_name: string;
-    last_name: string;
+    // first_name: string;
+    // last_name: string;
+    role: string;
   } | null;
 }
 
@@ -153,9 +154,9 @@ function UserMenu({ user }: UserMenuProps) {
     navigate('/login', { replace: true });
   };
 
-  const displayName = user ? `${user.first_name} ${user.last_name}` : 'Admin';
+  const displayName = user ? `${user.role}` : 'Admin';
 
-  const initials = user ? `${user.first_name?.[0]}${user.last_name?.[0]}` : 'A';
+  const initials = user ? `${user.role?.[0]}` : 'A';
 
   return (
     <div className="relative">

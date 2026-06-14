@@ -1,18 +1,18 @@
 import { z } from 'zod';
-import { ApiSuccessResponseSchema, AuditFieldsSchema } from './common';
+import { ApiSuccessResponseSchema } from './common';
+import { UserSchema } from './global';
 
-export const UserRolesSchema = [
-  'ADMIN',
-  'SUPER_ADMIN',
-  'OWNER',
-  'STAFF',
-] as const;
+export const UserRolesSchema = ['ADMIN', 'SUPER_ADMIN'] as const;
+
+export const UserRestoRolesSchema = ['ADMIN', 'STAFF', 'OWNER'] as const;
+
 export type UserRoles = (typeof UserRolesSchema)[number];
+export type UserRestoRoles = (typeof UserRestoRolesSchema)[number];
 
 export const AuthUserRestaurantsSchema = z.array(
   z.object({
     restaurantId: z.string().uuid(),
-    restaurantRole: z.enum(UserRolesSchema),
+    restaurantRole: z.enum(UserRestoRolesSchema),
   })
 );
 export type AuthUserRestaurants = z.infer<typeof AuthUserRestaurantsSchema>;
@@ -20,7 +20,7 @@ export type AuthUserRestaurants = z.infer<typeof AuthUserRestaurantsSchema>;
 export const AuthUserSchema = z.object({
   userId: z.string().uuid(),
   email: z.string().email(),
-  role: z.string(),
+  role: z.enum(UserRolesSchema),
   permissions: z.array(z.string()),
   restaurants: AuthUserRestaurantsSchema.optional(),
 });
@@ -34,20 +34,20 @@ export const AuthLoginDataSchema = z.object({
 export type AuthLoginData = z.infer<typeof AuthLoginDataSchema>;
 
 // User schema based on API response
-export const UserSchema = z
-  .object({
-    user_id: z.string().uuid(),
-    resto_id: z.string().uuid().nullable(),
-    user_no: z.string(),
-    first_name: z.string(),
-    middle_name: z.string().nullable(),
-    last_name: z.string(),
-    email_address: z.string().email(),
-    phone_number: z.string().nullable(),
-    gender: z.string().nullable(),
-    user_type: z.enum(['Admin', 'Resto_Admin', 'User']),
-  })
-  .merge(AuditFieldsSchema);
+// export const UserSchema = z
+//   .object({
+//     user_id: z.string().uuid(),
+//     resto_id: z.string().uuid().nullable(),
+//     user_no: z.string(),
+//     first_name: z.string(),
+//     middle_name: z.string().nullable(),
+//     last_name: z.string(),
+//     email_address: z.string().email(),
+//     phone_number: z.string().nullable(),
+//     gender: z.string().nullable(),
+//     user_type: z.enum(['Admin', 'Resto_Admin', 'User']),
+//   })
+// .merge(AuditFieldsSchema);
 
 export type User = z.infer<typeof UserSchema>;
 

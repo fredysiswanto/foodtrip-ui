@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../features/auth';
-import { ADMIN_ROLES } from '../features/auth';
+import { useAuth, USER_ROLES } from '../features/auth';
 
 export function NotFoundPage() {
   const navigate = useNavigate();
@@ -8,9 +7,9 @@ export function NotFoundPage() {
 
   const handleGoBack = () => {
     // Redirect to appropriate dashboard based on user role
-    if (user?.user_type === ADMIN_ROLES.ADMIN) {
+    if (user?.role === USER_ROLES.SUPER_ADMIN) {
       navigate('/admin/dashboard', { replace: true });
-    } else if (user?.user_type === ADMIN_ROLES.RESTO_ADMIN) {
+    } else if (user?.role === USER_ROLES.ADMIN) {
       navigate('/dashboard', { replace: true });
     } else {
       navigate('/login', { replace: true });

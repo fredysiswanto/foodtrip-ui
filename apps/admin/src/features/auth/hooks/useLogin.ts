@@ -2,7 +2,7 @@ import { ApiError, authApi } from '@foodtrip/api';
 import { JwtHelper } from '@foodtrip/utils';
 import { useMutation } from '@tanstack/react-query';
 import { useToast } from '../../../providers/toast';
-import { getRoleDisplayName } from '../roles';
+import { getRoleDisplayName, UserRestoRole, USER_ROLES } from '../roles';
 import { useAuth } from './useAuth';
 
 interface UseLoginOptions {
@@ -36,7 +36,10 @@ export function useLogin(options?: UseLoginOptions) {
         return;
       }
       // Validate that user has admin role
-      if (dataUser.role === 'CUSTOMER') {
+      if (
+        dataUser.role !== USER_ROLES.SUPER_ADMIN &&
+        dataUser.role !== USER_ROLES.ADMIN
+      ) {
         toast.error(
           'Access Denied',
           `Only admins can access this application. Your role: ${getRoleDisplayName(dataUser.role)}`
@@ -52,15 +55,15 @@ export function useLogin(options?: UseLoginOptions) {
       //   return;
       // }
 
-      if (dataUser.role === 'SUPER_ADMIN') {
+      if (dataUser.role === USER_ROLES.SUPER_ADMIN) {
         // Store token in localStorage
         localStorage.setItem('auth_token', data.data?.accessToken);
         localStorage.setItem('user_role', dataUser.role);
-      } else {
+      } else if (dataUser.role === USER_ROLES.ADMIN && dataUser.restaurants) {
         localStorage.setItem('auth_token', data.data?.accessToken);
         localStorage.setItem(
           'resto_id',
-          dataUser.restaurants?.[0].restaurantId || ''
+          JSON.stringify(dataUser.restaurants) || ''
         );
         localStorage.setItem('user_role', dataUser.role);
       }
@@ -79,7 +82,7 @@ export function useLogin(options?: UseLoginOptions) {
           restaurants: user.restaurants as
             | {
                 restaurantId: string;
-                restaurantRole: 'ADMIN' | 'SUPER_ADMIN' | 'OWNER' | 'STAFF';
+                restaurantRole: UserRestoRole;
               }[]
             | undefined,
         },
@@ -93,7 +96,7 @@ export function useLogin(options?: UseLoginOptions) {
 
       // Show role-specific welcome message
       const roleMessage =
-        dataUser.role === 'SUPER_ADMIN'
+        dataUser.role === USER_ROLES.SUPER_ADMIN
           ? 'System Administrator'
           : 'Restaurant Manager';
 

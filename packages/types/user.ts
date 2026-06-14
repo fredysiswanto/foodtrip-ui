@@ -1,23 +1,11 @@
 import { z } from 'zod';
 import { AuditFieldsSchema } from './common';
+import { UserSchema } from './global'; // Assuming UserSchema is defined in a global types package
 
 /**
  * Admin user schema
  */
-export const AdminSchema = z
-  .object({
-    user_id: z.string().uuid(),
-    user_no: z.string(),
-    password: z.string().optional(),
-    first_name: z.string(),
-    middle_name: z.string().nullable(),
-    last_name: z.string(),
-    email_address: z.string().email(),
-    phone_number: z.string().nullable(),
-    gender: z.string().nullable(),
-    user_type: z.literal('Admin'),
-  })
-  .merge(AuditFieldsSchema);
+export const AdminSchema = UserSchema.merge(AuditFieldsSchema);
 
 export type AdminType = z.infer<typeof AdminSchema>;
 

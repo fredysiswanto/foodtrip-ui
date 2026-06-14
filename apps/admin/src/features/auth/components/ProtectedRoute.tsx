@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks';
-import { AdminRole, ADMIN_ROLES } from '../roles';
+import { USER_ROLES, UserRole } from '../roles';
 
 export interface ProtectedRouteProps {
   children: ReactNode;
-  allowedRoles?: AdminRole[];
+  allowedRoles?: UserRole[];
 }
 
 export function ProtectedRoute({
@@ -31,13 +31,13 @@ export function ProtectedRoute({
 
   // Check role-based access if allowedRoles is specified
   if (allowedRoles && allowedRoles.length > 0) {
-    const userRole = user?.user_type as AdminRole | undefined;
+    const userRole = user?.role as UserRole | undefined;
 
     if (!userRole || !allowedRoles.includes(userRole)) {
       // Determine redirect destination based on actual user role
       const getDashboardPath = (): string => {
         if (!userRole) return '/login';
-        return userRole === ADMIN_ROLES.ADMIN
+        return userRole === USER_ROLES.ADMIN
           ? '/admin/dashboard'
           : '/restaurant-admin/dashboard';
       };

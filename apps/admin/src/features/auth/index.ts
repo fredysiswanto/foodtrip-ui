@@ -3,7 +3,8 @@ export { LoginForm, ProtectedRoute, RoleGuard } from './components';
 export { useLogin, useAuth, useLogout } from './hooks';
 export { AuthProvider } from './context/AuthContext';
 export {
-  ADMIN_ROLES,
+  USER_ROLES,
+  USER_RESTO_ROLES,
   hasRole,
   hasAnyRole,
   isSuperAdmin,
@@ -12,5 +13,6 @@ export {
   getRoleDisplayName,
   getAllowedRoutes,
   canAccessRoute,
-  type AdminRole,
+  type UserRole,
+  type UserRestoRole,
 } from './roles';

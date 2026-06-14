@@ -1,3 +1,4 @@
+import { UserRestoRoles, UserRoles } from '@/features/dish/types';
 import { CompactEncrypt, compactDecrypt } from 'jose';
 
 export function isTokenExpired(token: string): boolean {
@@ -36,11 +37,11 @@ export function isTokenValid(token: string): boolean {
 export interface JwtPayload {
   userId: string;
   email: string;
-  role: string; // RoleName
+  role: UserRoles; // RoleName
   permissions: string[];
   restaurants?: {
     restaurantId: string;
-    restaurantRole: string;
+    restaurantRole: UserRestoRoles;
   }[];
 }
 
@@ -94,7 +95,7 @@ export class JwtHelper {
         .encrypt(buf);
 
       return token;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
     } catch (error: unknown) {
       throw new Error(`Gagal membuat token: ${(error as Error).message}`);
     }
@@ -126,7 +127,7 @@ export class JwtHelper {
       }
 
       return payload;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
     } catch (error: unknown) {
       // Pengamanan Best Practice: Log internal, jangan bocorkan detail ke klien
       console.error('Token validasi gagal:', (error as Error).message);

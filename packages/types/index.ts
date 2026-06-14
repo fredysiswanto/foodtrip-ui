@@ -15,3 +15,4 @@ export * from './dish-category';
 export * from './trip';
 export * from './order';
 export * from './address';
+export * from './global';

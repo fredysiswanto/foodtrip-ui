@@ -180,13 +180,31 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
                 admin@example.com | Password123!
               </code>
               <span className="text-xs bg-blue-200 text-blue-900 px-2 py-1 rounded font-semibold">
-                Admin
+                Super Admin
               </span>
               <Button
                 variant="primary"
                 size="sm"
                 onClick={() => {
                   setEmail('admin@example.com');
+                  setPassword('Password123!');
+                }}
+              >
+                Copy
+              </Button>
+            </div>
+            <div className="flex items-center justify-between bg-blue-50 p-2.5 rounded">
+              <code className="text-sm font-mono text-blue-900">
+                admin@admin.com | Password123!
+              </code>
+              <span className="text-xs bg-blue-200 text-blue-900 px-2 py-1 rounded font-semibold">
+                Admin
+              </span>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => {
+                  setEmail('admin@admin.com');
                   setPassword('Password123!');
                 }}
               >
