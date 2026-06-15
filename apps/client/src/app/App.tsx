@@ -1,24 +1,47 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Suspense } from 'react';
+import { AuthProvider } from '@/features/auth';
+import { CartProvider } from '@/features/cart';
+import { OrderProvider } from '@/features/order';
+import Navbar from '../layouts/Navbar';
+import Footer from '../layouts/Footer';
+import HomePage from '@/pages/HomePage';
+import RestaurantListPage from '@/pages/RestaurantListPage';
+import RestaurantDetailPage from '@/pages/RestaurantDetailPage';
+import CartPage from '@/pages/CartPage';
+import CheckoutPage from '@/pages/CheckoutPage';
+import OrdersPage from '@/pages/OrdersPage';
+import OrderDetailPage from '@/pages/OrderDetailPage';
 
-function App() {
+function AppContent() {
   return (
-    <BrowserRouter>
-      <Suspense fallback={<div>Loading...</div>}>
+    <div className="bg-gray-50 min-h-screen flex flex-col">
+      <Navbar />
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
         <Routes>
-          <Route
-            path="/"
-            element={
-              <div className="p-8">
-                <h1 className="text-3xl font-bold">FoodTrip Client</h1>
-                <p className="text-slate-600 mt-2">Coming soon...</p>
-              </div>
-            }
-          />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/restaurants" element={<RestaurantListPage />} />
+          <Route path="/restaurant/:id" element={<RestaurantDetailPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/orders/:id" element={<OrderDetailPage />} />
         </Routes>
-      </Suspense>
-    </BrowserRouter>
+      </main>
+      <Footer />
+    </div>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <CartProvider>
+          <OrderProvider>
+            <AppContent />
+          </OrderProvider>
+        </CartProvider>
+      </AuthProvider>
+    </BrowserRouter>
+  );
+}

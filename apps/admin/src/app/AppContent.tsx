@@ -3,6 +3,7 @@ import { AuthProvider } from '../features/auth';
 import { adminRoutes } from './routes';
 
 export function AppContent() {
+  console.log('Rendering AppContent');
   return (
     <BrowserRouter>
       <AuthProvider>

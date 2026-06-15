@@ -1,0 +1,53 @@
+@import "tailwindcss";
+/* src/index.css */
+
+
+/* ========== Komponen Kustom ========== */
+@layer components {
+  /* Efek hover untuk kartu restoran/menu */
+  .card-hover {
+    @apply transition-transform duration-200 ease-in-out shadow-md;
+  }
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Badge keranjang (posisi absolut) */
+  .badge-cart {
+    @apply absolute -top-2 -right-2 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold;
+  }
+}
+
+/* ========== Utilitas Kustom ========== */
+@layer utilities {
+  /* Gradient oranye untuk hero */
+  .hero-bg {
+    background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+  }
+
+  /* Scrollbar horizontal untuk kategori */
+  .scroll-categories {
+    scrollbar-width: thin;
+    scrollbar-color: #F97316 #F3F4F6;
+  }
+  .scroll-categories::-webkit-scrollbar {
+    height: 6px;
+  }
+  .scroll-categories::-webkit-scrollbar-thumb {
+    background: #F97316;
+    border-radius: 10px;
+  }
+  .scroll-categories::-webkit-scrollbar-track {
+    background: #F3F4F6;
+  }
+
+  /* Sembunyikan scrollbar tapi masih bisa di-scroll (opsional) */
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}

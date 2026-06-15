@@ -9,7 +9,7 @@
   }
 
   body {
-    @apply bg-white text-slate-900 antialiased;
+    @apply bg-green-200 text-slate-900 antialiased;
   }
 
   /* Headings */

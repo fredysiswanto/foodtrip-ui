@@ -61,9 +61,13 @@ export function useLogin(options?: UseLoginOptions) {
         localStorage.setItem('user_role', dataUser.role);
       } else if (dataUser.role === USER_ROLES.ADMIN && dataUser.restaurants) {
         localStorage.setItem('auth_token', data.data?.accessToken);
+        // localStorage.setItem(
+        //   'resto_id',
+        //   JSON.stringify(dataUser.restaurants) || ''
+        // );
         localStorage.setItem(
           'resto_id',
-          JSON.stringify(dataUser.restaurants) || ''
+          JSON.stringify(dataUser.restaurants[0].restaurantId) || ''
         );
         localStorage.setItem('user_role', dataUser.role);
       }
