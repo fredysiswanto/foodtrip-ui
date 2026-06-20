@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { AdminRole } from '../roles';
+import { UserRole } from '../roles';
 
 export interface RoleGuardProps {
   children: ReactNode;
-  requiredRole: AdminRole | AdminRole[];
+  requiredRole: UserRole | UserRole[];
   fallback?: ReactNode;
 }
 
@@ -26,7 +26,7 @@ export function RoleGuard({
   }
 
   const roles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
-  const hasRole = roles.some((role) => user.user_type === role);
+  const hasRole = roles.some((role) => user.role === role);
 
   return hasRole ? children : fallback;
 }

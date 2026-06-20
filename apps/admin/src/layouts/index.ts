@@ -1,8 +1,3 @@
 export { AdminLayout } from './AdminLayout';
+export { navigationItems, type NavItem } from './navigation';
 export { RestaurantAdminLayout } from './RestaurantAdminLayout';
-export {
-  navigationItems,
-  navigationAdmin,
-  navigationRestaurantAdmin,
-  type NavItem,
-} from './navigation';

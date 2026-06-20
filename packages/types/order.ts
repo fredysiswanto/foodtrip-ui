@@ -1,21 +1,13 @@
 import { z } from 'zod';
 import { AuditFieldsSchema } from './common';
-import { DishSchema } from './dish';
-import { CustomerSchema } from './user';
+import { OrderItemBaseSchema } from './global';
 import { RestaurantSchema } from './restaurant';
+import { CustomerSchema } from './user';
 
 /**
  * Order item (dish in order)
  */
-export const OrderItemSchema = z.object({
-  order_item_id: z.string().uuid().optional(),
-  order_id: z.string().uuid(),
-  dish_id: z.string().uuid(),
-  quantity: z.number().int().positive(),
-  unit_price: z.string().regex(/^\d+(\.\d{1,2})?$/),
-  subtotal: z.string().regex(/^\d+(\.\d{1,2})?$/),
-  dish: DishSchema.optional(),
-});
+export const OrderItemSchema = OrderItemBaseSchema;
 
 export type OrderItemType = z.infer<typeof OrderItemSchema>;
 

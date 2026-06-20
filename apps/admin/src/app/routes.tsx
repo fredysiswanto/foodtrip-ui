@@ -1,8 +1,8 @@
 import { lazy, Suspense } from 'react';
 import type { RouteObject } from 'react-router-dom';
 import { ProtectedRoute, RoleGuard } from '../features/auth';
-import { AdminLayout, RestaurantAdminLayout } from '../layouts';
 import { USER_ROLES } from '../features/auth/roles';
+import { AdminLayout } from '../layouts';
 
 // Lazy load pages for better performance
 const LoginPage = lazy(() =>
@@ -121,59 +121,6 @@ const UserDetailPage = lazy(() =>
   }))
 );
 
-// Restaurant Admin Pages
-const RestaurantAdminDashboardPage = lazy(() =>
-  import('../pages/RestaurantAdminDashboardPage').then((m) => ({
-    default: m.RestaurantAdminDashboardPage,
-  }))
-);
-
-const RestaurantDishPage = lazy(() =>
-  import('../features/resto-dish/pages/RestoDishPage').then((m) => ({
-    default: m.RestoDishListPage,
-  }))
-);
-const RestoDishDetailPage = lazy(() =>
-  import('../features/resto-dish/pages/RestoDishDetailPage').then((m) => ({
-    default: m.RestoDishDetailPage,
-  }))
-);
-
-const RestoDishEditPage = lazy(() =>
-  import('../features/resto-dish/pages/RestoDishEditPage').then((m) => ({
-    default: m.RestoDishEditPage,
-  }))
-);
-const RestaurantAdminMenuPage = lazy(() =>
-  import('../pages/RestaurantAdminMenuPage').then((m) => ({
-    default: m.RestaurantAdminMenuPage,
-  }))
-);
-
-const RestaurantAdminOrdersPage = lazy(() =>
-  import('../pages/RestaurantAdminOrdersPage').then((m) => ({
-    default: m.RestaurantAdminOrdersPage,
-  }))
-);
-
-const RestaurantAdminOpeningHoursPage = lazy(() =>
-  import('../pages/RestaurantAdminOpeningHoursPage').then((m) => ({
-    default: m.RestaurantAdminOpeningHoursPage,
-  }))
-);
-
-const RestaurantAdminInfoPage = lazy(() =>
-  import('../pages/RestaurantAdminInfoPage').then((m) => ({
-    default: m.RestaurantAdminInfoPage,
-  }))
-);
-
-const RestaurantAdminAccountPage = lazy(() =>
-  import('../pages/RestaurantAdminAccountPage').then((m) => ({
-    default: m.RestaurantAdminAccountPage,
-  }))
-);
-
 // const FoodListPage = lazy(() =>
 //   import('../pages/FoodListPage').then(m => ({ default: m.FoodListPage }))
 // );
@@ -240,7 +187,7 @@ export const adminRoutes: RouteObject[] = [
   },
   // System Admin Routes
   {
-    path: '/admin',
+    path: '/',
     element: (
       <ProtectedRoute allowedRoles={[USER_ROLES.ADMIN]}>
         <RoleGuard requiredRole={USER_ROLES.ADMIN}>
@@ -406,92 +353,6 @@ export const adminRoutes: RouteObject[] = [
         element: (
           <Suspense fallback={<LoadingFallback />}>
             <UserDetailPage />
-          </Suspense>
-        ),
-      },
-    ],
-  },
-
-  // Restaurant Admin Routes
-  {
-    path: '/restaurant-admin',
-    element: (
-      <ProtectedRoute>
-        <RoleGuard requiredRole={USER_ROLES.ADMIN}>
-          <RestaurantAdminLayout />
-        </RoleGuard>
-      </ProtectedRoute>
-    ),
-    children: [
-      {
-        path: 'dashboard',
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <RestaurantAdminDashboardPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'dishes',
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <RestaurantDishPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'dishes/:id',
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <RestoDishDetailPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'dishes/:id/edit',
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <RestoDishEditPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'menu',
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <RestaurantAdminMenuPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'orders',
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <RestaurantAdminOrdersPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'opening-hours',
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <RestaurantAdminOpeningHoursPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'restaurant-info',
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <RestaurantAdminInfoPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'account',
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <RestaurantAdminAccountPage />
           </Suspense>
         ),
       },

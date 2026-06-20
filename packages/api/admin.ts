@@ -17,7 +17,7 @@ import {
   UserWithRestaurantSchema,
   UserWithRestaurantType,
 } from '@foodtrip/types';
-import { apiFetch } from './client';
+import { apiFetch } from './api-request';
 
 // Restaurant Management (System Admin - All restaurants)
 export const adminRestaurantApi = {
@@ -63,7 +63,7 @@ export const adminDishApi = {
       page: String(page),
       limit: String(limit),
     });
-    return apiFetch<DishType[]>(`/admin/dishes/?${params}`, {
+    return apiFetch<DishType[]>(`/admin/dishes?${params}`, {
       method: 'GET',
       validateWith: (data: unknown) => {
         if (Array.isArray(data)) {
@@ -102,7 +102,7 @@ export const adminDishCategoryApi = {
       limit: String(limit),
     });
     return apiFetch<DishCategoryWithDishesType[]>(
-      `/admin/dish-cat/?${params}`,
+      `/admin/categories?${params}`,
       {
         method: 'GET',
         validateWith: (data: unknown) => {

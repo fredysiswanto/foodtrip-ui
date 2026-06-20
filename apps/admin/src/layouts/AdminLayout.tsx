@@ -1,11 +1,7 @@
 import { useState } from 'react';
-import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
-import { useAuth, useLogout, USER_ROLES } from '../features/auth';
-import {
-  navigationAdmin,
-  navigationRestaurantAdmin,
-  NavItem,
-} from './navigation';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth, useLogout } from '../features/auth';
+import { navigationItems, NavItem } from './navigation';
 
 export function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -13,16 +9,10 @@ export function AdminLayout() {
   const { user } = useAuth();
 
   // Determine which navigation to use based on user role
-  const navigation =
-    user?.role === USER_ROLES.ADMIN
-      ? navigationAdmin
-      : navigationRestaurantAdmin;
+  const navigation = navigationItems;
 
   // Determine the home path based on role
-  const homePath =
-    user?.role === USER_ROLES.ADMIN
-      ? '/admin/dashboard'
-      : '/restaurant-admin/dashboard';
+  const homePath = '/dashboard';
 
   const isActive = (path: string) => {
     return location.pathname.startsWith(path);

@@ -1,27 +1,13 @@
 import { z } from 'zod';
 
-import { RestaurantCategorySchema } from './restauran-category';
-import { RestaurantAdminSchema } from './user';
+import { GetApiAdminRestaurantsResponse, RestaurantBaseSchema } from './global';
 
 /**
  * Restaurant entity schema
  * Represents a restaurant in the system
  */
 
-export const RestaurantSchema = z.object({
-  resto_img: z.string().url(),
-  resto_id: z.string().uuid(),
-  resto_no: z.string(),
-  resto_name: z.string(),
-  resto_email: z.string().email(),
-  resto_phone: z.string(),
-  resto_landline: z.string(),
-  resto_website: z.string().optional(),
-  restocatg_id: z.string().uuid(),
-  status: z.string(),
-  restaurant_category: RestaurantCategorySchema.nullable(),
-  restoadmin: RestaurantAdminSchema.nullable(),
-});
+export const RestaurantSchema = RestaurantBaseSchema;
 
 export type RestaurantType = z.infer<typeof RestaurantSchema>;
 export type Restaurant = RestaurantType; // Backward compatibility alias
@@ -32,18 +18,13 @@ export type Restaurant = RestaurantType; // Backward compatibility alias
  */
 export const CreateRestaurantSchema = z.object({
   name: z.string().min(2, 'Restaurant name is required'),
+  slug: z.string().min(2, 'Slug is required'),
   address: z.string().min(5, 'Address is required'),
-  cuisine: z.string().min(1, 'Cuisine type is required'),
-  rating: z.number().min(0).max(5).optional(),
+  city: z.string().min(2, 'City is required'),
+  province: z.string().min(2, 'Province is required'),
+  postalCode: z.string().min(5, 'Postal code is required'),
   email: z.string().email('Valid email is required').optional(),
   phone: z.string().optional(),
-  website: z.string().url('Valid URL is required').optional(),
-  image: z.string().url('Valid URL is required').optional(),
-  description: z.string().max(500).optional(),
-  latitude: z.number().optional(),
-  longitude: z.number().optional(),
-  restocatg_id: z.string().uuid('Valid category ID is required').optional(),
-  status: z.string().default('Open').optional(),
 });
 
 export type CreateRestaurantInputType = z.infer<typeof CreateRestaurantSchema>;
@@ -60,12 +41,7 @@ export type UpdateRestaurantInput = UpdateRestaurantInputType; // Backward compa
 /**
  * Restaurant list response
  */
-export const RestaurantListSchema = z.object({
-  draw: z.number(),
-  data: z.array(RestaurantSchema),
-  recordsFiltered: z.number(),
-  recordsTotal: z.number(),
-});
+export const RestaurantListSchema = GetApiAdminRestaurantsResponse;
 
 export type RestaurantListResponseType = z.infer<typeof RestaurantListSchema>;
 

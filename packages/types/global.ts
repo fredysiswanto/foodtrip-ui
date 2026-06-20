@@ -19,7 +19,7 @@ const Phone = zod.string().nullable();
 const ImageId = zod.string().uuid().nullable();
 
 // Pagination meta
-const PaginationMeta = zod.object({
+export const PaginationMeta = zod.object({
   page: zod.number(),
   limit: zod.number(),
   totalItems: zod.number(),
@@ -29,13 +29,22 @@ const PaginationMeta = zod.object({
 });
 
 // Generic response wrapper
-const ResponseWrapper = <T extends zod.ZodTypeAny>(dataSchema: T) =>
+export const ResponseListWrapper = <T extends zod.ZodTypeAny>(dataSchema: T) =>
   zod.object({
     success: zod.boolean(),
     statusCode: zod.number(),
     message: zod.string(),
     data: dataSchema.optional(),
     meta: PaginationMeta.optional(),
+    error: zod.string().optional(),
+  });
+
+export const ResponseWrapper = <T extends zod.ZodTypeAny>(dataSchema: T) =>
+  zod.object({
+    success: zod.boolean(),
+    statusCode: zod.number(),
+    message: zod.string(),
+    data: dataSchema.optional(),
     error: zod.string().optional(),
   });
 
@@ -113,7 +122,7 @@ export const CartSchema = zod.object({
 });
 
 // Order Item
-export const OrderItemSchema = zod.object({
+export const OrderItemBaseSchema = zod.object({
   id: UUID,
   dishId: UUID,
   dishName: zod.string(),
@@ -155,7 +164,7 @@ export const OrderBaseSchema = zod.object({
   createdAt: DateString,
   updatedAt: DateString,
   deletedAt: NullableDate,
-  orderItems: zod.array(OrderItemSchema),
+  orderItems: zod.array(OrderItemBaseSchema),
 });
 
 // User (for /me and admin)
