@@ -14,7 +14,7 @@ import OrderDetailPage from '@/pages/OrderDetailPage';
 
 function AppContent() {
   return (
-    <div className="bg-gray-50 min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
         <Routes>

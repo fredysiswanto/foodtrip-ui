@@ -10,14 +10,10 @@ export default function Footer() {
           <h4 className="text-white font-semibold mb-3">Tentang</h4>
           <ul className="space-y-1 text-sm">
             <li>
-              <a href="#" className="hover:text-white">
-                Tentang Kami
-              </a>
+              <a href="#">Tentang Kami</a>
             </li>
             <li>
-              <a href="#" className="hover:text-white">
-                Karir
-              </a>
+              <a href="#">Karir</a>
             </li>
           </ul>
         </div>
@@ -25,14 +21,10 @@ export default function Footer() {
           <h4 className="text-white font-semibold mb-3">Bantuan</h4>
           <ul className="space-y-1 text-sm">
             <li>
-              <a href="#" className="hover:text-white">
-                Pusat Bantuan
-              </a>
+              <a href="#">Pusat Bantuan</a>
             </li>
             <li>
-              <a href="#" className="hover:text-white">
-                Syarat & Ketentuan
-              </a>
+              <a href="#">Syarat & Ketentuan</a>
             </li>
           </ul>
         </div>

@@ -1,53 +1,87 @@
 @import "tailwindcss";
-/* src/index.css */
 
-
-/* ========== Komponen Kustom ========== */
-@layer components {
-  /* Efek hover untuk kartu restoran/menu */
-  .card-hover {
-    @apply transition-transform duration-200 ease-in-out shadow-md;
-  }
-  .card-hover:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+/* ============================================
+   Base Styles
+   ============================================ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
   }
 
-  /* Badge keranjang (posisi absolut) */
-  .badge-cart {
-    @apply absolute -top-2 -right-2 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold;
+  body {
+    @apply bg-green-200 text-slate-900 antialiased;
   }
+
+  /* Headings */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight;
+  }
+
+  h1 { @apply text-4xl; }
+  h2 { @apply text-3xl; }
+  h3 { @apply text-2xl; }
+  h4 { @apply text-xl; }
+  h5 { @apply text-lg; }
+  h6 { @apply text-base; }
+
+  p { @apply leading-relaxed; }
+  a { @apply text-blue-600 hover:text-yellow-700 transition-colors; }
+
+  ul, ol { @apply pl-6; }
+  li { @apply mb-2; }
+
+  code { @apply bg-slate-100 text-slate-900 px-1.5 py-0.5 rounded text-sm font-mono; }
+  pre { @apply bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto; }
+  pre code { @apply bg-transparent text-slate-100 p-0; }
+
+  input, textarea, select {
+    @apply rounded-md border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all;
+  }
+  input::placeholder, textarea::placeholder { @apply text-slate-400; }
+
+  table { @apply w-full border-collapse; }
+  th { @apply bg-slate-100 text-slate-900 font-semibold text-left px-4 py-2 border-b border-slate-300; }
+  td { @apply px-4 py-2 border-b border-slate-200; }
+  tr:hover { @apply bg-slate-50; }
 }
 
-/* ========== Utilitas Kustom ========== */
-@layer utilities {
-  /* Gradient oranye untuk hero */
-  .hero-bg {
-    background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+/* ============================================
+   Dark Mode
+   ============================================ */
+@layer base {
+  :is(.dark body) { @apply bg-slate-900 text-slate-100; }
+  :is(.dark input, .dark textarea, .dark select) { @apply bg-slate-800 border-slate-700 text-slate-100; }
+  :is(.dark input::placeholder, .dark textarea::placeholder) { @apply text-slate-500; }
+  :is(.dark th) { @apply bg-slate-800 text-slate-100 border-slate-700; }
+  :is(.dark td) { @apply border-slate-700; }
+  :is(.dark tr:hover) { @apply bg-slate-800; }
+}
+
+/* ============================================
+   Scrollbar Styles
+   ============================================ */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+* { scrollbar-width: thin; scrollbar-color: #d1d5db transparent; }
+
+/* ============================================
+   Animations
+   ============================================ */
+@layer components {
+  @keyframes slide-in {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
   }
 
-  /* Scrollbar horizontal untuk kategori */
-  .scroll-categories {
-    scrollbar-width: thin;
-    scrollbar-color: #F97316 #F3F4F6;
-  }
-  .scroll-categories::-webkit-scrollbar {
-    height: 6px;
-  }
-  .scroll-categories::-webkit-scrollbar-thumb {
-    background: #F97316;
-    border-radius: 10px;
-  }
-  .scroll-categories::-webkit-scrollbar-track {
-    background: #F3F4F6;
-  }
-
-  /* Sembunyikan scrollbar tapi masih bisa di-scroll (opsional) */
-  .hide-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none;
+  .animate-slide-in {
+    animation: slide-in 0.3s ease-out;
   }
 }
