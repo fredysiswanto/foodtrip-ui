@@ -7,7 +7,15 @@ import { GetApiAdminRestaurantsResponse, RestaurantBaseSchema } from './global';
  * Represents a restaurant in the system
  */
 
-export const RestaurantSchema = RestaurantBaseSchema;
+export const RestaurantSchema = RestaurantBaseSchema.pick({
+  id: true,
+  name: true,
+  slug: true,
+  address: true,
+  status: true,
+  isOpen: true,
+  createdAt: true,
+});
 
 export type RestaurantType = z.infer<typeof RestaurantSchema>;
 export type Restaurant = RestaurantType; // Backward compatibility alias

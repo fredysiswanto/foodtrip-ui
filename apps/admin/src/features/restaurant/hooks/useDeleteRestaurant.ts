@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { restaurantApi } from '@foodtrip/api';
+import { adminRestaurantApi } from '@foodtrip/api';
 
 export function useDeleteRestaurant() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: string) => restaurantApi.delete(id),
+    mutationFn: (id: string) => adminRestaurantApi.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['admin', 'restaurant', 'list'],

@@ -20,7 +20,7 @@ export function RestaurantDetailPage() {
       { id, data },
       {
         onSuccess: () => {
-          navigate('/admin/restaurants');
+          navigate('/restaurants');
         },
       }
     );
@@ -38,7 +38,7 @@ export function RestaurantDetailPage() {
     return (
       <VStack gap="lg">
         <Alert type="error">Failed to load restaurant details</Alert>
-        <Button onClick={() => navigate('/admin/restaurants')}>
+        <Button onClick={() => navigate('/restaurants')}>
           Back to Restaurants
         </Button>
       </VStack>
@@ -48,7 +48,7 @@ export function RestaurantDetailPage() {
   return (
     <VStack gap="lg">
       <div>
-        <Button variant="ghost" onClick={() => navigate('/admin/restaurants')}>
+        <Button variant="ghost" onClick={() => navigate('/restaurants')}>
           ← Back to Restaurants
         </Button>
         <h1 className="text-3xl font-bold text-gray-900 mt-4">

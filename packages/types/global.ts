@@ -67,6 +67,9 @@ export const CategorySchema = zod.object({
 export const RestaurantBaseSchema = zod.object({
   id: UUID,
   name: zod.string(),
+  slug: zod.string(),
+  isOpen: zod.boolean(),
+  status: zod.enum(['PENDING', 'APPROVED', 'ACTIVE', 'SUSPENDED', 'REJECTED']),
   description: zod.string().nullable(),
   address: zod.string(),
   phone: Phone,

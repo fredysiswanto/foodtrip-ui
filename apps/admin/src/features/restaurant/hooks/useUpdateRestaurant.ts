@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { restaurantApi } from '@foodtrip/api';
+import { adminRestaurantApi } from '@foodtrip/api';
 import { UpdateRestaurantInput } from '@foodtrip/types';
 
 interface UpdateRestaurantParams {
@@ -12,7 +12,7 @@ export function useUpdateRestaurant() {
 
   return useMutation({
     mutationFn: ({ id, data }: UpdateRestaurantParams) =>
-      restaurantApi.update(id, data),
+      adminRestaurantApi.update(id, data),
     onSuccess: (_, { id }) => {
       queryClient.invalidateQueries({
         queryKey: ['admin', 'restaurant', 'list'],

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { restaurantApi } from '@foodtrip/api';
+import { adminRestaurantApi } from '@foodtrip/api';
 
 interface RestaurantListParams {
   page?: number;
@@ -12,8 +12,7 @@ export function useRestaurantList(params?: RestaurantListParams) {
     queryKey: ['admin', 'restaurant', 'list', { page, limit }],
     queryFn: async () => {
       try {
-        const result = await restaurantApi.list(page, limit);
-
+        const result = await adminRestaurantApi.list(page, limit);
         return result;
       } catch (error) {
         console.error('useRestaurantList - API error:', error);

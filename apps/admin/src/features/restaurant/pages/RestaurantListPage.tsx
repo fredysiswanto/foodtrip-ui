@@ -12,7 +12,7 @@ export function RestaurantListPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const handleEdit = (id: string) => {
-    navigate(`/admin/restaurants/${id}`);
+    navigate(`/restaurants/${id}`);
   };
 
   const handleDeleteClick = (id: string) => {
@@ -37,7 +37,7 @@ export function RestaurantListPage() {
           </h1>
           <p className="text-gray-600">Manage all restaurants in the system</p>
         </div>
-        <Button onClick={() => navigate('/admin/restaurants/new')} size="lg">
+        <Button onClick={() => navigate('/restaurants/new')} size="lg">
           + Add Restaurant
         </Button>
       </div>
@@ -57,7 +57,7 @@ export function RestaurantListPage() {
       ) : restaurants.length === 0 ? (
         <Card className="text-center py-12">
           <p className="text-gray-500 mb-4">No restaurants found</p>
-          <Button onClick={() => navigate('/admin/restaurants/new')}>
+          <Button onClick={() => navigate('/restaurants/new')}>
             Create your first restaurant
           </Button>
         </Card>

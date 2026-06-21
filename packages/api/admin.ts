@@ -5,6 +5,7 @@
 
 import {
   CreateDishSchema,
+  CreateRestaurantSchema,
   DishCategoryWithDishesSchema,
   DishCategoryWithDishesType,
   DishDetailSchema,
@@ -16,6 +17,7 @@ import {
   RestaurantSchema,
   RestaurantType,
   UpdateDishSchema,
+  UpdateRestaurantSchema,
   UserListWithRestaurantSchema,
   UserWithRestaurantSchema,
   UserWithRestaurantType,
@@ -25,7 +27,7 @@ import { apiFetch } from './api-request';
 
 // Restaurant Management (System Admin - All restaurants)
 export const adminRestaurantApi = {
-  list: async (page = 1, limit = 10) => {
+  listAll: async (page = 1, limit = 10) => {
     const params = new URLSearchParams({
       page: String(page),
       limit: String(limit),
@@ -46,9 +48,29 @@ export const adminRestaurantApi = {
       },
     });
   },
-
+  list: async (page = 1, limit = 10) => {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: String(limit),
+    });
+    return apiFetch<RestaurantType[]>(`/admin/restaurants/my?${params}`, {
+      method: 'GET',
+      validateWith: (data: unknown) => {
+        if (Array.isArray(data)) {
+          return data.map((item) => RestaurantSchema.parse(item));
+        }
+        if (data && typeof data === 'object' && 'data' in data) {
+          const obj = data as Record<string, unknown>;
+          if (Array.isArray(obj.data)) {
+            return obj.data.map((item) => RestaurantSchema.parse(item));
+          }
+        }
+        return [];
+      },
+    });
+  },
   getById: async (id: string) => {
-    return apiFetch<RestaurantType>(`/admin/restaurant/${id}`, {
+    return apiFetch<RestaurantType>(`/admin/restaurants/${id}`, {
       method: 'GET',
       validateWith: (data: unknown) => {
         if (data && typeof data === 'object' && 'data' in data) {
@@ -56,6 +78,40 @@ export const adminRestaurantApi = {
         }
         return RestaurantSchema.parse(data);
       },
+    });
+  },
+
+  create: async (input: Record<string, unknown>) => {
+    const validated = CreateRestaurantSchema.parse(input);
+    return apiFetch<RestaurantType>('/admin/restaurants', {
+      method: 'POST',
+      body: JSON.stringify(validated),
+      validateWith: (data: unknown) => {
+        if (data && typeof data === 'object' && 'data' in data) {
+          return RestaurantDetailSchema.parse(data).data;
+        }
+        return RestaurantSchema.parse(data);
+      },
+    });
+  },
+
+  update: async (id: string, input: Record<string, unknown>) => {
+    const validated = UpdateRestaurantSchema.parse(input);
+    return apiFetch<RestaurantType>(`/admin/restaurant/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(validated),
+      validateWith: (data: unknown) => {
+        if (data && typeof data === 'object' && 'data' in data) {
+          return RestaurantDetailSchema.parse(data).data;
+        }
+        return RestaurantSchema.parse(data);
+      },
+    });
+  },
+
+  delete: async (id: string) => {
+    return apiFetch<void>(`/admin/restaurant/${id}`, {
+      method: 'DELETE',
     });
   },
 };

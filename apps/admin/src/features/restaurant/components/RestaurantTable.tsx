@@ -16,33 +16,33 @@ export function RestaurantTable({
 }: RestaurantTableProps) {
   const columns = [
     {
-      key: 'resto_name',
+      key: 'name',
       label: 'Name',
       sortable: true,
     },
     {
-      key: 'resto_phone',
+      key: 'phone',
       label: 'Phone',
       render: (value: string) => (
         <span className="text-sm text-gray-600">{value}</span>
       ),
     },
     {
-      key: 'resto_no',
+      key: 'phone',
       label: 'Restaurant No.',
       render: (value: string) => (
         <Badge variant={value ? 'info' : 'default'}>{value || 'N/A'}</Badge>
       ),
     },
+    // {
+    //   key: 'category',
+    //   label: 'Resto Category',
+    //   render: (value: { restocatg_name?: string } | null) => (
+    //     <span className="font-semibold">{value?.restocatg_name || 'N/A'}</span>
+    //   ),
+    // },
     {
-      key: 'restaurant_category',
-      label: 'Resto Category',
-      render: (value: { restocatg_name?: string } | null) => (
-        <span className="font-semibold">{value?.restocatg_name || 'N/A'}</span>
-      ),
-    },
-    {
-      key: 'status',
+      key: 'isAvailable',
       label: 'Status',
       render: (value: boolean) => (
         <Badge variant={value ? 'success' : 'warning'}>
@@ -51,7 +51,7 @@ export function RestaurantTable({
       ),
     },
     {
-      key: 'resto_id',
+      key: 'id',
       label: 'Actions',
       render: (value: string) => (
         <div className="flex gap-2">
@@ -79,12 +79,6 @@ export function RestaurantTable({
   ];
 
   return (
-    <Table
-      columns={columns}
-      data={restaurants}
-      rowKey="resto_id"
-      striped
-      hoverable
-    />
+    <Table columns={columns} data={restaurants} rowKey="id" striped hoverable />
   );
 }
