@@ -85,7 +85,6 @@ async function apiFetch<T>(
       );
     }
 
-    console.error('apiFetch - Network error:', error);
     throw new ApiError(true, 500, null, 'Network request failed', error);
   }
 }

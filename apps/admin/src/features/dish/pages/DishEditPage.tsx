@@ -9,6 +9,7 @@ export function DishEditPage() {
   const { data: dish, isLoading, error } = useDishDetail(id || '');
   const { mutate: updateDish, isPending } = useUpdateDish();
 
+  console.log('DishEditPage - dish:', dish?.name || 'No dish data');
   const handleSubmit = async (data: CreateDishInputType) => {
     if (!id) return;
 
@@ -16,7 +17,7 @@ export function DishEditPage() {
       { id, data },
       {
         onSuccess: () => {
-          navigate(`/admin/dishes/${id}`);
+          navigate(`/dishes/${id}`);
         },
       }
     );
@@ -36,9 +37,7 @@ export function DishEditPage() {
         <Alert type="error">
           {error instanceof Error ? error.message : 'Failed to load dish'}
         </Alert>
-        <Button onClick={() => navigate('/admin/dishes')}>
-          Back to Dishes
-        </Button>
+        <Button onClick={() => navigate('/dishes')}>Back to Dishes</Button>
       </VStack>
     );
   }
@@ -46,50 +45,52 @@ export function DishEditPage() {
   return (
     <VStack gap="lg">
       <div>
-        <Button variant="ghost" onClick={() => navigate(`/admin/dishes/${id}`)}>
+        <Button variant="ghost" onClick={() => navigate(`/dishes/${id}`)}>
           ← Back to Dish
         </Button>
         <h1 className="text-3xl font-bold text-gray-900 mt-4">Edit Dish</h1>
-        <p className="text-gray-600">{dish.dish_name}</p>
+        <p className="text-gray-600">{dish.name}</p>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4 w-full">
         <Card className="space-y-6 w-full sm:w-1/2">
-          {dish.dish_img && (
+          {/* {dish.dish_img && (
             <img
               src={dish.dish_img}
               alt={dish.dish_name}
               className="w-full h-80 object-cover rounded-lg"
             />
-          )}
+          )} */}
 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <p className="text-sm text-gray-600">Restaurant</p>
               <p className="text-lg font-semibold">
-                {dish.restaurant?.resto_name || 'N/A'}
+                {dish.restaurant?.name || 'N/A'}
               </p>
             </div>
             <div>
               <p className="text-sm text-gray-600">Category</p>
               <p className="text-lg font-semibold">
-                {dish.dish_category?.dishcatg_name || 'N/A'}
+                {dish.category?.name || 'N/A'}
               </p>
             </div>
             <div>
               <p className="text-sm text-gray-600">Price</p>
-              <p className="text-lg font-semibold">${dish.dish_price}</p>
+              <p className="text-lg font-semibold">${dish.price}</p>
             </div>
             <div>
               <p className="text-sm text-gray-600">Status</p>
-              <p className="text-lg font-semibold">{dish.status}</p>
+              <p className="text-lg font-semibold">
+                {dish.isAvailable ? 'Available' : 'Not Available'}
+              </p>
             </div>
           </div>
 
-          {dish.dish_desc && (
+          {dish.description && (
             <div>
               <p className="text-sm text-gray-600">Description</p>
-              <p className="text-gray-700 mt-2">{dish.dish_desc}</p>
+              <p className="text-gray-700 mt-2">{dish.description}</p>
             </div>
           )}
         </Card>

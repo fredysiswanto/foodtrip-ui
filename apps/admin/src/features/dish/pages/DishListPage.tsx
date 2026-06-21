@@ -6,13 +6,13 @@ export function DishListPage() {
   const navigate = useNavigate();
   const { data: dishes = [], isLoading, error } = useDishList();
   const handleEdit = (id: string) => {
-    navigate(`/admin/dishes/${id}/edit`);
+    navigate(`/dishes/${id}/edit`);
   };
   const handleDelete = (id: string) => {
-    navigate(`/admin/dishes/${id}`);
+    navigate(`/dishes/${id}`);
   };
   const handleView = (id: string) => {
-    navigate(`/admin/dishes/${id}`);
+    navigate(`/dishes/${id}`);
   };
 
   return (
@@ -22,7 +22,7 @@ export function DishListPage() {
           <h1 className="text-3xl font-bold text-gray-900">Dish Management</h1>
           <p className="text-gray-600">Manage all dishes in the system</p>
         </div>
-        <Button onClick={() => navigate('/admin/dishes/new')} variant="primary">
+        <Button onClick={() => navigate('/dishes/new')} variant="primary">
           + Create Dish
         </Button>
       </div>
@@ -42,7 +42,7 @@ export function DishListPage() {
       ) : dishes.length === 0 ? (
         <Card className="text-center py-12">
           <p className="text-gray-500 mb-4">No dishes found</p>
-          <Button onClick={() => navigate('/admin/dishes/new')}>
+          <Button onClick={() => navigate('/dishes/new')}>
             Create your first dish
           </Button>
         </Card>

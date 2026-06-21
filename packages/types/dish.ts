@@ -5,7 +5,16 @@ import { DishBaseSchema, ResponseListWrapper, ResponseWrapper } from './global';
  * Represents a dish in the system
  */
 
-export const DishSchema = DishBaseSchema;
+export const DishSchema = DishBaseSchema.pick({
+  id: true,
+  name: true,
+  description: true,
+  price: true,
+  isAvailable: true,
+  createdAt: true,
+  restaurant: true,
+  category: true,
+});
 
 export type DishType = z.infer<typeof DishSchema>;
 
@@ -24,6 +33,8 @@ export const CreateDishSchema = z.object({
   imageId: z.string().optional(),
   isFeatured: z.boolean().default(false),
   isAvailable: z.boolean().default(false),
+  restaurantName: z.string().readonly(),
+  categoryName: z.string().readonly(),
 });
 
 export type CreateDishInputType = z.infer<typeof CreateDishSchema>;

@@ -87,7 +87,9 @@ export const DishBaseSchema = zod.object({
   slug: zod.string(),
   name: zod.string(),
   description: zod.string().nullable(),
-  price: zod.number().min(0),
+  price: zod
+    .string()
+    .regex(/^\d+(\.\d{1,2})?$/, 'Price must be a valid number'),
   imageId: ImageId,
   stock: zod.number().min(0),
   isAvailable: zod.boolean(),
@@ -96,6 +98,8 @@ export const DishBaseSchema = zod.object({
   createdAt: DateString,
   updatedAt: DateString,
   deletedAt: NullableDate,
+  restaurant: RestaurantBaseSchema.pick({ id: true, name: true }).optional(),
+  category: CategorySchema.pick({ id: true, name: true }).optional(),
 });
 
 // Cart Item (with nested dish)

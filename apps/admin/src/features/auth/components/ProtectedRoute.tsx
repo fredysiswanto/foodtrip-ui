@@ -38,7 +38,7 @@ export function ProtectedRoute({
       const getDashboardPath = (): string => {
         if (!userRole) return '/login';
         return userRole === USER_ROLES.ADMIN
-          ? '/admin/dashboard'
+          ? '/dashboard'
           : '/restaurant-admin/dashboard';
       };
 

@@ -9,7 +9,7 @@ export function DishCreatePage() {
   const handleSubmit = async (data: CreateDishInputType) => {
     createDish(data, {
       onSuccess: () => {
-        navigate('/admin/dishes');
+        navigate('/dishes');
       },
     });
   };
@@ -17,7 +17,7 @@ export function DishCreatePage() {
   return (
     <VStack gap="lg">
       <div>
-        <Button variant="ghost" onClick={() => navigate('/admin/dishes')}>
+        <Button variant="ghost" onClick={() => navigate('/dishes')}>
           ← Back to Dishes
         </Button>
         <h1 className="text-3xl font-bold text-gray-900 mt-4">

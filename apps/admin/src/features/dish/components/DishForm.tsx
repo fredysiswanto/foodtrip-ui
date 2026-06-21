@@ -33,13 +33,15 @@ export function DishForm({
     resolver: zodResolver(CreateDishSchema),
     defaultValues: initialData
       ? {
-          dish_name: initialData.dish_name,
-          dish_desc: initialData.dish_desc || '',
-          dish_price: String(initialData.dish_price),
-          dishcatg_id: initialData.dishcatg_id,
-          resto_id: initialData.resto_id,
-          status: initialData.status,
-          dish_img: initialData.dish_img || '',
+          name: initialData.name || '',
+          description: initialData.description || '',
+          price: String(initialData.price),
+          categoryId: initialData.category?.id || '',
+          restaurantId: initialData.restaurant?.id || '',
+          isAvailable: initialData.isAvailable,
+          // imageId: initialData.imageId || '',
+          restaurantName: initialData.restaurant?.name || '',
+          categoryName: initialData.category?.name || '',
         }
       : {},
   });
@@ -50,14 +52,14 @@ export function DishForm({
         <Input
           label="Dish Name"
           placeholder="Enter dish name"
-          error={errors.dish_name?.message}
-          {...register('dish_name')}
+          error={errors.name?.message}
+          {...register('name')}
         />
         <Input
-          label="Restaurant ID"
-          placeholder="Enter restaurant ID"
-          error={errors.resto_id?.message}
-          {...register('resto_id')}
+          label="Restaurant Name"
+          placeholder="Enter restaurant name"
+          error={errors.restaurantName?.message}
+          {...register('restaurantName')}
         />
       </FormGroup>
 
@@ -65,16 +67,16 @@ export function DishForm({
         <Input
           label="Category ID"
           placeholder="Enter dish category ID"
-          error={errors.dishcatg_id?.message}
-          {...register('dishcatg_id')}
+          error={errors.categoryId?.message}
+          {...register('categoryId')}
         />
         <NumberInput
           label="Price"
           placeholder="Enter dish price"
           min={0}
           step={0.01}
-          error={errors.dish_price?.message}
-          {...register('dish_price')}
+          error={errors.price?.message}
+          {...register('price')}
         />
       </FormGroup>
 
@@ -82,26 +84,28 @@ export function DishForm({
         label="Description"
         placeholder="Enter dish description"
         rows={4}
-        error={errors.dish_desc?.message}
-        {...register('dish_desc')}
+        error={errors.description?.message}
+        {...register('description')}
       />
 
       <FormGroup>
         <Select
           label="Status"
-          error={errors.status?.message}
-          {...register('status')}
+          error={errors.isAvailable?.message}
+          {...register('isAvailable', {
+            setValueAs: (value) => value === 'true',
+          })}
         >
           <option value="">Select Status</option>
-          <option value="Available">Available</option>
-          <option value="Unavailable">Unavailable</option>
+          <option value="true">Available</option>
+          <option value="false">Unavailable</option>
         </Select>
         <Input
           label="Image URL"
           type="url"
           placeholder="Enter image URL"
-          error={errors.dish_img?.message}
-          {...register('dish_img')}
+          error={errors.imageId?.message}
+          {...register('imageId')}
         />
       </FormGroup>
 

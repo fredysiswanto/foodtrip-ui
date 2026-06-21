@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { dishApi } from '@foodtrip/api';
+import { adminDishApi } from '@foodtrip/api';
 
 interface DishListParams {
   page?: number;
@@ -9,10 +9,10 @@ interface DishListParams {
 export function useDishList(params?: DishListParams) {
   const { page = 1, limit = 10 } = params || {};
   return useQuery({
-    queryKey: ['admin', 'dish', 'list', { page, limit }],
+    queryKey: ['admin', 'dishes', 'list', { page, limit }],
     queryFn: async () => {
       try {
-        const result = await dishApi.list(page, limit);
+        const result = await adminDishApi.list();
 
         return result;
       } catch (error) {

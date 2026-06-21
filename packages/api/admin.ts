@@ -4,19 +4,23 @@
  */
 
 import {
-  RestaurantSchema,
-  RestaurantDetailSchema,
-  RestaurantType,
-  DishSchema,
-  DishType,
+  CreateDishSchema,
   DishCategoryWithDishesSchema,
   DishCategoryWithDishesType,
+  DishDetailSchema,
+  DishSchema,
+  DishType,
   RestaurantCategoryWithRestaurantsSchema,
   RestaurantCategoryWithRestaurantsType,
+  RestaurantDetailSchema,
+  RestaurantSchema,
+  RestaurantType,
+  UpdateDishSchema,
   UserListWithRestaurantSchema,
   UserWithRestaurantSchema,
   UserWithRestaurantType,
 } from '@foodtrip/types';
+
 import { apiFetch } from './api-request';
 
 // Restaurant Management (System Admin - All restaurants)
@@ -58,7 +62,7 @@ export const adminRestaurantApi = {
 
 // Dish Management (System Admin - All dishes)
 export const adminDishApi = {
-  list: async (page = 1, limit = 10) => {
+  listAll: async (page = 1, limit = 10) => {
     const params = new URLSearchParams({
       page: String(page),
       limit: String(limit),
@@ -80,8 +84,25 @@ export const adminDishApi = {
     });
   },
 
+  list: async () => {
+    return apiFetch<DishType[]>(`/admin/dishes/restaurants`, {
+      method: 'GET',
+      validateWith: (data: unknown) => {
+        if (Array.isArray(data)) {
+          return data.map((item) => DishSchema.parse(item));
+        }
+        if (data && typeof data === 'object' && 'data' in data) {
+          const obj = data as Record<string, unknown>;
+          if (Array.isArray(obj.data)) {
+            return obj.data.map((item) => DishSchema.parse(item));
+          }
+        }
+        return [];
+      },
+    });
+  },
   getById: async (id: string) => {
-    return apiFetch<DishType>(`/admin/dish/${id}`, {
+    return apiFetch<DishType>(`/admin/dishes/${id}`, {
       method: 'GET',
       validateWith: (data: unknown) => {
         if (data && typeof data === 'object' && 'data' in data) {
@@ -90,6 +111,38 @@ export const adminDishApi = {
         }
         return DishSchema.parse(data);
       },
+    });
+  },
+  create: async (input: Record<string, unknown>) => {
+    const validated = CreateDishSchema.parse(input);
+    return apiFetch(`/admin/dishes`, {
+      method: 'POST',
+      body: JSON.stringify(validated),
+      validateWith: (data: unknown) => {
+        if (data && typeof data === 'object' && 'data' in data) {
+          return DishDetailSchema.parse(data).data;
+        }
+        return DishSchema.parse(data);
+      },
+    });
+  },
+  update: async (id: string, input: Record<string, unknown>) => {
+    const validated = UpdateDishSchema.parse(input);
+    return apiFetch(`/admin/dishes/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(validated),
+      validateWith: (data: unknown) => {
+        if (data && typeof data === 'object' && 'data' in data) {
+          return DishDetailSchema.parse(data).data;
+        }
+
+        return DishSchema.parse(data);
+      },
+    });
+  },
+  delete: async (id: string) => {
+    return apiFetch(`/admin/dishes/${id}`, {
+      method: 'DELETE',
     });
   },
 };

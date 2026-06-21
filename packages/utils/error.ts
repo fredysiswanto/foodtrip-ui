@@ -8,24 +8,24 @@ export function getErrorMessage(error: unknown): string {
   if (
     error instanceof Error &&
     error.name === 'ApiError' &&
-    'status' in error
+    'statusCode' in error
   ) {
     const apiError = error as ApiError;
 
     // Handle specific HTTP status codes
-    if (apiError.status === 401) {
+    if (apiError.statusCode === 401) {
       return 'Unauthorized. Please log in again.';
     }
-    if (apiError.status === 403) {
+    if (apiError.statusCode === 403) {
       return 'You do not have permission to perform this action.';
     }
-    if (apiError.status === 404) {
+    if (apiError.statusCode === 404) {
       return 'The requested resource was not found.';
     }
-    if (apiError.status === 409) {
+    if (apiError.statusCode === 409) {
       return 'This item already exists. Please use a different value.';
     }
-    if (apiError.status >= 500) {
+    if (apiError.statusCode >= 500) {
       return 'Server error. Please try again later.';
     }
 

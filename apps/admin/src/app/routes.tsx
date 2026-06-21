@@ -126,16 +126,16 @@ const UserDetailPage = lazy(() =>
 // );
 
 // Placeholder pages for future features (CRUD pages)
-const FoodListPage = lazy(() =>
-  Promise.resolve({
-    default: () => (
-      <div>
-        <h1 className="text-3xl font-bold">Food Management</h1>
-        <p className="text-slate-600 mt-2">Coming soon...</p>
-      </div>
-    ),
-  })
-);
+// const FoodListPage = lazy(() =>
+//   Promise.resolve({
+//     default: () => (
+//       <div>
+//         <h1 className="text-3xl font-bold">Food Management</h1>
+//         <p className="text-slate-600 mt-2">Coming soon...</p>
+//       </div>
+//     ),
+//   })
+// );
 
 const TripListPage = lazy(() =>
   Promise.resolve({
@@ -204,14 +204,14 @@ export const adminRoutes: RouteObject[] = [
           </Suspense>
         ),
       },
-      {
-        path: 'foods',
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <FoodListPage />
-          </Suspense>
-        ),
-      },
+      // {
+      //   path: 'foods',
+      //   element: (
+      //     <Suspense fallback={<LoadingFallback />}>
+      //       <FoodListPage />
+      //     </Suspense>
+      //   ),
+      // },
       {
         path: 'dishes',
         element: (

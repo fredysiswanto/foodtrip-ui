@@ -20,40 +20,40 @@ export function DishTable({
     {
       key: 'restaurant',
       label: 'Restaurant Name',
-      render: (value: { resto_name: string } | null) => (
-        <span className="font-medium">{value ? value.resto_name : 'N/A'}</span>
+      render: (value: { name: string } | null) => (
+        <span className="font-medium">{value ? value.name : 'N/A'}</span>
       ),
     },
     {
-      key: 'dish_category',
+      key: 'category',
       label: 'Category',
-      render: (value: { dishcatg_name: string } | null) => (
+      render: (value: { name: string } | null) => (
         <span className="text-sm text-gray-600">
-          {value ? value.dishcatg_name : 'N/A'}
+          {value ? value.name : 'N/A'}
         </span>
       ),
     },
     {
-      key: 'dish_name',
+      key: 'name',
       label: 'Name',
       sortable: true,
     },
     {
-      key: 'dish_price',
+      key: 'price',
       label: 'Price',
       render: (value: number) => (
         <span className="font-semibold">${value}</span>
       ),
     },
     {
-      key: 'dish_desc',
+      key: 'description',
       label: 'Description',
       render: (value: string | null) => (
         <span className="text-sm text-gray-600">{value || 'N/A'}</span>
       ),
     },
     {
-      key: 'status',
+      key: 'isAvailable',
       label: 'Status',
       render: (value: string) => {
         let color = 'gray';
@@ -71,7 +71,7 @@ export function DishTable({
       },
     },
     {
-      key: 'dish_id',
+      key: 'id',
       label: 'Actions',
       render: (value: string) => (
         <div className="flex gap-2">
@@ -113,7 +113,7 @@ export function DishTable({
       sortDirection="asc"
       columns={columns}
       data={dishes}
-      rowKey="dish_id"
+      rowKey="id"
       striped
       hoverable
     />

@@ -8,7 +8,7 @@ export function NotFoundPage() {
   const handleGoBack = () => {
     // Redirect to appropriate dashboard based on user role
     if (user?.role === USER_ROLES.SUPER_ADMIN) {
-      navigate('/admin/dashboard', { replace: true });
+      navigate('/dashboard', { replace: true });
     } else if (user?.role === USER_ROLES.ADMIN) {
       navigate('/dashboard', { replace: true });
     } else {

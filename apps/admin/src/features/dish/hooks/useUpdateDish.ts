@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { dishApi } from '@foodtrip/api';
+import { adminDishApi } from '@foodtrip/api';
 import { CreateDishInputType } from '@foodtrip/types';
 
 interface UpdateDishParams {
@@ -11,7 +11,8 @@ export function useUpdateDish() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: UpdateDishParams) => dishApi.update(id, data),
+    mutationFn: ({ id, data }: UpdateDishParams) =>
+      adminDishApi.update(id, data),
     onSuccess: (_, { id }) => {
       queryClient.invalidateQueries({
         queryKey: ['admin', 'dish', 'list'],

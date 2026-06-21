@@ -12,7 +12,7 @@ export function LoginPage() {
     if (isAuthenticated && user) {
       const dashboardPath =
         user.role === USER_ROLES.ADMIN
-          ? '/admin/dashboard'
+          ? '/dashboard'
           : '/restaurant-admin/dashboard';
       navigate(dashboardPath, { replace: true });
     }
