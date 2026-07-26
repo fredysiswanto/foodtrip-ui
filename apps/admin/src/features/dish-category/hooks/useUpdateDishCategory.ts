@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { dishCategoryApi } from '@foodtrip/api';
+import { adminDishCategoryApi } from '@foodtrip/api';
 import type { UpdateDishCategoryInputType } from '@foodtrip/types';
 
 export function useUpdateDishCategory() {
@@ -12,7 +12,7 @@ export function useUpdateDishCategory() {
     }: {
       id: string;
       data: UpdateDishCategoryInputType;
-    }) => dishCategoryApi.update(id, data),
+    }) => adminDishCategoryApi.update(id, data),
     onSuccess: () => {
       // Invalidate both list and detail queries
       queryClient.invalidateQueries({

@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { dishCategoryApi } from '@foodtrip/api';
+import { adminDishCategoryApi } from '@foodtrip/api';
 
 export function useDeleteDishCategory() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: string) => dishCategoryApi.delete(id),
+    mutationFn: (id: string) => adminDishCategoryApi.delete(id),
     onSuccess: () => {
       // Invalidate dish category list to refetch
       queryClient.invalidateQueries({

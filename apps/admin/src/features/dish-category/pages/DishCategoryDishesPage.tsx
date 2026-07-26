@@ -15,7 +15,7 @@ export function DishCategoryDishesPage() {
 
   const { data: category, isLoading, error } = useDishCategoryDetail(id || '');
 
-  const categoryName = stateCategory || category?.dishcatg_name || 'Category';
+  const categoryName = stateCategory || category?.name || 'Category';
   const dishes = category?.dishes || [];
 
   if (isLoading) {
@@ -30,7 +30,7 @@ export function DishCategoryDishesPage() {
     return (
       <VStack gap="lg">
         <Alert type="error">Failed to load category details</Alert>
-        <Button onClick={() => navigate('/admin/dish-categories')}>
+        <Button onClick={() => navigate('/dish-categories')}>
           Back to Categories
         </Button>
       </VStack>
@@ -40,10 +40,7 @@ export function DishCategoryDishesPage() {
   return (
     <VStack gap="lg">
       <div>
-        <Button
-          variant="ghost"
-          onClick={() => navigate('/admin/dish-categories')}
-        >
+        <Button variant="ghost" onClick={() => navigate('/dish-categories')}>
           ← Back to Categories
         </Button>
       </div>

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { dishCategoryApi } from '@foodtrip/api';
+import { adminDishCategoryApi } from '@foodtrip/api';
 
 interface DishCategoryListParams {
   page?: number;
@@ -13,7 +13,7 @@ export function useDishCategoryList(params?: DishCategoryListParams) {
     queryKey: ['admin', 'dish-category', 'list', { page, limit }],
     queryFn: async () => {
       try {
-        const result = await dishCategoryApi.list(page, limit);
+        const result = await adminDishCategoryApi.list(page, limit);
         return result;
       } catch (error) {
         console.error('useDishCategoryList - API error:', error);

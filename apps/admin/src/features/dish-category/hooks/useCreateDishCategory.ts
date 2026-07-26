@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { dishCategoryApi } from '@foodtrip/api';
+import { adminDishCategoryApi } from '@foodtrip/api';
 import type { CreateDishCategoryInputType } from '@foodtrip/types';
 
 export function useCreateDishCategory() {
@@ -7,7 +7,7 @@ export function useCreateDishCategory() {
 
   return useMutation({
     mutationFn: (data: CreateDishCategoryInputType) =>
-      dishCategoryApi.create(data),
+      adminDishCategoryApi.create(data),
     onSuccess: () => {
       // Invalidate dish category list to refetch
       queryClient.invalidateQueries({

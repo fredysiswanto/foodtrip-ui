@@ -12,7 +12,7 @@ export function DishCategoryListPage() {
   const { mutate: deleteDishCategory } = useDeleteDishCategory();
 
   const handleEdit = (id: string) => {
-    navigate(`/admin/dish-categories/${id}`);
+    navigate(`/dish-categories/${id}`);
   };
 
   const handleDelete = async (id: string) => {
@@ -20,7 +20,7 @@ export function DishCategoryListPage() {
   };
 
   const handleViewDishes = (categoryId: string, categoryName: string) => {
-    navigate(`/admin/dish-categories/${categoryId}/dishes`, {
+    navigate(`/dish-categories/${categoryId}/dishes`, {
       state: { categoryName },
     });
   };
@@ -34,10 +34,7 @@ export function DishCategoryListPage() {
             Manage dish categories and their associated dishes
           </p>
         </div>
-        <Button
-          onClick={() => navigate('/admin/dish-categories/create')}
-          size="lg"
-        >
+        <Button onClick={() => navigate('/dish-categories/create')} size="lg">
           + Add Category
         </Button>
       </div>
@@ -57,7 +54,7 @@ export function DishCategoryListPage() {
       ) : categories.length === 0 ? (
         <Card className="text-center py-12">
           <p className="text-gray-500 mb-4">No categories found</p>
-          <Button onClick={() => navigate('/admin/dish-categories/create')}>
+          <Button onClick={() => navigate('/dish-categories/create')}>
             Create your first category
           </Button>
         </Card>

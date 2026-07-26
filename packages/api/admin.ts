@@ -4,8 +4,11 @@
  */
 
 import {
+  CategorySchema,
+  CreateDishCategorySchema,
   CreateDishSchema,
   CreateRestaurantSchema,
+  DishCategoryDetailSchema,
   DishCategoryWithDishesSchema,
   DishCategoryWithDishesType,
   DishDetailSchema,
@@ -16,11 +19,14 @@ import {
   RestaurantDetailSchema,
   RestaurantSchema,
   RestaurantType,
+  UpdateDishCategorySchema,
   UpdateDishSchema,
   UpdateRestaurantSchema,
   UserListWithRestaurantSchema,
   UserWithRestaurantSchema,
   UserWithRestaurantType,
+  DishCategoryType,
+  DishCategorySchema,
 } from '@foodtrip/types';
 
 import { apiFetch } from './api-request';
@@ -140,8 +146,12 @@ export const adminDishApi = {
     });
   },
 
-  list: async () => {
-    return apiFetch<DishType[]>(`/admin/dishes/restaurants`, {
+  list: async (page = 1, limit = 10) => {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: String(limit),
+    });
+    return apiFetch<DishType[]>(`/admin/dishes/restaurants?${params}`, {
       method: 'GET',
       validateWith: (data: unknown) => {
         if (Array.isArray(data)) {
@@ -210,38 +220,67 @@ export const adminDishCategoryApi = {
       page: String(page),
       limit: String(limit),
     });
-    return apiFetch<DishCategoryWithDishesType[]>(
-      `/admin/categories?${params}`,
-      {
-        method: 'GET',
-        validateWith: (data: unknown) => {
-          if (Array.isArray(data)) {
-            return data.map((item) => DishCategoryWithDishesSchema.parse(item));
+    return apiFetch<DishCategoryType[]>(`/admin/categories?${params}`, {
+      method: 'GET',
+      validateWith: (data: unknown) => {
+        if (Array.isArray(data)) {
+          return data.map((item) => DishCategoryWithDishesSchema.parse(item));
+        }
+        if (data && typeof data === 'object' && 'data' in data) {
+          const obj = data as Record<string, unknown>;
+          if (Array.isArray(obj.data)) {
+            return obj.data.map((item) => DishCategorySchema.parse(item));
           }
-          if (data && typeof data === 'object' && 'data' in data) {
-            const obj = data as Record<string, unknown>;
-            if (Array.isArray(obj.data)) {
-              return obj.data.map((item) =>
-                DishCategoryWithDishesSchema.parse(item)
-              );
-            }
-          }
-          return [];
-        },
-      }
-    );
+        }
+        return [];
+      },
+    });
   },
 
   getById: async (id: string) => {
-    return apiFetch<DishCategoryWithDishesType>(`/admin/dish-cat/${id}`, {
+    return apiFetch<DishCategoryType>(`/admin/categories/${id}`, {
       method: 'GET',
       validateWith: (data: unknown) => {
         if (data && typeof data === 'object' && 'data' in data) {
           const wrapper = data as Record<string, unknown>;
-          return DishCategoryWithDishesSchema.parse(wrapper.data);
+          return CategorySchema.parse(wrapper.data);
+        }
+        return CategorySchema.parse(data);
+      },
+    });
+  },
+
+  create: async (input: Record<string, unknown>) => {
+    const validated = CreateDishCategorySchema.parse(input);
+    return apiFetch<DishCategoryWithDishesType>('/admin/categories', {
+      method: 'POST',
+      body: JSON.stringify(validated),
+      validateWith: (data: unknown) => {
+        if (data && typeof data === 'object' && 'data' in data) {
+          return DishCategoryDetailSchema.parse(data).data;
         }
         return DishCategoryWithDishesSchema.parse(data);
       },
+    });
+  },
+
+  update: async (id: string, input: Record<string, unknown>) => {
+    const validated = UpdateDishCategorySchema.parse(input);
+    return apiFetch<DishCategoryWithDishesType>(`/admin/categories/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(validated),
+      validateWith: (data: unknown) => {
+        if (data && typeof data === 'object' && 'data' in data) {
+          return DishCategoryDetailSchema.parse(data).data;
+        }
+        return DishCategoryWithDishesSchema.parse(data);
+      },
+    });
+  },
+
+  delete: async (id: string) => {
+    return apiFetch<void>(`/admin/categories/${id}`, {
+      method: 'DELETE',
     });
   },
 };

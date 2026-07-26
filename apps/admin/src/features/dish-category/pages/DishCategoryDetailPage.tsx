@@ -12,14 +12,14 @@ export function DishCategoryDetailPage() {
   const { data: category, isLoading, error } = useDishCategoryDetail(id || '');
   const { mutate: updateDishCategory, isPending } = useUpdateDishCategory();
 
-  const handleSubmit = async (data: { dishcatg_name: string }) => {
+  const handleSubmit = async (data: { name: string }) => {
     if (!id) return;
 
     updateDishCategory(
       { id, data },
       {
         onSuccess: () => {
-          navigate('/admin/dish-categories');
+          navigate('/dish-categories');
         },
       }
     );
@@ -37,7 +37,7 @@ export function DishCategoryDetailPage() {
     return (
       <VStack gap="lg">
         <Alert type="error">Failed to load category details</Alert>
-        <Button onClick={() => navigate('/admin/dish-categories')}>
+        <Button onClick={() => navigate('/dish-categories')}>
           Back to Categories
         </Button>
       </VStack>
@@ -47,10 +47,7 @@ export function DishCategoryDetailPage() {
   return (
     <VStack gap="lg">
       <div>
-        <Button
-          variant="ghost"
-          onClick={() => navigate('/admin/dish-categories')}
-        >
+        <Button variant="ghost" onClick={() => navigate('/dish-categories')}>
           ← Back to Categories
         </Button>
         <h1 className="text-3xl font-bold text-gray-900 mt-4">Edit Category</h1>

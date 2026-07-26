@@ -6,10 +6,10 @@ export function DishCategoryCreatePage() {
   const navigate = useNavigate();
   const { mutate: createDishCategory, isPending } = useCreateDishCategory();
 
-  const handleSubmit = async (data: { dishcatg_name: string }) => {
+  const handleSubmit = async (data: { name: string }) => {
     createDishCategory(data, {
       onSuccess: () => {
-        navigate('/admin/dish-categories');
+        navigate('/dish-categories');
       },
     });
   };
@@ -17,10 +17,7 @@ export function DishCategoryCreatePage() {
   return (
     <VStack gap="lg">
       <div>
-        <Button
-          variant="ghost"
-          onClick={() => navigate('/admin/dish-categories')}
-        >
+        <Button variant="ghost" onClick={() => navigate('/dish-categories')}>
           ← Back to Categories
         </Button>
         <h1 className="text-3xl font-bold text-gray-900 mt-4">
