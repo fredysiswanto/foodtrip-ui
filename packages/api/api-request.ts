@@ -2,7 +2,7 @@ import { LoginResponse, LoginResponseSchema } from '@foodtrip/types';
 
 const API_URL =
   (import.meta as ImportMeta & { env?: { VITE_API_URL?: string } }).env
-    ?.VITE_API_URL || 'http://localhost:3003/api';
+    ?.VITE_API_URL || 'http://localhost:3005/api';
 
 interface FetchOptions extends Record<string, unknown> {
   method?: string;

@@ -11,6 +11,7 @@ export function useLogout() {
       // Clear token from localStorage
       localStorage.removeItem('auth_token');
       localStorage.removeItem('auth_user');
+      localStorage.removeItem('user_role');
     },
     onSuccess: () => {
       // Reset auth state

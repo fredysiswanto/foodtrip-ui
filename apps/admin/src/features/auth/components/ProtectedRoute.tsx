@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../hooks';
+import { useAuth, useLogout } from '../hooks';
 import { USER_ROLES, UserRole } from '../roles';
 
 export interface ProtectedRouteProps {
@@ -13,6 +13,12 @@ export function ProtectedRoute({
   allowedRoles,
 }: ProtectedRouteProps) {
   const { isAuthenticated, isLoading, user } = useAuth();
+  const { mutate: logout } = useLogout();
+
+  const handleLogout = () => {
+    logout();
+    window.location.href = '/login';
+  };
 
   if (isLoading) {
     return (
@@ -85,7 +91,7 @@ export function ProtectedRoute({
                 Go to Your Dashboard
               </button>
               <button
-                onClick={() => (window.location.href = '/login')}
+                onClick={handleLogout}
                 className="px-4 py-2 bg-gray-200 text-gray-900 rounded-md hover:bg-gray-300 font-medium transition-colors"
               >
                 Logout

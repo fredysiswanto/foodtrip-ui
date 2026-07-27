@@ -195,7 +195,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
             </div>
             <div className="flex items-center justify-between bg-blue-50 p-2.5 rounded">
               <code className="text-sm font-mono text-blue-900">
-                admin@admin.com | Password123!
+                manager@example.com | Password123!
               </code>
               <span className="text-xs bg-blue-200 text-blue-900 px-2 py-1 rounded font-semibold">
                 Admin
@@ -204,7 +204,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
                 variant="primary"
                 size="sm"
                 onClick={() => {
-                  setEmail('admin@admin.com');
+                  setEmail('manager@example.com');
                   setPassword('Password123!');
                 }}
               >
